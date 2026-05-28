@@ -1,8 +1,8 @@
-# ImageToUI2
+# ImageToUI
 
 [中文](README.zh-CN.md)
 
-ImageToUI2 provides the `image-to-ui` Codex skill. It takes a target UI effect
+ImageToUI provides the `image-to-ui` Codex skill. It takes a target UI effect
 image and a sliced sprite directory, then generates a structured
 `ui_structure.json`.
 

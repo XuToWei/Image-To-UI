@@ -1,8 +1,8 @@
-# ImageToUI2
+# ImageToUI
 
 [English](README.md)
 
-ImageToUI2 提供 `image-to-ui` Codex skill，用于根据 UI 效果图和切图目录生成
+ImageToUI 提供 `image-to-ui` Codex skill，用于根据 UI 效果图和切图目录生成
 结构化的 `ui_structure.json`。
 
 ## 示例
