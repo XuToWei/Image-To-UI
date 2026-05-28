@@ -1,0 +1,4 @@
+interface:
+  display_name: "Image to UI"
+  short_description: "Extract UI JSON with inventory, validation, and bbox checks"
+  default_prompt: "Use $image-to-ui to inventory sliced assets, validate structure, and extract structured UI JSON from this design image and sprite directory."
