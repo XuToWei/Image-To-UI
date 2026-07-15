@@ -14,19 +14,24 @@ Both are scaled to the same height for visual comparison.
 """
 
 import argparse
+import hashlib
 import json
-import os
+import math
 import re
 import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, __version__ as PILLOW_VERSION
 
 # Make sibling layout.py importable when run from anywhere
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import layout as layout_mod  # noqa: E402
 from annotate_grid import draw_grid  # noqa: E402
+
+
+class RenderError(RuntimeError):
+    """Raised when an asset cannot be rendered at its requested size."""
 
 
 # --- Asset loading ---------------------------------------------------------
@@ -64,6 +69,11 @@ class AssetCache:
             self._index.pop(name_key, None)
             self._borders.pop(name_key, None)
         self._cache = {}
+
+    def path_for(self, filename: str):
+        if not filename:
+            return None
+        return self._index.get(filename.replace("\\", "/").lower())
 
     @staticmethod
     def _read_unity_sprite_border(path: Path):
@@ -144,16 +154,48 @@ def apply_tint(img: Image.Image, hex_color: str) -> Image.Image:
     return Image.fromarray(arr, mode="RGBA")
 
 
-def render_nine_slice(src: Image.Image, target_w: int, target_h: int,
-                      margins: dict) -> Image.Image:
-    """Render `src` at (target_w, target_h) using 9-slice scaling.
+def apply_hue_shift(img: Image.Image, degrees: int | float) -> Image.Image:
+    """Rotate visible RGB hues while preserving alpha and hidden pixels."""
+    if (
+        not isinstance(degrees, (int, float))
+        or isinstance(degrees, bool)
+        or not math.isfinite(degrees)
+        or degrees < -360
+        or degrees > 360
+    ):
+        raise ValueError("hueShift must be a finite number between -360 and 360")
+    if degrees == 0:
+        return img
 
-    margins: dict with integer keys "left", "top", "right", "bottom" giving
-    the non-stretching corner widths/heights in source-pixel units. The four
-    corners are pasted unchanged, the four edges stretch along one axis, and
-    the center stretches on both axes.
-    """
-    sw, sh = src.size
+    rgba = np.asarray(img.convert("RGBA"), dtype=np.uint8)
+    hsv = np.asarray(
+        Image.fromarray(rgba[..., :3], mode="RGB").convert("HSV"),
+        dtype=np.uint8,
+    ).copy()
+    delta = int(round(float(degrees) * 256.0 / 360.0))
+    hsv[..., 0] = (
+        hsv[..., 0].astype(np.int16) + delta
+    ) % 256
+    shifted_rgb = np.asarray(
+        Image.fromarray(hsv, mode="HSV").convert("RGB"),
+        dtype=np.uint8,
+    )
+    visible = rgba[..., 3:4] > 0
+    result = np.concatenate(
+        [np.where(visible, shifted_rgb, rgba[..., :3]), rgba[..., 3:4]],
+        axis=2,
+    )
+    return Image.fromarray(result.astype(np.uint8), mode="RGBA")
+
+
+def effective_nine_slice_margins(
+    margins: dict,
+    src_w: int,
+    src_h: int,
+    target_w: int,
+    target_h: int,
+) -> dict[str, int]:
+    """Clamp nine-slice margins to the source and target pixel extents."""
     l = int(margins.get("left", 0))
     t = int(margins.get("top", 0))
     r = int(margins.get("right", 0))
@@ -175,9 +217,28 @@ def render_nine_slice(src: Image.Image, target_w: int, target_h: int,
                 second = limit - first
         return first, second
 
-    # Clamp margins so they don't overlap in either source or target.
-    l, r = clamp_pair(l, r, sw, target_w)
-    t, b = clamp_pair(t, b, sh, target_h)
+    l, r = clamp_pair(l, r, src_w, target_w)
+    t, b = clamp_pair(t, b, src_h, target_h)
+    return {"left": l, "top": t, "right": r, "bottom": b}
+
+
+def render_nine_slice(src: Image.Image, target_w: int, target_h: int,
+                      margins: dict) -> Image.Image:
+    """Render `src` at (target_w, target_h) using 9-slice scaling.
+
+    margins: dict with integer keys "left", "top", "right", "bottom" giving
+    the non-stretching corner widths/heights in source-pixel units. The four
+    corners are pasted unchanged, the four edges stretch along one axis, and
+    the center stretches on both axes.
+    """
+    sw, sh = src.size
+    effective = effective_nine_slice_margins(
+        margins, sw, sh, target_w, target_h
+    )
+    l = effective["left"]
+    t = effective["top"]
+    r = effective["right"]
+    b = effective["bottom"]
 
     out = Image.new("RGBA", (max(1, target_w), max(1, target_h)), (0, 0, 0, 0))
 
@@ -237,12 +298,19 @@ def resolve_nine_slice_margins(nine_slice, src_w: int, src_h: int,
                      Missing keys default to 0 (useful for things like a bar
                      that only stretches horizontally: {"left": 20, "right": 20})
     """
-    if nine_slice in (True, "auto", "meta"):
+    if nine_slice is True or (
+        isinstance(nine_slice, str) and nine_slice in ("auto", "meta")
+    ):
         if meta_border:
-            return meta_border
+            return {
+                "left": int(meta_border.get("left", 0)),
+                "top": int(meta_border.get("top", 0)),
+                "right": int(meta_border.get("right", 0)),
+                "bottom": int(meta_border.get("bottom", 0)),
+            }
         m = max(4, min(60, min(src_w, src_h) // 4))
         return {"left": m, "top": m, "right": m, "bottom": m}
-    if isinstance(nine_slice, (int, float)):
+    if isinstance(nine_slice, (int, float)) and not isinstance(nine_slice, bool):
         m = int(nine_slice)
         return {"left": m, "top": m, "right": m, "bottom": m}
     if isinstance(nine_slice, dict):
@@ -266,45 +334,244 @@ def apply_opacity(img: Image.Image, opacity: float) -> Image.Image:
 
 FONT_SEARCH_DIRS: list[Path] = []
 
+SYSTEM_FONT_CANDIDATES = (
+    Path("C:/Windows/Fonts/arialbd.ttf"),
+    Path("C:/Windows/Fonts/arial.ttf"),
+    Path("C:/Windows/Fonts/segoeui.ttf"),
+    Path("C:/Windows/Fonts/msyh.ttc"),
+    Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"),
+    Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"),
+    Path("/System/Library/Fonts/Helvetica.ttc"),
+)
+
+
+def preferred_font_candidates(preferred: str) -> list[Path]:
+    """Return deterministic task paths for an explicit font request."""
+    requested = Path(preferred)
+    if requested.is_absolute():
+        return [requested]
+
+    candidates: list[Path] = []
+    for configured_root in FONT_SEARCH_DIRS:
+        root = Path(configured_root)
+        if not root.is_absolute():
+            continue
+        candidate = root / requested
+        candidates.append(candidate)
+        if requested.suffix:
+            continue
+
+        parent = candidate.parent
+        stem = candidate.name
+        matches = [
+            *parent.glob(f"{stem}*.ttf"),
+            *parent.glob(f"{stem}*.otf"),
+        ]
+        candidates.extend(sorted(matches, key=lambda path: path.name.casefold()))
+    return candidates
+
 
 def find_font(size: int, preferred: str | None = None) -> ImageFont.FreeTypeFont:
     # Try a few common fonts; fall back to default bitmap font
-    candidates = []
-    if preferred:
-        preferred_path = Path(preferred)
-        candidates.append(str(preferred_path))
-        for root in FONT_SEARCH_DIRS:
-            candidates.append(str(root / preferred))
-        if preferred_path.suffix:
-            stem = preferred_path.stem
-        else:
-            stem = preferred
-            for root in FONT_SEARCH_DIRS:
-                candidates.extend(str(p) for p in root.glob(f"{stem}*.ttf"))
-                candidates.extend(str(p) for p in root.glob(f"{stem}*.otf"))
-    candidates = [
-        *candidates,
-        "C:/Windows/Fonts/arialbd.ttf",
-        "C:/Windows/Fonts/arial.ttf",
-        "C:/Windows/Fonts/segoeui.ttf",
-        "C:/Windows/Fonts/msyh.ttc",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "/System/Library/Fonts/Helvetica.ttc",
-    ]
-    for c in candidates:
-        if os.path.exists(c):
+    candidates = preferred_font_candidates(preferred) if preferred else []
+    for candidate in [*candidates, *SYSTEM_FONT_CANDIDATES]:
+        if candidate.is_file():
             try:
-                return ImageFont.truetype(c, size)
+                return ImageFont.truetype(str(candidate), size)
             except Exception:
                 continue
     return ImageFont.load_default()
 
 
+def font_path_matches_request(resolved: str | None, preferred: str) -> bool:
+    if not resolved:
+        return False
+    requested = Path(preferred)
+    if not (
+        requested.is_absolute()
+        or requested.suffix
+        or requested.parent != Path(".")
+    ):
+        return False
+
+    resolved_path = Path(resolved).resolve()
+    return any(
+        resolved_path == candidate.resolve()
+        for candidate in preferred_font_candidates(preferred)
+    )
+
+
+def describe_font(font: ImageFont.ImageFont, preferred: str | None) -> dict:
+    """Return conservative font-resolution details for render diagnostics."""
+    resolved = getattr(font, "path", None)
+    if isinstance(resolved, bytes):
+        resolved = resolved.decode(errors="replace")
+    try:
+        resolved_path = Path(resolved)
+        resolved_text = str(resolved_path) if resolved_path.is_file() else None
+    except (OSError, TypeError, ValueError):
+        # Pillow's embedded default font is commonly backed by BytesIO. Its
+        # repr contains a process-specific address and is not a dependency
+        # file that the workflow can snapshot.
+        resolved_text = None
+
+    resolved_sha256 = None
+    if resolved_text:
+        try:
+            digest = hashlib.sha256()
+            with Path(resolved_text).open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+            resolved_sha256 = digest.hexdigest()
+        except OSError:
+            pass
+
+    fallback = False
+    if preferred:
+        requested_path = Path(preferred)
+        if (
+            requested_path.is_absolute()
+            or requested_path.suffix
+            or requested_path.parent != Path(".")
+        ):
+            fallback = not font_path_matches_request(resolved_text, preferred)
+        else:
+            requested_stem = re.sub(
+                r"[^a-z0-9]", "", requested_path.stem.lower()
+            )
+            resolved_names = []
+            if resolved_text:
+                resolved_names.append(Path(resolved_text).stem)
+            try:
+                family, style = font.getname()
+                resolved_names.extend((family, f"{family}{style}"))
+            except (AttributeError, OSError):
+                pass
+            normalized_names = [
+                re.sub(r"[^a-z0-9]", "", name.lower())
+                for name in resolved_names
+            ]
+            fallback = not (
+                requested_stem
+                and any(
+                    name and (requested_stem in name or name in requested_stem)
+                    for name in normalized_names
+                )
+            )
+    return {
+        "requested": preferred,
+        "resolved": resolved_text,
+        "resolved_sha256": resolved_sha256,
+        "pillow_version": PILLOW_VERSION,
+        "fallback": fallback,
+    }
+
+
+def overflow_sides(inner: list[int] | None, outer: list[int]) -> dict[str, int]:
+    if inner is None:
+        return {"left": 0, "top": 0, "right": 0, "bottom": 0}
+    ix, iy, iw, ih = inner
+    ox, oy, ow, oh = outer
+    return {
+        "left": max(0, ox - ix),
+        "top": max(0, oy - iy),
+        "right": max(0, ix + iw - (ox + ow)),
+        "bottom": max(0, iy + ih - (oy + oh)),
+    }
+
+
+def union_bboxes(boxes: list[list[int] | None]) -> list[int] | None:
+    visible = [box for box in boxes if box is not None]
+    if not visible:
+        return None
+    left = min(box[0] for box in visible)
+    top = min(box[1] for box in visible)
+    right = max(box[0] + box[2] for box in visible)
+    bottom = max(box[1] + box[3] for box in visible)
+    return [left, top, max(0, right - left), max(0, bottom - top)]
+
+
+def clip_bbox(bbox: list[int] | None,
+              canvas_size: tuple[int, int]) -> list[int] | None:
+    if bbox is None:
+        return None
+    x, y, width, height = bbox
+    canvas_width, canvas_height = canvas_size
+    left = max(0, x)
+    top = max(0, y)
+    right = min(canvas_width, x + width)
+    bottom = min(canvas_height, y + height)
+    if right <= left or bottom <= top:
+        return None
+    return [left, top, right - left, bottom - top]
+
+
+def alpha_layer_metrics(
+    image: Image.Image,
+    x: int,
+    y: int,
+    canvas_size: tuple[int, int],
+) -> tuple[list[int] | None, bool]:
+    """Return visible alpha bounds and conservative opaque-layer evidence."""
+    canvas_width, canvas_height = canvas_size
+    draw_left = max(0, x)
+    draw_top = max(0, y)
+    draw_right = min(canvas_width, x + image.width)
+    draw_bottom = min(canvas_height, y + image.height)
+    if draw_right <= draw_left or draw_bottom <= draw_top:
+        return None, False
+
+    visible_alpha = image.getchannel("A").crop((
+        draw_left - x,
+        draw_top - y,
+        draw_right - x,
+        draw_bottom - y,
+    ))
+    alpha_bbox = visible_alpha.getbbox()
+    if alpha_bbox is None:
+        return None, False
+
+    left, top, right, bottom = alpha_bbox
+    visible_bbox = [
+        draw_left + left,
+        draw_top + top,
+        right - left,
+        bottom - top,
+    ]
+    return visible_bbox, visible_alpha.getextrema() == (255, 255)
+
+
+def alpha_visible_bbox(image: Image.Image, x: int, y: int,
+                       canvas_size: tuple[int, int]) -> list[int] | None:
+    return alpha_layer_metrics(image, x, y, canvas_size)[0]
+
+
+def rasterize_text_line(
+    line: str,
+    bbox: tuple[int, int, int, int],
+    font: ImageFont.ImageFont,
+    fill,
+    stroke_width: int,
+    stroke_fill,
+) -> Image.Image:
+    width = max(1, bbox[2] - bbox[0])
+    height = max(1, bbox[3] - bbox[1])
+    image = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    ImageDraw.Draw(image).text(
+        (-bbox[0], -bbox[1]),
+        line,
+        font=font,
+        fill=fill,
+        stroke_width=stroke_width,
+        stroke_fill=stroke_fill,
+    )
+    return image
+
+
 def draw_text(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int):
     text = elem.get("text", "")
     if not text:
-        return
+        return None
     pos = elem.get("position", {"x": 0, "y": 0})
     size = elem.get("size", {"width": 100, "height": 40})
     x = origin_x + int(pos.get("x", 0))
@@ -316,48 +583,196 @@ def draw_text(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int):
     color_rgba = hex_to_rgba(elem.get("color", "#000000"), elem.get("opacity", 1.0))
     alignment = elem.get("alignment", "left")
     text_v_align = elem.get("textVAlign", "middle")
-    line_h = int(elem.get("lineHeight", font_size + 4))
+    line_h = max(1, int(elem.get("lineHeight", font_size + 4)))
     stroke_width = int(elem.get("strokeWidth", 0))
     stroke_rgba = hex_to_rgba(elem.get("strokeColor", "#000000"), elem.get("opacity", 1.0))
+    raw_text_scale_x = elem.get("textScaleX", 1.0)
+    if (
+        not isinstance(raw_text_scale_x, (int, float))
+        or isinstance(raw_text_scale_x, bool)
+        or raw_text_scale_x <= 0
+    ):
+        raise ValueError("textScaleX must be a positive finite number")
+    try:
+        text_scale_x = float(raw_text_scale_x)
+    except OverflowError as exc:
+        raise ValueError("textScaleX must be a positive finite number") from exc
+    if not math.isfinite(text_scale_x):
+        raise ValueError("textScaleX must be a positive finite number")
 
-    font = find_font(font_size, elem.get("fontFamily") or elem.get("font"))
+    preferred_font = elem.get("fontFamily") or elem.get("font")
+    font = find_font(font_size, preferred_font)
     draw = ImageDraw.Draw(canvas)
 
     lines = text.split("\n")
-    total_h = line_h * len(lines)
-    if text_v_align in ("top", "start"):
-        start_y = y
-    elif text_v_align in ("bottom", "end"):
-        start_y = y + max(0, h - total_h)
-    else:
-        start_y = y + max(0, (h - total_h) // 2)
+    line_bboxes = []
+    line_rasters = []
+    for line in lines:
+        if not line:
+            bbox = (0, 0, 0, 0)
+        else:
+            try:
+                bbox = draw.textbbox(
+                    (0, 0),
+                    line,
+                    font=font,
+                    stroke_width=stroke_width,
+                )
+            except Exception:
+                try:
+                    raw = font.getbbox(line)
+                    bbox = (
+                        raw[0] - stroke_width,
+                        raw[1] - stroke_width,
+                        raw[2] + stroke_width,
+                        raw[3] + stroke_width,
+                    )
+                except Exception:
+                    width = font_size * len(line) // 2
+                    bbox = (-stroke_width, -stroke_width,
+                            width + stroke_width, font_size + stroke_width)
+        line_image = rasterize_text_line(
+            line,
+            bbox,
+            font,
+            color_rgba,
+            stroke_width,
+            stroke_rgba,
+        )
+        line_bboxes.append(bbox)
+        line_rasters.append((line_image, line_image.getchannel("A").getbbox()))
 
-    for i, line in enumerate(lines):
-        try:
-            bbox = font.getbbox(line)
-            line_w = bbox[2] - bbox[0]
-        except Exception:
-            line_w = font_size * len(line) // 2
+    vertical_bounds = [
+        (
+            i * line_h + bbox[1] + visible[1],
+            i * line_h + bbox[1] + visible[3],
+        )
+        for i, (bbox, (_image, visible)) in enumerate(
+            zip(line_bboxes, line_rasters)
+        )
+        if visible is not None
+    ]
+    if vertical_bounds:
+        block_top = min(top for top, _bottom in vertical_bounds)
+        block_bottom = max(bottom for _top, bottom in vertical_bounds)
+    else:
+        block_top = 0
+        block_bottom = 0
+    block_h = max(0, block_bottom - block_top)
+    if text_v_align in ("top", "start"):
+        ink_top = y
+    elif text_v_align in ("bottom", "end"):
+        ink_top = y + h - block_h
+    else:
+        ink_top = y + (h - block_h) // 2
+    draw_origin_y = ink_top - block_top
+
+    line_ink_bboxes: list[list[int] | None] = []
+    for i, (line, bbox, (line_image, local_visible)) in enumerate(
+        zip(lines, line_bboxes, line_rasters)
+    ):
+        if local_visible is None:
+            line_ink_bboxes.append(None)
+            continue
+
+        if text_scale_x == 1.0:
+            visible_width = local_visible[2] - local_visible[0]
+            visible_height = local_visible[3] - local_visible[1]
+            if alignment == "center":
+                line_left = x + (w - visible_width) // 2
+            elif alignment == "right":
+                line_left = x + w - visible_width
+            else:
+                line_left = x
+            line_top = (
+                draw_origin_y + i * line_h + bbox[1] + local_visible[1]
+            )
+            draw.text(
+                (line_left - bbox[0] - local_visible[0],
+                 draw_origin_y + i * line_h),
+                line,
+                font=font,
+                fill=color_rgba,
+                stroke_width=stroke_width,
+                stroke_fill=stroke_rgba,
+            )
+            line_ink_bboxes.append([
+                line_left,
+                line_top,
+                visible_width,
+                visible_height,
+            ])
+            continue
+
+        visible_line = line_image.crop(local_visible)
+        scaled_width = max(1, int(round(visible_line.width * text_scale_x)))
+        if scaled_width != visible_line.width:
+            visible_line = visible_line.resize(
+                (scaled_width, visible_line.height), Image.LANCZOS
+            )
+        scaled_visible = visible_line.getchannel("A").getbbox()
+        if scaled_visible is None:
+            line_ink_bboxes.append(None)
+            continue
+        scaled_local_left, scaled_local_top, scaled_right, scaled_bottom = (
+            scaled_visible
+        )
+        visible_line = visible_line.crop(scaled_visible)
 
         if alignment == "center":
-            line_x = x + max(0, (w - line_w) // 2)
+            line_left = x + (w - visible_line.width) // 2
         elif alignment == "right":
-            line_x = x + w - line_w
+            line_left = x + w - visible_line.width
         else:
-            line_x = x
-
-        draw.text(
-            (line_x, start_y + i * line_h),
-            line,
-            font=font,
-            fill=color_rgba,
-            stroke_width=stroke_width,
-            stroke_fill=stroke_rgba,
+            line_left = x
+        line_top = (
+            draw_origin_y
+            + i * line_h
+            + bbox[1]
+            + local_visible[1]
+            + scaled_local_top
         )
+        canvas.alpha_composite(visible_line, (line_left, line_top))
+        line_ink_bboxes.append([
+            line_left,
+            line_top,
+            scaled_right - scaled_local_left,
+            scaled_bottom - scaled_local_top,
+        ])
+
+    ink_bbox = union_bboxes(line_ink_bboxes)
+    visible_bbox = union_bboxes([
+        clip_bbox(box, canvas.size) for box in line_ink_bboxes
+    ])
+    text_box = [x, y, w, h]
+    overflow = overflow_sides(ink_bbox, text_box)
+    return {
+        "text_box": text_box,
+        "ink_bbox": ink_bbox,
+        "line_ink_bboxes": line_ink_bboxes,
+        "visible_bbox": visible_bbox,
+        "ink_overflow": overflow,
+        "font": describe_font(font, preferred_font),
+        "font_size": font_size,
+        "line_height": line_h,
+        "text_scale_x": text_scale_x,
+        "stroke_width": stroke_width,
+        "alignment": alignment,
+        "vertical_alignment": text_v_align,
+        "line_count": len(lines),
+    }
+
+
+def append_trace_entry(trace: list[dict] | None, entry: dict) -> None:
+    if trace is None:
+        return
+    entry["z_order"] = len(trace)
+    trace.append(entry)
 
 
 def render_element(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int,
-                   assets: AssetCache):
+                   assets: AssetCache, trace: list[dict] | None = None,
+                   path: str = "root", parent_bbox: list[int] | None = None):
     """Recursively render an element and its children onto the canvas.
 
     Position source priority:
@@ -382,34 +797,95 @@ def render_element(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int
     asset_name = elem.get("asset")
     color = elem.get("color")
     opacity = float(elem.get("opacity", 1.0))
+    entry = {
+        "path": path,
+        "name": elem.get("name", "?"),
+        "type": etype,
+        "bbox": [ax, ay, w, h],
+        "parent_bbox": parent_bbox,
+        "opacity": opacity,
+        "fully_opaque": False,
+    }
+    if asset_name or (color and etype != "text") or etype == "text":
+        entry["visible_bbox"] = None
+    if elem.get("layout"):
+        entry["layout"] = elem["layout"]
 
     if asset_name:
         img = assets.get(asset_name)
+        asset_path = assets.path_for(asset_name)
+        entry["asset"] = {
+            "requested": asset_name,
+            "resolved": (
+                asset_path.relative_to(assets.assets_dir).as_posix()
+                if asset_path else None
+            ),
+            "found": img is not None,
+            "render_error": None,
+        }
         if img is not None:
             nine_slice = elem.get("nineSlice")
+            hue_shift = elem.get("hueShift", 0)
+            entry["asset"].update({
+                "source_size": [img.width, img.height],
+                "source_alpha_bbox": list(img.getchannel("A").getbbox() or (0, 0, 0, 0)),
+                "render_mode": "nine_slice" if nine_slice else "stretch",
+                "hue_shift": hue_shift,
+            })
+            if img.width > 0 and img.height > 0 and w > 0 and h > 0:
+                scale_x = w / img.width
+                scale_y = h / img.height
+                entry["asset"]["aspect_scale_error"] = round(
+                    max(scale_x / scale_y, scale_y / scale_x) - 1.0, 6
+                )
             try:
                 if nine_slice:
-                    margins = resolve_nine_slice_margins(
+                    requested_margins = resolve_nine_slice_margins(
                         nine_slice,
                         img.width,
                         img.height,
                         assets.border_for(asset_name),
                     )
+                    margins = effective_nine_slice_margins(
+                        requested_margins,
+                        img.width,
+                        img.height,
+                        max(1, w),
+                        max(1, h),
+                    )
+                    entry["asset"]["nine_slice_margins"] = margins
                     img_resized = render_nine_slice(img, max(1, w), max(1, h), margins)
                 else:
                     img_resized = img.resize((max(1, w), max(1, h)), Image.LANCZOS)
+                img_resized = apply_hue_shift(img_resized, hue_shift)
+                if color:
+                    img_resized = apply_tint(img_resized, color)
+                if opacity < 1.0:
+                    img_resized = apply_opacity(img_resized, opacity)
+                visible_bbox, fully_opaque = alpha_layer_metrics(
+                    img_resized, ax, ay, canvas.size
+                )
+                entry["visible_bbox"] = visible_bbox
+                entry["fully_opaque"] = fully_opaque
+                canvas.alpha_composite(img_resized, (ax, ay))
             except Exception as exc:
-                print(f"  [warn] render failed for {asset_name}: {exc}", file=sys.stderr)
-                img_resized = img
-            if color:
-                img_resized = apply_tint(img_resized, color)
-            if opacity < 1.0:
-                img_resized = apply_opacity(img_resized, opacity)
-            canvas.alpha_composite(img_resized, (ax, ay))
+                render_error = f"{type(exc).__name__}: {exc}"
+                entry["asset"]["render_error"] = render_error
+                append_trace_entry(trace, entry)
+                render_kind = "nine-slice" if nine_slice else "stretch"
+                raise RenderError(
+                    f"{render_kind} render failed for asset {asset_name!r} "
+                    f"at {path}: {render_error}"
+                ) from exc
     elif color and etype != "text" and w > 0 and h > 0:
         fill = hex_to_rgba(color, opacity)
         if fill:
             overlay = Image.new("RGBA", (w, h), fill)
+            visible_bbox, fully_opaque = alpha_layer_metrics(
+                overlay, ax, ay, canvas.size
+            )
+            entry["visible_bbox"] = visible_bbox
+            entry["fully_opaque"] = fully_opaque
             canvas.alpha_composite(overlay, (ax, ay))
 
     if etype == "text":
@@ -418,11 +894,25 @@ def render_element(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int
         temp = dict(elem)
         temp["position"] = {"x": rx, "y": ry}
         temp["size"] = {"width": w, "height": h}
-        draw_text(canvas, temp, origin_x, origin_y)
+        entry["text"] = draw_text(canvas, temp, origin_x, origin_y)
+        if entry["text"] is not None:
+            entry["visible_bbox"] = entry["text"]["visible_bbox"]
+
+    append_trace_entry(trace, entry)
 
     # Recurse into children
     for child in elem.get("children", []) or []:
-        render_element(canvas, child, ax, ay, assets)
+        child_name = child.get("name", "?") if isinstance(child, dict) else "?"
+        render_element(
+            canvas,
+            child,
+            ax,
+            ay,
+            assets,
+            trace,
+            f"{path}/{child_name}",
+            [ax, ay, w, h],
+        )
 
 
 # --- Comparison ------------------------------------------------------------
@@ -456,7 +946,8 @@ def build_side_by_side(design_img: Image.Image, reconstruction: Image.Image,
 
 
 def render_from_structure(structure: dict, assets: AssetCache,
-                          background: tuple[int, int, int, int]) -> Image.Image:
+                          background: tuple[int, int, int, int],
+                          trace: list[dict] | None = None) -> Image.Image:
     canvas_info = structure.get("canvas", {})
     cw = int(canvas_info.get("width", 720))
     ch = int(canvas_info.get("height", 1560))
@@ -467,7 +958,7 @@ def render_from_structure(structure: dict, assets: AssetCache,
 
     canvas = Image.new("RGBA", (cw, ch), background)
     root = structure.get("root", {})
-    render_element(canvas, root, 0, 0, assets)
+    render_element(canvas, root, 0, 0, assets, trace)
     return canvas
 
 
@@ -477,6 +968,10 @@ def main():
     ap.add_argument("--structure", required=True, help="Path to ui_structure.json")
     ap.add_argument("--assets", required=True, help="Directory containing sliced PNG assets")
     ap.add_argument("--output", required=True, help="Path to save comparison.png")
+    ap.add_argument("--reconstruction",
+                    help="Optional path to save the raw reconstruction without a grid")
+    ap.add_argument("--trace",
+                    help="Optional path to save same-pass render diagnostics as JSON")
     ap.add_argument("--no-grid", action="store_true",
                     help="Disable the grid overlay on both panels. By default a "
                          "labeled grid is drawn on the design and the "
@@ -516,13 +1011,15 @@ def main():
 
     global FONT_SEARCH_DIRS
     FONT_SEARCH_DIRS = [
-        structure_path.parent,
-        structure_path.parent.parent,
-        assets_dir,
-        assets_dir.parent,
-        design_path.parent,
-        design_path.parent.parent,
-        Path.cwd(),
+        path.resolve()
+        for path in (
+            structure_path.parent,
+            structure_path.parent.parent,
+            assets_dir,
+            assets_dir.parent,
+            design_path.parent,
+            design_path.parent.parent,
+        )
     ]
 
     if args.transparent_bg:
@@ -531,7 +1028,36 @@ def main():
         background = hex_to_rgba(args.background_color) or (30, 30, 40, 255)
 
     print("Rendering reconstruction...")
-    reconstruction = render_from_structure(structure, assets, background)
+    trace_entries: list[dict] | None = [] if args.trace else None
+    reconstruction = render_from_structure(structure, assets, background, trace_entries)
+
+    if args.reconstruction:
+        reconstruction_path = Path(args.reconstruction)
+        reconstruction_path.parent.mkdir(parents=True, exist_ok=True)
+        reconstruction.save(reconstruction_path)
+        print(f"Saved reconstruction: {reconstruction_path}")
+    if args.trace:
+        trace_path = Path(args.trace)
+        trace_path.parent.mkdir(parents=True, exist_ok=True)
+        trace_data = {
+            "version": 1,
+            "canvas": {
+                "width": reconstruction.width,
+                "height": reconstruction.height,
+                "background": list(background),
+            },
+            "stats": {
+                "elements": len(trace_entries or []),
+                "texts": sum(1 for item in trace_entries or [] if item["type"] == "text"),
+                "assets": sum(1 for item in trace_entries or [] if item.get("asset")),
+            },
+            "elements": trace_entries or [],
+        }
+        trace_path.write_text(
+            json.dumps(trace_data, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(f"Saved render trace: {trace_path}")
 
     print(f"Loading design image: {design_path}")
     design_img = Image.open(design_path).convert("RGBA")

@@ -26,3 +26,10 @@ Use this reference when selecting sliced sprites for `ui_structure.json`.
    `button_or_panel` and `has_meta_border` is true.
 4. Do not use nine-slice for `icon`, `portrait`, or item art unless the design
    clearly stretches that asset.
+5. Search by filename stem, not one exact filename only. Treat suffixes such as
+   `Bg`, `BgShadow`, `BgLight`, `Glow`, `Border`, `FocusLine`, `Arrow`, and
+   `Icon` as a related layer family. Compare the family against the design and
+   build the visible layers back-to-front.
+6. For a composite icon button, use the base/frame alpha bbox for the outer
+   control and the glyph's source alpha aspect for the centered inner layer.
+   A shared outer bbox does not imply that every child should share its size.

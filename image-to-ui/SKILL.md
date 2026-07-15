@@ -1,225 +1,191 @@
 ---
 name: image-to-ui
-description: "Extract structured UI data from design images. Use this skill when the user provides a UI screenshot or design mockup plus sliced assets and wants layout hierarchy, element positions, text content, asset references, and ui_structure.json for Unity/Cocos-style game UI. Trigger when users mention \"UI analysis\", \"extract UI structure\", \"parse design\", \"UI to JSON\", \"analyze layout\", \"screenshot to UI JSON\", \"design image plus sprites\", \"\u622a\u56fe\u8f6c UI JSON\", \"\u751f\u6210 ui_structure.json\", \"Unity/Cocos UI \u914d\u7f6e\", or \"\u6839\u636e\u8bbe\u8ba1\u56fe\u548c Sprite \u76ee\u5f55\u8fd8\u539f UI\"."
+description: "Extract structured UI data from design images. Use when a UI screenshot or mockup plus sliced assets must become layout hierarchy, positions, text, asset references, and ui_structure.json for Unity/Cocos-style game UI. Trigger for UI analysis, screenshot/design to UI JSON, parse design, extract UI structure, Unity/Cocos UI configuration, or reconstruct UI from a design image and Sprite directory."
 ---
 
-# Image to UI Structure Extractor
+# Image to UI
 
-Extract `ui_structure.json` from a UI design image and a sliced PNG asset
-directory for game UI systems such as Unity or Cocos. The workflow is asset
-inventory first, grid reading second, JSON validation third, bbox verification
-fourth, and final reconstruction comparison last.
+Create `ui_structure.json` from one design image and one sliced-asset directory.
+Use the workflow wrapper for normal runs; call individual scripts only when
+debugging the skill itself.
 
-## Inputs
+## Inputs and task folder
 
-1. **Design image** - full UI mockup, PNG/JPG.
-2. **Assets directory** - sliced PNG files. Nested folders are supported. If
-   duplicate basenames exist, write assets as relative paths such as
-   `icons/coin.png`.
+Require:
 
-## Workflow
+- a PNG/JPG design at native resolution;
+- a directory of sliced PNG assets, optionally nested and accompanied by Unity
+  `.png.meta` files;
+- a fresh output directory for this design.
 
-```
-0. inventory_assets.py    -> assets_inventory.json + assets_contact_sheet.png
-1. annotate_grid.py       -> design_grid.png + design_grid_metrics.json
-2. Write ui_structure.json from the grid and asset inventory
-3. validate_structure.py  -> field, asset, canvas, and layout checks
-4. annotate_element.py    -> all-elements bbox overview, then targeted bboxes
-5. render_comparison.py   -> final design/reconstruction comparison
-```
+Keep each design in its own task folder. The workflow records input snapshots
+in `workflow_state.json` and refuses mismatched or stale task folders.
 
-Use `py -B` for workflow commands so Python does not write `__pycache__`
-inside the skill. If sandboxed `py` reports
-`No installed Python found!`, retry the same `py` command once with escalation;
-if it still fails, report the exact error and stop.
-
-Verify interpreter and dependencies before the workflow:
+## 1. Prepare
 
 ```bash
-py -B -c "import sys; print(sys.executable); print(sys.version)"
-py -B -c "import PIL, numpy; print('deps ok')"
+py -B <skill>/scripts/workflow.py prepare --design <design.png> --assets <sprite-dir> --output <task-dir>
 ```
 
-Install deps once if needed:
+This checks Python dependencies, inventories assets, creates grouped contact
+sheets, overlays a measurement grid, and writes grid metrics. If dependencies
+are missing, install only those named by the error and rerun the same command.
+
+Inspect these files first:
+
+- `<task-dir>/design_grid.png`
+- `<task-dir>/design_grid_metrics.json`
+- `<task-dir>/assets/assets_inventory.json`
+- relevant `<task-dir>/assets/assets_contact_sheet_usage_*.png`
+
+Read [references/assets.md](references/assets.md) when selecting sprites.
+
+## 2. Write the structure
+
+Write `<task-dir>/ui_structure.json`. Use the design grid for every bbox and
+the inventory/contact sheets for every asset choice. Read
+[references/schema.md](references/schema.md) for fields and examples.
+
+Apply these rules:
+
+1. Set `canvas` to the native design size from the metrics file.
+2. Build parent-relative hierarchy before fine coordinates.
+3. Use `layout`, `align`, and `vAlign` for derived positions; use explicit
+   `position` only for free placement. Every `layout` object must declare
+   `"type": "row"` or `"type": "column"`.
+4. Model composite controls as layered children and flat generated shapes as
+   `rect` or `overlay`. Give the frame/base the control's outer bbox; keep an
+   icon glyph at its own visible aspect ratio and center it inside the frame.
+   Never stretch a small glyph to the full button bbox.
+5. Include the active UI surface and its scrim; omit unrelated scene content
+   behind it.
+6. Use exact relative asset paths when basenames are duplicated. Prefer Unity
+   sprite-border metadata for stretchable panels and buttons.
+7. Treat a text element's bbox as its text box. Use `alignment` and
+   `textVAlign` for visible-glyph alignment inside that box; use `align` and
+   `vAlign` only to position the box inside its parent.
+8. For repeated siblings, measure their centers and use one row/column layout.
+   Tune the parent position, spacing, and cross-axis alignment before adding
+   child offsets.
+9. When choosing a family asset, inspect its sibling layers. A `Bg` commonly
+   needs the matching `Shadow`, `BgLight`, `Glow`, `Border`, or `FocusLine`;
+   include only layers visible in the design, in back-to-front child order.
+10. Do not add empty text or visual-less leaf containers as placeholders. They
+    cannot count as foreground or review coverage.
+
+Convert grid readings with both axis scales:
+
+```text
+x = column * px_per_cell_x
+y = row * px_per_cell_y
+width = column_span * px_per_cell_x
+height = row_span * px_per_cell_y
+```
+
+When adapting an older draft, scale it once before manual review:
 
 ```bash
-py -B -m pip install pillow numpy
+py -B <skill>/scripts/scale_structure.py --structure <draft.json> --target-design <design.png> --output <task-dir>/ui_structure.json
 ```
 
-Commands below are single-line so they can be pasted into PowerShell. Use one
-task folder per design, such as `out/<design-stem>`, and keep all generated
-artifacts for that design there. Do not reuse old outputs from another design.
-Use script interfaces and reference files first; read script source only when
-debugging the scripts themselves.
-
-## Step 0 - Inventory Assets
+## 3. Check and iterate
 
 ```bash
-py -B <skill>/scripts/inventory_assets.py --assets sprite_dir --output out/<design-stem>/assets
+py -B <skill>/scripts/workflow.py check --output <task-dir>
 ```
 
-Use grouped contact sheets first, especially
-`assets_contact_sheet_usage_button_or_panel.png` and
-`assets_contact_sheet_usage_icon.png`; use the full sheet only as fallback.
-For asset path, duplicate basename, and nine-slice rules, read
-`references/assets.md`.
+`check` is strict by default: structural warnings fail the run.
+`--allow-warnings` is diagnostic only; `finalize` still requires a warning-free
+structural report. Add `--transparent-bg` when scene content behind an active
+popup was intentionally omitted.
 
-## Step 1 - Grid the Design
+The command stops immediately on invalid JSON or structure errors. On success
+it writes:
+
+- `validate_report.json`
+- `all_elements.png` and `all_elements_legend.json`
+- `comparison.png`
+- `reconstruction.png` and `render_trace.json`
+- `visual_audit.json`
+
+The render trace is collected during the same render pass. The audit blocks
+missing requested fonts and visible text ink outside its box. Atomic sprite
+aspect changes and child boxes outside their parents are diagnostic warnings;
+review them in context instead of moving elements automatically. Every current
+visual-audit warning requires an exact accepted entry in
+`metadata.auditWaivers`; stale waivers also block completion.
+
+Every successful `check` or `target` must rewrite `comparison.png` from the
+current structure. Before validation, the workflow removes the old comparison
+so a failed run cannot leave a stale image that looks current. Do not use
+`validate_structure.py` directly during normal iteration because that
+low-level validator does not render.
+
+Inspect both images. Fix hierarchy or parent placement before adjusting child
+coordinates; fix asset, nine-slice, tint, opacity, text, or layer order when
+bboxes align but rendering differs. Rerun `check` after every JSON edit.
+When an asset's shape and shading match but its hue does not, use a small
+validated `hueShift` before replacing the asset or distorting its geometry.
+Use `visible_bbox` and text `line_ink_bboxes` in `render_trace.json` for pixel
+edges. Correct the font, size, line height, stroke, and alignment first; use a
+small positive `textScaleX` only when the supplied font has the wrong width.
+
+For crowded or ambiguous regions, validate once and generate one or more
+focused views:
 
 ```bash
-py -B <skill>/scripts/annotate_grid.py --design design.png --output out/<design-stem>/design_grid.png --metrics out/<design-stem>/design_grid_metrics.json
+py -B <skill>/scripts/workflow.py target --output <task-dir> --element-path "root/popup/close" --element-path "root/popup/rewards"
 ```
 
-Read `out/<design-stem>/design_grid_metrics.json` for `px_per_cell_x`,
-`px_per_cell_y`, and native design size. `ui_structure.json`
-`canvas.width` / `canvas.height` must match the design.
+`target` requires a successful full `check`, refreshes the render artifacts,
+and reuses the transparent-background mode from that check. Pass
+`--transparent-bg` only when changing the recorded mode intentionally.
 
-If scaling an older or downsampled draft:
+Cap focused rechecks at three per element. Read
+[references/alignment.md](references/alignment.md) for correction heuristics and
+[references/validation.md](references/validation.md) when a check fails.
+
+## 4. Review and finalize
+
+Inspect `all_elements.png` and `comparison.png`. After the latest `check` or
+`target`, write `<task-dir>/alignment_review.md` as a four-column Markdown table
+with every path from `all_elements_legend.json`: element path, status
+(`aligned`, `adjusted`, or `skipped`), observed issue/change, and recheck PNG.
+Copy the exact `Review binding:` HTML comment printed by that final command
+into the review. An aligned/adjusted row must cite current `all_elements.png`,
+`comparison.png`, or a current workflow-generated `target_*.png`; a target is
+valid only for paths covered by its companion legend. A skipped row must
+explain why.
+
+Record intentional substitutions or known visual limits in
+`metadata.approximations`; each needs an element `path`, `kind`, `reason`, and
+`"accepted": true`. Do not hide approximations in prose notes only.
+Record every accepted visual-audit warning in `metadata.auditWaivers` with its
+exact `path`, `code`, reason, and `"accepted": true`.
 
 ```bash
-py -B <skill>/scripts/scale_structure.py --structure draft_ui_structure.json --target-design design.png --output out/<design-stem>/ui_structure.json
+py -B <skill>/scripts/workflow.py finalize --output <task-dir>
 ```
 
-## Step 2 - Write `ui_structure.json`
+`finalize` does not rerender elements. It verifies current artifact hashes,
+review coverage, validation, and accepted approximations, then crops only
+suspicious regions from the existing images into `detail_comparison.png`.
+Finish only when it writes `completion_report.json` with `complete: true` and
+sets workflow status to `completed`.
 
-View `out/<design-stem>/design_grid.png` and the relevant grouped contact
-sheets. Do not write positions from the bare design or guess assets from
-filenames before checking the inventory.
+## Do not
 
-For each visible active UI element:
+- Do not estimate coordinates from the ungridded design.
+- Do not guess assets from filenames without checking the inventory.
+- Do not reuse another design's output directory.
+- Do not use pixel/template matching or automatic coordinate correction.
+- Do not change coordinates to hide an asset, text, layering, or nine-slice
+  problem.
 
-1. Read top-left and bottom-right grid coordinates.
-2. Convert with both axis scales:
-   `x = col * px_per_cell_x`, `y = row * px_per_cell_y`,
-   `width = (right_col - left_col) * px_per_cell_x`,
-   `height = (bottom_row - top_row) * px_per_cell_y`.
-3. Convert to parent-relative coordinates.
-4. Prefer `layout` for repeated rows/columns.
-5. Prefer `align` / `vAlign` for centered or edge-aligned elements. Inside a
-   parent `layout`, child alignment only affects the cross axis; see
-   `references/schema.md`.
-6. Use explicit `position` only for genuinely free placements.
+## Deliver
 
-Skip non-UI scene content behind the active UI surface, such as gameplay,
-decorative scenery, or faded screens under a popup. Keep UI-owned
-semi-transparent modal scrims as `overlay` elements, with the popup or active
-foreground surface nested as children. Decompose composite controls into layered
-children: button base + label, slot background + icon + border, avatar base +
-portrait + rim.
-
-Do not skip flat colored UI shapes just because they have no sliced asset. If a
-rectangle can be generated by the engine, model it as a `rect` with `color`,
-optional `opacity`, and an explicit bbox. Use `overlay` instead when that
-colored layer is also the parent of a popup or foreground surface.
-
-For schema fields, element types, nine-slice options, and text rendering hints,
-read `references/schema.md`.
-
-## Step 3 - Validate `ui_structure.json`
-
-```bash
-py -B <skill>/scripts/validate_structure.py --structure out/<design-stem>/ui_structure.json --design design.png --assets sprite_dir --report out/<design-stem>/validate_report.json
-```
-
-Fix all validation errors before bbox alignment. Review warnings and fix any
-that affect the current design. Read `references/validation.md` for triage.
-
-## Step 4 - BBox Alignment
-
-Step 4 is an AI review-and-fix loop, not just an artifact generation step.
-The agent must inspect bbox outputs, decide whether each active foreground
-element is aligned, edit `ui_structure.json` when it is not, and rerun the
-checks until accepted or explicitly skipped.
-
-Start with one all-elements overview:
-
-```bash
-py -B <skill>/scripts/annotate_element.py --design design.png --structure out/<design-stem>/ui_structure.json --all-elements --output out/<design-stem>/all_elements.png --legend out/<design-stem>/all_elements_legend.json
-```
-
-This draws every non-full-canvas resolved bbox on the full design image with
-the grid overlay. Full-canvas `overlay` and `rect` elements are also included
-because they are active UI layers. Labels are numeric; read the legend JSON for
-label-to-path mapping instead of printing it to stdout.
-
-Use the overview to catch parent offsets, obvious size errors, missing groups,
-and elements in the wrong area. For every visible active foreground element,
-record one review status in `out/<design-stem>/alignment_review.md`:
-`aligned`, `adjusted`, `needs-targeted-check`, or `skipped`. Include the
-element path, observed issue, JSON fields changed, recheck output, and skip
-reason when applicable.
-
-Run targeted checks for any element marked `needs-targeted-check`, any adjusted
-element, and any crowded or overlapping foreground region where the overview is
-not enough to judge edges or parent/child relationships:
-
-```bash
-py -B <skill>/scripts/annotate_element.py --design design.png --structure out/<design-stem>/ui_structure.json --element-path "root/level_popup/popup_header/close_button" --output out/<design-stem>/annotated.png --legend out/<design-stem>/annotated_legend.json
-```
-
-Decision rules:
-
-- Position/size drift: adjust `position` / `size`, then rerun overview if a
-  parent changed or targeted bbox if one leaf changed.
-- Whole group drift: adjust the parent container before changing children.
-- Missing bbox for a real design element: add the element to
-  `ui_structure.json`, rerun Step 3, then rerun Step 4.
-- Wrong bbox crowding or occlusion: use targeted bbox; skip only if still
-  impossible to judge, and record the skip reason in `alignment_review.md`.
-- Layout group drift: check the layout parent and adjust the parent
-  `position`, `layout.spacing`, padding, or alignment rather than each child.
-- If bbox edges align but `comparison.png` later looks wrong, treat it as a
-  render issue first: inspect asset transparency, `nineSlice`, layer order,
-  `opacity`, `color`, text metrics, and asset choice before changing
-  coordinates.
-
-After any JSON edit in this step, rerun Step 3 before regenerating bbox images.
-Cap targeted rechecks at 3 iterations per element. Do not proceed to Step 5
-until all review statuses are `aligned` or `skipped`.
-
-For detailed alignment heuristics, precision expectations, and structural
-debugging, read `references/alignment.md`.
-
-## Step 5 - Final Comparison
-
-Choose the command before the first comparison:
-
-```bash
-py -B <skill>/scripts/render_comparison.py --design design.png --structure out/<design-stem>/ui_structure.json --assets sprite_dir --output out/<design-stem>/comparison.png
-```
-
-If the structure intentionally skips scene context behind an active popup, use
-transparent background from the first comparison. This still applies when the
-UI-owned modal scrim itself is modeled as an `overlay`:
-
-```bash
-py -B <skill>/scripts/render_comparison.py --design design.png --structure out/<design-stem>/ui_structure.json --assets sprite_dir --output out/<design-stem>/comparison.png --transparent-bg
-```
-
-Inspect `comparison.png` against the grid. For debugging order and precision
-expectations, read `references/alignment.md`. Use `--no-grid` only for
-presentation output.
-
-## Do Not
-
-- Do not use template matching or automatic pixel correction.
-- Do not add a local crop/zoom verification step.
-- Do not write coordinates from the bare design image.
-- Do not guess asset names before checking the generated inventory/contact
-  sheet.
-- Do not calibrate an old example JSON; calibrate the current draft for the
-  current design.
-- Do not reuse `out/` artifacts from another design.
-- Do not treat structural problems as coordinate drift.
-
-## Output Delivery
-
-1. Save `ui_structure.json`.
-2. Provide `comparison.png`.
-3. Keep `assets_inventory.json`, `assets_contact_sheet*.png`,
-   `design_grid_metrics.json`, `validate_report.json`, bbox outputs, and
-   legend JSON files in the task folder.
-4. Keep `alignment_review.md` with per-element Step 4 statuses, edits, recheck
-   artifacts, and skipped/uncertain reasons.
-5. Summarize total elements, derived vs free-positioned elements, alignment
-   iterations, asset inventory findings, and anything skipped or uncertain.
+Keep `ui_structure.json`, `comparison.png`, `reconstruction.png`, render/audit
+reports, `alignment_review.md`, `completion_report.json`, `workflow_state.json`,
+inventories, grid files, bbox images, and legends in the task folder. Report
+element/layout counts, structure revision and check counts, accepted warnings
+and approximations, and anything skipped or uncertain.

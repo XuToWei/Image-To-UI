@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from collections import defaultdict
@@ -28,14 +29,20 @@ IMAGE_EXTS = {".png", ".jpg", ".jpeg"}
 ELEMENT_TYPES = {"container", "image", "text", "button", "overlay", "rect"}
 LAYOUT_TYPES = {"row", "column"}
 LAYOUT_SPACING = {"even"}
-LAYOUT_ALIGN = {
-    "start", "center", "middle", "end", "left", "right", "top", "bottom",
-    "space-between", "space-around", "space-evenly",
+LAYOUT_AXES = {
+    "row": ("x", "y"),
+    "column": ("y", "x"),
 }
+AXIS_ALIGN = {
+    "x": {"start", "center", "middle", "end", "left", "right"},
+    "y": {"start", "center", "middle", "end", "top", "bottom"},
+}
+LAYOUT_DISTRIBUTION = {"space-between", "space-around", "space-evenly"}
 ALIGN_X = {"left", "center", "right", "start", "end"}
 ALIGN_Y = {"top", "middle", "bottom", "start", "end", "center"}
 TEXT_ALIGN = {"left", "center", "right"}
 TEXT_VALIGN = {"top", "middle", "bottom", "start", "end", "center"}
+NINE_SLICE_SIDES = ("left", "top", "right", "bottom")
 COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$")
 
 
@@ -59,6 +66,20 @@ def positive_number(value: Any) -> bool:
     return is_number(value) and value > 0
 
 
+def finite_non_negative_number(value: Any) -> bool:
+    if not is_number(value) or value < 0:
+        return False
+    return not isinstance(value, float) or math.isfinite(value)
+
+
+def asset_key(value: str) -> str:
+    return value.replace("\\", "/").lower()
+
+
+def casefold_asset_key(value: str) -> str:
+    return value.replace("\\", "/").casefold()
+
+
 def read_json(path: Path) -> dict[str, Any]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -69,21 +90,44 @@ def read_json(path: Path) -> dict[str, Any]:
     return data
 
 
-def build_asset_index(assets_dir: Path) -> tuple[dict[str, Path], set[str], dict[str, dict[str, int]]]:
+def build_asset_index(
+    assets_dir: Path,
+    reporter: Reporter | None = None,
+) -> tuple[dict[str, Path], set[str], dict[str, dict[str, int | float]]]:
     by_basename: dict[str, list[Path]] = defaultdict(list)
     index: dict[str, Path] = {}
-    borders: dict[str, dict[str, int]] = {}
+    borders: dict[str, dict[str, int | float]] = {}
+    relative_paths: dict[str, str] = {}
 
-    for path in assets_dir.rglob("*"):
-        if not path.is_file() or path.suffix.lower() not in IMAGE_EXTS:
-            continue
+    paths = [
+        path
+        for path in assets_dir.rglob("*")
+        if path.is_file() and path.suffix.casefold() in IMAGE_EXTS
+    ]
+    paths.sort(
+        key=lambda path: (
+            path.relative_to(assets_dir).as_posix().casefold(),
+            path.relative_to(assets_dir).as_posix(),
+        )
+    )
+    for path in paths:
         rel = path.relative_to(assets_dir).as_posix()
-        rel_key = rel.lower()
+        rel_key = asset_key(rel)
+        collision_key = casefold_asset_key(rel)
         name_key = path.name.lower()
-        index[rel_key] = path
+        previous = relative_paths.get(collision_key)
+        if previous is not None and previous != rel:
+            if reporter is not None:
+                reporter.error(
+                    "assets",
+                    f"asset relative path case-fold collision: {previous!r} and {rel!r}",
+                )
+        else:
+            relative_paths[collision_key] = rel
+            index[rel_key] = path
         by_basename[name_key].append(path)
         border = read_unity_sprite_border(path)
-        if border:
+        if border and rel_key not in borders:
             borders[rel_key] = border
 
     duplicate_basenames = {name for name, paths in by_basename.items() if len(paths) > 1}
@@ -96,7 +140,7 @@ def build_asset_index(assets_dir: Path) -> tuple[dict[str, Path], set[str], dict
     return index, duplicate_basenames, borders
 
 
-def read_unity_sprite_border(path: Path) -> dict[str, int] | None:
+def read_unity_sprite_border(path: Path) -> dict[str, int | float] | None:
     meta_path = Path(str(path) + ".meta")
     if not meta_path.exists():
         return None
@@ -110,7 +154,11 @@ def read_unity_sprite_border(path: Path) -> dict[str, int] | None:
     )
     if not match:
         return None
-    left, bottom, right, top = (int(float(v.strip())) for v in match.groups())
+    parsed = tuple(float(value.strip()) for value in match.groups())
+    if all(math.isfinite(value) for value in parsed):
+        left, bottom, right, top = (int(value) for value in parsed)
+    else:
+        left, bottom, right, top = parsed
     if left == top == right == bottom == 0:
         return None
     return {"left": left, "top": top, "right": right, "bottom": bottom}
@@ -141,13 +189,110 @@ def check_color(value: Any, path: str, field: str, reporter: Reporter) -> None:
         reporter.warn(path, f"{field} should be #RRGGBB or #RRGGBBAA")
 
 
+def check_axis_alignment(
+    layout: dict[str, Any],
+    path: str,
+    field: str,
+    axis: str,
+    is_main_axis: bool,
+    reporter: Reporter,
+) -> None:
+    if field not in layout:
+        return
+    allowed = set(AXIS_ALIGN[axis])
+    if is_main_axis:
+        allowed.update(LAYOUT_DISTRIBUTION)
+    value = layout[field]
+    if not isinstance(value, str) or value not in allowed:
+        role = "main" if is_main_axis else "cross"
+        reporter.error(
+            path,
+            f"layout.{field} must be one of {sorted(allowed)} for the {axis}-axis {role} axis",
+        )
+
+
+def check_nine_slice(
+    value: Any,
+    path: str,
+    reporter: Reporter,
+    asset_path: Path | None,
+    sprite_border: dict[str, int | float] | None,
+) -> None:
+    margins: dict[str, int | float] | None = None
+    if isinstance(value, bool):
+        if value and sprite_border:
+            margins = sprite_border
+    elif isinstance(value, str):
+        if value not in ("auto", "meta"):
+            reporter.error(path, "nineSlice string must be auto or meta")
+            return
+        if sprite_border:
+            margins = sprite_border
+    elif is_number(value):
+        if not finite_non_negative_number(value):
+            reporter.error(path, "nineSlice must be a finite non-negative number")
+            return
+        margins = {side: value for side in NINE_SLICE_SIDES}
+    elif isinstance(value, dict):
+        unknown = [key for key in value if key not in NINE_SLICE_SIDES]
+        if unknown:
+            names = ", ".join(sorted((repr(key) for key in unknown)))
+            reporter.error(path, f"nineSlice has unknown margin key(s): {names}")
+        valid = True
+        for side in NINE_SLICE_SIDES:
+            if side in value and not finite_non_negative_number(value[side]):
+                reporter.error(
+                    path,
+                    f"nineSlice.{side} must be a finite non-negative number",
+                )
+                valid = False
+        if not unknown and valid:
+            margins = {side: value.get(side, 0) for side in NINE_SLICE_SIDES}
+    else:
+        reporter.error(path, "nineSlice must be bool, number, auto/meta, or margins object")
+        return
+
+    if margins is None:
+        return
+    valid_margins = True
+    for side in NINE_SLICE_SIDES:
+        if not finite_non_negative_number(margins.get(side)):
+            reporter.error(
+                path,
+                f"nineSlice.{side} must be a finite non-negative number",
+            )
+            valid_margins = False
+    if not valid_margins or asset_path is None:
+        return
+
+    try:
+        with Image.open(asset_path) as image:
+            source_width, source_height = image.size
+    except OSError:
+        return
+    if margins["left"] + margins["right"] > source_width:
+        reporter.error(
+            path,
+            f"nineSlice horizontal margins exceed source width {source_width}",
+        )
+    if margins["top"] + margins["bottom"] > source_height:
+        reporter.error(
+            path,
+            f"nineSlice vertical margins exceed source height {source_height}",
+        )
+
+
 def check_layout(layout: Any, path: str, reporter: Reporter) -> None:
     if not isinstance(layout, dict):
         reporter.error(path, "layout must be an object")
         return
-    ltype = layout.get("type", "row")
-    if ltype not in LAYOUT_TYPES:
-        reporter.error(path, "layout.type must be row or column")
+    if "type" not in layout:
+        reporter.error(path, "layout.type is required")
+        ltype = None
+    else:
+        ltype = layout["type"]
+        if not isinstance(ltype, str) or ltype not in LAYOUT_TYPES:
+            reporter.error(path, "layout.type must be row or column")
     spacing = layout.get("spacing", 0)
     if isinstance(spacing, str) and spacing not in LAYOUT_SPACING:
         reporter.error(path, "layout.spacing string must be even")
@@ -163,10 +308,10 @@ def check_layout(layout: Any, path: str, reporter: Reporter) -> None:
                     reporter.error(path, f"layout.padding.{key} must be a number")
         else:
             reporter.error(path, "layout.padding must be a number or {x,y}")
-    if "align" in layout and layout["align"] not in LAYOUT_ALIGN:
-        reporter.warn(path, f"unknown layout.align: {layout['align']}")
-    if "vAlign" in layout and layout["vAlign"] not in LAYOUT_ALIGN:
-        reporter.warn(path, f"unknown layout.vAlign: {layout['vAlign']}")
+    if isinstance(ltype, str) and ltype in LAYOUT_AXES:
+        main_axis, cross_axis = LAYOUT_AXES[ltype]
+        check_axis_alignment(layout, path, "align", main_axis, True, reporter)
+        check_axis_alignment(layout, path, "vAlign", cross_axis, False, reporter)
 
 
 def validate_tree(
@@ -176,7 +321,7 @@ def validate_tree(
     reporter: Reporter,
     asset_index: dict[str, Path],
     duplicate_basenames: set[str],
-    asset_borders: dict[str, dict[str, int]],
+    asset_borders: dict[str, dict[str, int | float]],
     seen_paths: set[str],
     stats: dict[str, int],
 ) -> None:
@@ -188,6 +333,12 @@ def validate_tree(
     if not isinstance(name, str) or not name:
         reporter.error(path, "name is required")
         name = "?"
+    elif "/" in name or "\\" in name or name in {".", ".."}:
+        reporter.error(
+            path,
+            "name must be a stable path segment; path separators and '.'/'..' "
+            "are not allowed",
+        )
     etype = elem.get("type")
     if etype not in ELEMENT_TYPES:
         reporter.error(path, f"type must be one of {sorted(ELEMENT_TYPES)}")
@@ -229,6 +380,17 @@ def validate_tree(
             reporter.error(path, "opacity must be between 0 and 1")
     if "color" in elem:
         check_color(elem["color"], path, "color", reporter)
+    if "hueShift" in elem:
+        hue_shift = elem["hueShift"]
+        if (
+            not is_number(hue_shift)
+            or (isinstance(hue_shift, float) and not math.isfinite(hue_shift))
+            or hue_shift < -360
+            or hue_shift > 360
+        ):
+            reporter.error(
+                path, "hueShift must be a finite number between -360 and 360"
+            )
     if etype == "overlay" and not (elem.get("asset") or elem.get("color")):
         reporter.error(path, "overlay must have color or asset")
     if etype == "rect":
@@ -237,39 +399,64 @@ def validate_tree(
         if elem.get("asset"):
             reporter.warn(path, "rect should not use asset; use image for sliced sprites")
 
+    asset_path: Path | None = None
+    sprite_border: dict[str, int | float] | None = None
     asset = elem.get("asset")
     if asset:
         stats["asset_refs"] += 1
         if not isinstance(asset, str):
             reporter.error(path, "asset must be a string")
         else:
-            key = asset.replace("\\", "/").lower()
+            key = asset_key(asset)
+            asset_path = asset_index.get(key)
+            sprite_border = asset_borders.get(key)
             if "/" not in key and key in duplicate_basenames:
                 reporter.error(path, f"asset basename is ambiguous, use relative path: {asset}")
             elif key not in asset_index:
                 reporter.error(path, f"asset not found: {asset}")
             nine_slice = elem.get("nineSlice")
-            if nine_slice in ("meta", "auto", True) and key not in asset_borders:
+            uses_metadata = nine_slice is True or (
+                isinstance(nine_slice, str) and nine_slice in ("meta", "auto")
+            )
+            if uses_metadata and sprite_border is None:
                 reporter.warn(path, f"nineSlice {nine_slice!r} has no Unity spriteBorder metadata; renderer will infer margins")
     elif etype == "image":
         reporter.warn(path, "image element has no asset")
 
     if "nineSlice" in elem:
-        ns = elem["nineSlice"]
-        if isinstance(ns, bool) or isinstance(ns, (int, float)) or ns in ("auto", "meta"):
-            pass
-        elif isinstance(ns, dict):
-            for key in ("left", "top", "right", "bottom"):
-                if key in ns and not is_number(ns[key]):
-                    reporter.error(path, f"nineSlice.{key} must be a number")
-        else:
-            reporter.error(path, "nineSlice must be bool, number, auto/meta, or margins object")
+        check_nine_slice(
+            elem["nineSlice"],
+            path,
+            reporter,
+            asset_path,
+            sprite_border,
+        )
 
     if etype == "text":
-        if "text" not in elem:
-            reporter.warn(path, "text element has no text field")
+        text = elem.get("text")
+        if not isinstance(text, str) or not text.strip():
+            reporter.error(path, "text must be a non-empty string")
         if "fontSize" in elem and not positive_number(elem["fontSize"]):
             reporter.error(path, "fontSize must be positive")
+        if "lineHeight" in elem and not positive_number(elem["lineHeight"]):
+            reporter.error(path, "lineHeight must be positive")
+        if "textScaleX" in elem:
+            text_scale_x = elem["textScaleX"]
+            if (
+                not is_number(text_scale_x)
+                or text_scale_x <= 0
+                or (
+                    isinstance(text_scale_x, float)
+                    and not math.isfinite(text_scale_x)
+                )
+            ):
+                reporter.error(
+                    path, "textScaleX must be a positive finite number"
+                )
+        if "strokeWidth" in elem:
+            stroke_width = elem["strokeWidth"]
+            if not is_number(stroke_width) or stroke_width < 0:
+                reporter.error(path, "strokeWidth must be a non-negative number")
         if "alignment" in elem and elem["alignment"] not in TEXT_ALIGN:
             reporter.warn(path, f"unknown text alignment: {elem['alignment']}")
         if "textVAlign" in elem and elem["textVAlign"] not in TEXT_VALIGN:
@@ -279,12 +466,27 @@ def validate_tree(
     if "layout" in elem:
         check_layout(elem["layout"], path, reporter)
         if isinstance(elem["layout"], dict):
-            layout_type = elem["layout"].get("type", "row")
+            candidate_layout_type = elem["layout"].get("type")
+            if (
+                isinstance(candidate_layout_type, str)
+                and candidate_layout_type in LAYOUT_TYPES
+            ):
+                layout_type = candidate_layout_type
 
     children = elem.get("children") or []
     if not isinstance(children, list):
         reporter.error(path, "children must be a list")
         return
+    if (
+        path != "root"
+        and etype in {"container", "button"}
+        and not children
+        and not (elem.get("asset") or elem.get("color"))
+    ):
+        reporter.error(
+            path,
+            f"leaf {etype} must have children or its own visual (asset or color)",
+        )
 
     sibling_names: dict[str, int] = defaultdict(int)
     for child in children:
@@ -334,7 +536,10 @@ def validate_structure(structure: dict[str, Any], design_path: Path, assets_dir:
         reporter.error("root", "root object is required")
         return reporter, stats
 
-    asset_index, duplicate_basenames, asset_borders = build_asset_index(assets_dir)
+    asset_index, duplicate_basenames, asset_borders = build_asset_index(
+        assets_dir,
+        reporter,
+    )
     validate_tree(
         structure["root"],
         "root",

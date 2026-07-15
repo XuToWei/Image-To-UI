@@ -53,7 +53,7 @@ workflow in `SKILL.md`.
       }
     ]
   },
-  "metadata": { "total_elements": 0, "notes": "" }
+  "metadata": { "notes": "", "approximations": [] }
 }
 ```
 
@@ -71,17 +71,27 @@ workflow in `SKILL.md`.
 
 `type`, `name`, and `size { width, height }` are required. `position` is
 required unless the element's position is fully derived from `align`/`vAlign`
-or from the parent's `layout`.
+or from the parent's `layout`. Text must be non-empty. A non-root leaf
+`container` or `button` must have children or its own `asset`/`color` visual.
+Each `name` is one stable path segment: it cannot contain `/` or `\\`, and it
+cannot be `.` or `..`.
 
 ## Optional Fields
 
 - `asset`: filename in the assets directory, matched case-insensitively. Nested asset directories are indexed. If duplicate basenames exist, use a relative path such as `icons/coin.png`.
 - `color`: `"#RRGGBB"`; fill color on `rect` / `overlay`, multiplicative tint
   on images, text color on text.
+- `hueShift`: optional image hue rotation in degrees from `-360` to `360`.
+  Use it only when the source shape and shading already match; hue rotation is
+  applied before multiplicative `color` tint and never changes alpha.
 - `opacity`: `0.0` to `1.0`.
 - `text`, `fontSize`, `alignment`: text fields. `alignment` is for text within the text box; `align` positions the text box inside its parent.
+- `textScaleX`: optional positive horizontal scale for visible text ink. Keep
+  it at `1` unless the exact supplied font still has the wrong width after
+  font, size, stroke, and alignment are correct.
 - `nineSlice`: stretchable asset handling.
-- `layout`: declare this container as a row/column group.
+- `layout`: declare this container as a row/column group. The object must
+  explicitly contain `"type": "row"` or `"type": "column"`.
 - `align`, `vAlign`, `offset`: derived positioning relative to parent.
 
 Inside a parent `layout`, child-level alignment only overrides the cross axis:
@@ -165,12 +175,55 @@ The verifier supports fields that make comparisons closer to game UI exports:
   "strokeColor": "#111111",
   "strokeWidth": 5,
   "lineHeight": 56,
+  "textScaleX": 1.08,
   "alignment": "center",
   "textVAlign": "middle"
 }
 ```
 
-`fontFamily` is searched relative to the structure file, assets directory,
-design directory, and current workspace. `alignment` and `textVAlign` align
-text within the text box; `align` and `vAlign` still position the text box
-within its parent.
+`fontFamily` is searched relative to the prepared task, asset, and design
+directories and their parents; it never depends on the process working
+directory. `alignment` and `textVAlign` align the visible glyph pixels,
+including stroke, within the text box. Leading and trailing spaces remain in
+the content but do not move that visible ink. `align` and `vAlign` still
+position the text box within its parent. `fontSize` selects the font size but
+is not the visible glyph height. `lineHeight` is the vertical step between
+successive line draw origins; the renderer measures the real multi-line ink
+bounds before applying vertical alignment.
+`textScaleX` changes visible glyph width around the authored text alignment;
+it does not resize or reposition the text box.
+
+## Accepted Approximations
+
+Use structured metadata for an intentional visual substitution or a limitation
+caused by supplied assets. `finalize` accepts only entries whose path appears
+in `all_elements_legend.json` and whose reason is explicit.
+
+```json
+"metadata": {
+  "notes": "Underlying scene intentionally omitted from the active UI scope.",
+  "approximations": [
+    {
+      "path": "root/popup/selected_badge/check",
+      "kind": "missing_asset",
+      "reason": "No check-mark sprite was supplied; a text glyph is used.",
+      "accepted": true
+    }
+  ],
+  "auditWaivers": [
+    {
+      "path": "root/popup/count_badge",
+      "code": "parent_overflow",
+      "reason": "The badge intentionally overlaps the slot edge by 8px.",
+      "accepted": true
+    }
+  ]
+}
+```
+
+`path`, `reason`, and boolean `accepted` are required. `kind` is a short stable
+category such as `missing_asset`, `asset_color`, or `font_substitution`.
+
+`auditWaivers` is separate from visual substitutions. Each entry must exactly
+match a current warning's `path` and `code`; missing, rejected, duplicate, and
+stale entries block `finalize`.

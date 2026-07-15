@@ -6,8 +6,9 @@ design.
 
 Group mode:
   - If --element-path points to a container that has a `layout` block, all of
-    its direct children are annotated together (each with its own colored
-    bbox + label). One vision call covers the whole group.
+    its direct children are annotated together with the container itself
+    (each with its own colored bbox + label). One vision call covers the
+    whole group.
 
 All-elements mode:
   - If --all-elements is passed, every non-full-canvas resolved element is
@@ -111,16 +112,18 @@ def is_full_canvas(elem_abs, design_w: int, design_h: int) -> bool:
 def should_skip_all_elements_target(elem: dict, bbox, design_w: int, design_h: int) -> bool:
     if not is_full_canvas(bbox, design_w, design_h):
         return False
-    return elem.get("type") not in {"overlay", "rect"}
+    return not bool(elem.get("asset") or elem.get("color") or elem.get("text"))
 
 
 Target = Tuple[str, str, str, Tuple[int, int, int, int]]
 
 
 def gather_targets(structure: dict, path: str) -> List[Target]:
-    """Return [(label, bbox)] for the element to annotate. If the element has
-    a layout block, return one entry per direct child instead of the parent
-    itself (this is the group-alignment case)."""
+    """Return targets for the element to annotate.
+
+    A layout container includes itself followed by each direct child so the
+    requested element path always corresponds to a bbox in the rendered PNG.
+    """
     elem = layout_mod.find_by_path(structure, path)
     if elem is None:
         raise SystemExit(f"element path not found: {path}")
@@ -129,18 +132,16 @@ def gather_targets(structure: dict, path: str) -> List[Target]:
     if abs_box is None:
         raise SystemExit(f"element has no resolved _abs (did you call resolve_positions?): {path}")
 
+    name = elem.get("name", "?")
+    out = [(path, name, name, tuple(abs_box))]
     if elem.get("layout") and elem.get("children"):
-        out = []
         for c in elem.get("children", []):
             cabs = c.get("_abs")
             if cabs is None:
                 continue
             name = c.get("name", "?")
             out.append((f"{path}/{name}", name, name, tuple(cabs)))
-        if out:
-            return out
-    name = elem.get("name", "?")
-    return [(path, name, name, tuple(abs_box))]
+    return out
 
 
 def gather_all_targets(structure: dict, design_w: int, design_h: int) -> List[Target]:

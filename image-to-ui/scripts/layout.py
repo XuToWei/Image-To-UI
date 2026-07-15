@@ -45,6 +45,9 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Tuple
 
 
+LAYOUT_TYPES = {"row", "column"}
+
+
 def _to_int(x: Any, default: int = 0) -> int:
     try:
         return int(round(float(x)))
@@ -79,6 +82,31 @@ def _get_padding(layout: dict) -> Tuple[int, int]:
 
 def _children(elem: dict) -> List[dict]:
     return elem.get("children") or []
+
+
+def _layout_type(layout: Any) -> str:
+    if not isinstance(layout, dict):
+        raise ValueError("layout must be an object with an explicit layout.type")
+    layout_type = layout.get("type")
+    if not isinstance(layout_type, str) or layout_type not in LAYOUT_TYPES:
+        raise ValueError("layout.type must be explicitly set to row or column")
+    return layout_type
+
+
+def _distribute_pixels(total: int, slots: int) -> List[int]:
+    """Split integer pixels across slots without dropping a remainder.
+
+    Cumulative integer boundaries keep the result deterministic, consume the
+    exact total, and make any two slots differ by at most one pixel. The floor
+    at the leading boundary gives odd centered layouts their existing one-pixel
+    bias toward the trailing edge.
+    """
+    if slots <= 0:
+        return []
+    return [
+        ((index + 1) * total) // slots - (index * total) // slots
+        for index in range(slots)
+    ]
 
 
 # ---------------------------------------------------------------------------
@@ -133,6 +161,7 @@ def _layout_group(parent: dict, layout: dict) -> List[Tuple[int, int]]:
 
     Coordinate space: relative to parent's top-left (inside padding).
     """
+    ltype = _layout_type(layout)
     children = _children(parent)
     if not children:
         return []
@@ -142,7 +171,6 @@ def _layout_group(parent: dict, layout: dict) -> List[Tuple[int, int]]:
     inner_w = max(0, pw - 2 * pad_x)
     inner_h = max(0, ph - 2 * pad_y)
 
-    ltype = layout.get("type", "row")
     main_axis = "x" if ltype == "row" else "y"
     main_extent = inner_w if main_axis == "x" else inner_h
     cross_extent = inner_h if main_axis == "x" else inner_w
@@ -165,25 +193,23 @@ def _layout_group(parent: dict, layout: dict) -> List[Tuple[int, int]]:
     v_align = layout.get("vAlign", "start")
 
     # Determine per-gap spacing and leading offset.
-    if spacing_cfg == "even" or align in (
-            "space-between", "space-around", "space-evenly"):
-        if n == 1:
-            # Single child: place by align like a normal aligned element
-            lead = _align_axis(main_extent, sizes_main[0], align, 0)
-            gaps = [0]
-        elif align == "space-between":
-            lead = 0
-            gap = leftover // (n - 1) if n > 1 else 0
-            gaps = [gap] * (n - 1)
-        elif align == "space-around":
-            half = leftover // (2 * n) if n > 0 else 0
-            lead = half
-            gap = (leftover - 2 * half) // (n - 1) if n > 1 else 0
-            gaps = [gap] * (n - 1)
-        else:  # "even" or space-evenly: equal gaps including ends
-            gap = leftover // (n + 1)
-            lead = gap
-            gaps = [gap] * (n - 1)
+    distribution = align if align in (
+        "space-between", "space-around", "space-evenly"
+    ) else ("space-evenly" if spacing_cfg == "even" else None)
+    if distribution == "space-between":
+        lead = 0
+        gaps = _distribute_pixels(leftover, n - 1)
+    elif distribution == "space-around":
+        half_gaps = _distribute_pixels(leftover, 2 * n)
+        lead = half_gaps[0]
+        gaps = [
+            half_gaps[2 * index + 1] + half_gaps[2 * index + 2]
+            for index in range(n - 1)
+        ]
+    elif distribution == "space-evenly":
+        all_gaps = _distribute_pixels(leftover, n + 1)
+        lead = all_gaps[0]
+        gaps = all_gaps[1:-1]
     else:
         # Fixed spacing
         fixed = _to_int(spacing_cfg)
@@ -245,17 +271,20 @@ def resolve_positions(structure: dict) -> dict:
 
     def walk(elem: dict, parent_abs_x: int, parent_abs_y: int,
              parent_w: int, parent_h: int):
+        has_layout = "layout" in elem
         layout = elem.get("layout")
         children = _children(elem)
 
         # Precompute child positions when this element drives a layout.
         layout_positions: Optional[List[Tuple[int, int]]] = None
-        if layout and children:
-            layout_positions = _layout_group(elem, layout)
+        if has_layout:
+            _layout_type(layout)
+            if children:
+                layout_positions = _layout_group(elem, layout)
 
         for i, child in enumerate(children):
             cw, ch = _get_size(child)
-            if layout is not None and layout_positions is not None:
+            if has_layout and layout_positions is not None:
                 rx, ry = layout_positions[i]
             else:
                 rx, ry = _resolve_alignment(child, _get_size(elem)[0], _get_size(elem)[1])
