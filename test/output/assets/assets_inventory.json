@@ -1,0 +1,435 @@
+{
+  "assets_dir": "G:\\GitHub\\Image-To-UI\\test\\source\\sprites",
+  "total_images": 28,
+  "meta_border_count": 0,
+  "duplicate_basenames": {},
+  "assets": [
+    {
+      "path": "backgrounds/bg_citadel.png",
+      "basename": "bg_citadel.png",
+      "width": 1672,
+      "height": 941,
+      "alpha_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/badge_notification.png",
+      "basename": "badge_notification.png",
+      "width": 151,
+      "height": 151,
+      "alpha_bbox": [
+        12,
+        12,
+        139,
+        139
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "image"
+    },
+    {
+      "path": "components/button_action_round.png",
+      "basename": "button_action_round.png",
+      "width": 300,
+      "height": 305,
+      "alpha_bbox": [
+        12,
+        12,
+        296,
+        294
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/button_primary.png",
+      "basename": "button_primary.png",
+      "width": 445,
+      "height": 239,
+      "alpha_bbox": [
+        12,
+        12,
+        445,
+        227
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/button_utility_round.png",
+      "basename": "button_utility_round.png",
+      "width": 136,
+      "height": 136,
+      "alpha_bbox": [
+        12,
+        12,
+        124,
+        124
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/card_quest_frame.png",
+      "basename": "card_quest_frame.png",
+      "width": 383,
+      "height": 155,
+      "alpha_bbox": [
+        12,
+        12,
+        379,
+        143
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/card_quest_row.png",
+      "basename": "card_quest_row.png",
+      "width": 383,
+      "height": 155,
+      "alpha_bbox": [
+        12,
+        12,
+        379,
+        143
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "image"
+    },
+    {
+      "path": "components/divider_gold.png",
+      "basename": "divider_gold.png",
+      "width": 512,
+      "height": 95,
+      "alpha_bbox": [
+        12,
+        12,
+        508,
+        84
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "image"
+    },
+    {
+      "path": "components/dock_navigation_5slot.png",
+      "basename": "dock_navigation_5slot.png",
+      "width": 377,
+      "height": 120,
+      "alpha_bbox": [
+        0,
+        11,
+        375,
+        108
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/frame_portrait.png",
+      "basename": "frame_portrait.png",
+      "width": 275,
+      "height": 268,
+      "alpha_bbox": [
+        12,
+        12,
+        271,
+        264
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "portrait"
+    },
+    {
+      "path": "components/frame_resource_capsule.png",
+      "basename": "frame_resource_capsule.png",
+      "width": 384,
+      "height": 106,
+      "alpha_bbox": [
+        12,
+        12,
+        380,
+        94
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/frame_status_dual.png",
+      "basename": "frame_status_dual.png",
+      "width": 425,
+      "height": 132,
+      "alpha_bbox": [
+        12,
+        12,
+        421,
+        120
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/panel_quest.png",
+      "basename": "panel_quest.png",
+      "width": 372,
+      "height": 286,
+      "alpha_bbox": [
+        12,
+        12,
+        368,
+        283
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "components/slot_navigation.png",
+      "basename": "slot_navigation.png",
+      "width": 211,
+      "height": 212,
+      "alpha_bbox": [
+        11,
+        12,
+        199,
+        200
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "icons/icon_coin.png",
+      "basename": "icon_coin.png",
+      "width": 231,
+      "height": 245,
+      "alpha_bbox": [
+        12,
+        12,
+        227,
+        237
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_compass.png",
+      "basename": "icon_compass.png",
+      "width": 271,
+      "height": 273,
+      "alpha_bbox": [
+        12,
+        12,
+        260,
+        261
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_crystal.png",
+      "basename": "icon_crystal.png",
+      "width": 174,
+      "height": 255,
+      "alpha_bbox": [
+        12,
+        12,
+        170,
+        251
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_fire_sigil.png",
+      "basename": "icon_fire_sigil.png",
+      "width": 237,
+      "height": 297,
+      "alpha_bbox": [
+        12,
+        12,
+        225,
+        293
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_frozen_skull.png",
+      "basename": "icon_frozen_skull.png",
+      "width": 210,
+      "height": 271,
+      "alpha_bbox": [
+        11,
+        12,
+        206,
+        259
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_helmet.png",
+      "basename": "icon_helmet.png",
+      "width": 231,
+      "height": 271,
+      "alpha_bbox": [
+        12,
+        12,
+        227,
+        259
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_mail.png",
+      "basename": "icon_mail.png",
+      "width": 230,
+      "height": 184,
+      "alpha_bbox": [
+        12,
+        12,
+        218,
+        172
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_settings.png",
+      "basename": "icon_settings.png",
+      "width": 235,
+      "height": 241,
+      "alpha_bbox": [
+        12,
+        12,
+        231,
+        237
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_shield_crest.png",
+      "basename": "icon_shield_crest.png",
+      "width": 197,
+      "height": 282,
+      "alpha_bbox": [
+        12,
+        12,
+        193,
+        270
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_spectral_flame.png",
+      "basename": "icon_spectral_flame.png",
+      "width": 239,
+      "height": 269,
+      "alpha_bbox": [
+        12,
+        12,
+        235,
+        257
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_spellbook.png",
+      "basename": "icon_spellbook.png",
+      "width": 263,
+      "height": 222,
+      "alpha_bbox": [
+        11,
+        12,
+        259,
+        210
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "icons/icon_sword.png",
+      "basename": "icon_sword.png",
+      "width": 242,
+      "height": 292,
+      "alpha_bbox": [
+        12,
+        12,
+        238,
+        280
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "icon"
+    },
+    {
+      "path": "quest-backgrounds/quest_bg_fire.png",
+      "basename": "quest_bg_fire.png",
+      "width": 1024,
+      "height": 280,
+      "alpha_bbox": [
+        0,
+        0,
+        1024,
+        280
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    },
+    {
+      "path": "quest-backgrounds/quest_bg_frost.png",
+      "basename": "quest_bg_frost.png",
+      "width": 1024,
+      "height": 280,
+      "alpha_bbox": [
+        0,
+        0,
+        1024,
+        280
+      ],
+      "has_meta_border": false,
+      "spriteBorder": null,
+      "likely_usage": "button_or_panel"
+    }
+  ],
+  "contact_sheets": [
+    "assets_contact_sheet.png",
+    "assets_contact_sheet_usage_button_or_panel.png",
+    "assets_contact_sheet_usage_icon.png",
+    "assets_contact_sheet_usage_image.png",
+    "assets_contact_sheet_usage_portrait.png"
+  ]
+}

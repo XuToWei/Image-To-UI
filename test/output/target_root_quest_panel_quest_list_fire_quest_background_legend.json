@@ -1,0 +1,24 @@
+{
+  "mode": "element",
+  "element_path": "root/quest_panel/quest_list/fire_quest/background",
+  "target_count": 1,
+  "is_group": false,
+  "targets": [
+    {
+      "label": "background",
+      "path": "root/quest_panel/quest_list/fire_quest/background",
+      "name": "background",
+      "abs_bbox": [
+        50,
+        384,
+        425,
+        108
+      ]
+    }
+  ],
+  "design_size": [
+    1672,
+    941
+  ],
+  "output": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_fire_quest_background.png"
+}

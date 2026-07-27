@@ -1,0 +1,164 @@
+{
+  "complete": true,
+  "completed_at": "2026-07-27T03:48:57.581679+00:00",
+  "structure": {
+    "path": "G:\\GitHub\\Image-To-UI\\test\\output\\ui_structure.json",
+    "size": 28480,
+    "mtime_ns": 1785123991290359200,
+    "sha256": "fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef"
+  },
+  "iterations": {
+    "check_count": 5,
+    "structure_revision": 5,
+    "target_count": 12
+  },
+  "review_coverage": {
+    "required": 70,
+    "reviewed": 70,
+    "complete": true,
+    "missing": [],
+    "status_counts": {
+      "adjusted": 24,
+      "aligned": 46,
+      "skipped": 0
+    },
+    "evidence_count": 5,
+    "evidence": [
+      "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png",
+      "G:\\GitHub\\Image-To-UI\\test\\output\\comparison.png",
+      "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button.png",
+      "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_fire_quest_background.png",
+      "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_frost_quest_background.png"
+    ],
+    "fresh": true,
+    "review": "G:\\GitHub\\Image-To-UI\\test\\output\\alignment_review.md",
+    "expected_binding": "<!-- image-to-ui-review-binding: structure=fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef artifacts=ac7b4edb5214309642cac3dfc2f7c9579f392746122ff0ee14df16169f1ba288 -->"
+  },
+  "validation": {
+    "valid": true,
+    "error_count": 0,
+    "warning_count": 0
+  },
+  "visual_audit": {
+    "valid": true,
+    "error_count": 0,
+    "warning_count": 0,
+    "elapsed_ms": 110.66
+  },
+  "approximations": {
+    "total": 7,
+    "accepted": 7,
+    "items": [
+      {
+        "path": "root/background",
+        "kind": "missing_scene_layer",
+        "reason": "The central hero visible in the reference is not present in the supplied sprite directory; the supplied citadel background is used without that scene layer.",
+        "accepted": true
+      },
+      {
+        "path": "root/top_left_hud/portrait/frame",
+        "kind": "missing_asset",
+        "reason": "No portrait artwork was supplied, so the portrait frame keeps its authored dark center.",
+        "accepted": true
+      },
+      {
+        "path": "root/top_left_hud/portrait/level_badge/base",
+        "kind": "asset_substitution",
+        "reason": "No dedicated level plaque was supplied; the resource capsule is resized to approximate the small framed level badge.",
+        "accepted": true
+      },
+      {
+        "path": "root/top_left_hud/portrait/level_badge/label",
+        "kind": "font_substitution",
+        "reason": "No UI font was supplied; Georgia Bold is used as the closest available serif substitute.",
+        "accepted": true
+      },
+      {
+        "path": "root/quest_panel/title",
+        "kind": "font_substitution",
+        "reason": "No UI font was supplied; Georgia is used as the closest available serif substitute.",
+        "accepted": true
+      },
+      {
+        "path": "root/bottom_navigation/nav_buttons/talents/icon",
+        "kind": "asset_color",
+        "reason": "No gold central crest sprite was supplied; the fire sigil is recolored to approximate the highlighted navigation emblem.",
+        "accepted": true
+      },
+      {
+        "path": "root/enter_button/label",
+        "kind": "font_substitution",
+        "reason": "No UI font was supplied; Georgia is used as the closest available serif substitute.",
+        "accepted": true
+      }
+    ]
+  },
+  "audit_waivers": {
+    "required": 0,
+    "accepted": 0,
+    "items": []
+  },
+  "artifact_snapshots": {
+    "validation": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\validate_report.json",
+      "size": 225,
+      "mtime_ns": 1785124045792083600,
+      "sha256": "165ba1bae35a23bb24ff80fc21051effa1038efad4a43b211f266f161bf2233a"
+    },
+    "bbox": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png",
+      "size": 2652002,
+      "mtime_ns": 1785124007574767200,
+      "sha256": "58ad4cdc20bfc6026e6a9fe0d3d4dc2ff46476cb9ba8323d92e7206868b4d7cb"
+    },
+    "bbox_legend": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements_legend.json",
+      "size": 14222,
+      "mtime_ns": 1785124007577768600,
+      "sha256": "6b46aaa2b4771a3f87b32d713557a43a630b95076d094291ba8fe3787b73ec56"
+    },
+    "comparison": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\comparison.png",
+      "size": 5299478,
+      "mtime_ns": 1785124046981682600,
+      "sha256": "8e38da207a299a08570f1dd835fc913541111e7e5c9928251e7e7eab35c21eea"
+    },
+    "reconstruction": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\reconstruction.png",
+      "size": 2894950,
+      "mtime_ns": 1785124046504453500,
+      "sha256": "e5ef8f32bcbe462ba9dddc6cbcf7a0a42ea2f76ea0e76e275aba2d3376e13806"
+    },
+    "render_trace": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\render_trace.json",
+      "size": 53871,
+      "mtime_ns": 1785124046507453500,
+      "sha256": "a9e4b4d50117f656fd124fca9dc256f519102c8e1a52a0f9d80c856b3be76fd6"
+    },
+    "visual_audit": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\visual_audit.json",
+      "size": 325,
+      "mtime_ns": 1785124137163642600,
+      "sha256": "b7322944955b9b5835178465f2651eaf4837a8ba933678e575cba4c519372a86"
+    },
+    "assets_inventory": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json",
+      "size": 9647,
+      "mtime_ns": 1785121820398445700,
+      "sha256": "f1b03e9d031d3f4c7d3e89229f48392d791f27c33c46f846ef539236d4708838"
+    },
+    "detail_comparison": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\detail_comparison.png",
+      "size": 3442,
+      "mtime_ns": 1785124137161642400,
+      "sha256": "cc21aae22c7255263d21941d9156c27ebc20d2351c7d9d0be16891f19425cf62"
+    },
+    "alignment_review": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\alignment_review.md",
+      "size": 11102,
+      "mtime_ns": 1785124125212649500,
+      "sha256": "27214feaf7699384a5f7f9b33b8e0c3a6df3e6f802eb56389258b4974de8c47d"
+    }
+  },
+  "blockers": []
+}

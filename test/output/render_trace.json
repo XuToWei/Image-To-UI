@@ -1,0 +1,2695 @@
+{
+  "version": 1,
+  "canvas": {
+    "width": 1672,
+    "height": 941,
+    "background": [
+      30,
+      30,
+      40,
+      255
+    ]
+  },
+  "stats": {
+    "elements": 71,
+    "texts": 3,
+    "assets": 42
+  },
+  "elements": [
+    {
+      "path": "root",
+      "name": "root",
+      "type": "container",
+      "bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "parent_bbox": null,
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 0
+    },
+    {
+      "path": "root/background",
+      "name": "background",
+      "type": "image",
+      "bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "parent_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "opacity": 1.0,
+      "fully_opaque": true,
+      "visible_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "asset": {
+        "requested": "backgrounds/bg_citadel.png",
+        "resolved": "backgrounds/bg_citadel.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          1672,
+          941
+        ],
+        "source_alpha_bbox": [
+          0,
+          0,
+          1672,
+          941
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.0
+      },
+      "z_order": 1
+    },
+    {
+      "path": "root/top_left_hud",
+      "name": "top_left_hud",
+      "type": "container",
+      "bbox": [
+        8,
+        2,
+        570,
+        205
+      ],
+      "parent_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 2
+    },
+    {
+      "path": "root/top_left_hud/status_bars",
+      "name": "status_bars",
+      "type": "image",
+      "bbox": [
+        151,
+        43,
+        425,
+        88
+      ],
+      "parent_bbox": [
+        8,
+        2,
+        570,
+        205
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        163,
+        49,
+        409,
+        76
+      ],
+      "asset": {
+        "requested": "components/frame_status_dual.png",
+        "resolved": "components/frame_status_dual.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          425,
+          132
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          421,
+          120
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.5
+      },
+      "z_order": 3
+    },
+    {
+      "path": "root/top_left_hud/portrait",
+      "name": "portrait",
+      "type": "container",
+      "bbox": [
+        8,
+        2,
+        190,
+        203
+      ],
+      "parent_bbox": [
+        8,
+        2,
+        570,
+        205
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 4
+    },
+    {
+      "path": "root/top_left_hud/portrait/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        8,
+        2,
+        190,
+        185
+      ],
+      "parent_bbox": [
+        8,
+        2,
+        190,
+        203
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        14,
+        8,
+        184,
+        179
+      ],
+      "asset": {
+        "requested": "components/frame_portrait.png",
+        "resolved": "components/frame_portrait.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          275,
+          268
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          271,
+          264
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000885
+      },
+      "z_order": 5
+    },
+    {
+      "path": "root/top_left_hud/portrait/level_badge",
+      "name": "level_badge",
+      "type": "container",
+      "bbox": [
+        35,
+        158,
+        132,
+        47
+      ],
+      "parent_bbox": [
+        8,
+        2,
+        190,
+        203
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 6
+    },
+    {
+      "path": "root/top_left_hud/portrait/level_badge/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        35,
+        158,
+        132,
+        47
+      ],
+      "parent_bbox": [
+        35,
+        158,
+        132,
+        47
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        37,
+        161,
+        130,
+        41
+      ],
+      "asset": {
+        "requested": "components/frame_resource_capsule.png",
+        "resolved": "components/frame_resource_capsule.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          384,
+          106
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          380,
+          94
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.28988
+      },
+      "z_order": 7
+    },
+    {
+      "path": "root/top_left_hud/portrait/level_badge/label",
+      "name": "label",
+      "type": "text",
+      "bbox": [
+        41,
+        167,
+        120,
+        39
+      ],
+      "parent_bbox": [
+        35,
+        158,
+        132,
+        47
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        68,
+        177,
+        66,
+        18
+      ],
+      "text": {
+        "text_box": [
+          41,
+          167,
+          120,
+          39
+        ],
+        "ink_bbox": [
+          68,
+          177,
+          66,
+          18
+        ],
+        "line_ink_bboxes": [
+          [
+            68,
+            177,
+            66,
+            18
+          ]
+        ],
+        "visible_bbox": [
+          68,
+          177,
+          66,
+          18
+        ],
+        "ink_overflow": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        },
+        "font": {
+          "requested": "C:/Windows/Fonts/georgiab.ttf",
+          "resolved": "C:\\Windows\\Fonts\\georgiab.ttf",
+          "resolved_sha256": "72a6cd94fab6c179392075d3fb361e269cdddfad41bb7ab385fa22a37e49a900",
+          "pillow_version": "12.2.0",
+          "fallback": false
+        },
+        "font_size": 22,
+        "line_height": 26,
+        "text_scale_x": 1.0,
+        "stroke_width": 1,
+        "alignment": "center",
+        "vertical_alignment": "middle",
+        "line_count": 1
+      },
+      "z_order": 8
+    },
+    {
+      "path": "root/resource_bar",
+      "name": "resource_bar",
+      "type": "container",
+      "bbox": [
+        649,
+        17,
+        463,
+        62
+      ],
+      "parent_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "layout": {
+        "type": "row",
+        "spacing": 17,
+        "align": "start",
+        "vAlign": "middle"
+      },
+      "z_order": 9
+    },
+    {
+      "path": "root/resource_bar/coin",
+      "name": "coin",
+      "type": "container",
+      "bbox": [
+        649,
+        17,
+        223,
+        62
+      ],
+      "parent_bbox": [
+        649,
+        17,
+        463,
+        62
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 10
+    },
+    {
+      "path": "root/resource_bar/coin/capsule",
+      "name": "capsule",
+      "type": "image",
+      "bbox": [
+        662,
+        18,
+        210,
+        60
+      ],
+      "parent_bbox": [
+        649,
+        17,
+        223,
+        62
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        666,
+        22,
+        206,
+        51
+      ],
+      "asset": {
+        "requested": "components/frame_resource_capsule.png",
+        "resolved": "components/frame_resource_capsule.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          384,
+          106
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          380,
+          94
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.03504
+      },
+      "z_order": 11
+    },
+    {
+      "path": "root/resource_bar/coin/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        649,
+        17,
+        62,
+        62
+      ],
+      "parent_bbox": [
+        649,
+        17,
+        223,
+        62
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        652,
+        20,
+        56,
+        56
+      ],
+      "asset": {
+        "requested": "components/button_utility_round.png",
+        "resolved": "components/button_utility_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          136,
+          136
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          124,
+          124
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.0
+      },
+      "z_order": 12
+    },
+    {
+      "path": "root/resource_bar/coin/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        659,
+        25,
+        43,
+        46
+      ],
+      "parent_bbox": [
+        649,
+        17,
+        223,
+        62
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        659,
+        25,
+        43,
+        46
+      ],
+      "asset": {
+        "requested": "icons/icon_coin.png",
+        "resolved": "icons/icon_coin.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          231,
+          245
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          227,
+          237
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.008638
+      },
+      "z_order": 13
+    },
+    {
+      "path": "root/resource_bar/crystal",
+      "name": "crystal",
+      "type": "container",
+      "bbox": [
+        889,
+        17,
+        223,
+        62
+      ],
+      "parent_bbox": [
+        649,
+        17,
+        463,
+        62
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 14
+    },
+    {
+      "path": "root/resource_bar/crystal/capsule",
+      "name": "capsule",
+      "type": "image",
+      "bbox": [
+        902,
+        18,
+        210,
+        60
+      ],
+      "parent_bbox": [
+        889,
+        17,
+        223,
+        62
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        906,
+        22,
+        206,
+        51
+      ],
+      "asset": {
+        "requested": "components/frame_resource_capsule.png",
+        "resolved": "components/frame_resource_capsule.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          384,
+          106
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          380,
+          94
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.03504
+      },
+      "z_order": 15
+    },
+    {
+      "path": "root/resource_bar/crystal/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        889,
+        17,
+        62,
+        62
+      ],
+      "parent_bbox": [
+        889,
+        17,
+        223,
+        62
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        892,
+        20,
+        56,
+        56
+      ],
+      "asset": {
+        "requested": "components/button_utility_round.png",
+        "resolved": "components/button_utility_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          136,
+          136
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          124,
+          124
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.0
+      },
+      "z_order": 16
+    },
+    {
+      "path": "root/resource_bar/crystal/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        903,
+        23,
+        34,
+        50
+      ],
+      "parent_bbox": [
+        889,
+        17,
+        223,
+        62
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        903,
+        23,
+        34,
+        50
+      ],
+      "asset": {
+        "requested": "icons/icon_crystal.png",
+        "resolved": "icons/icon_crystal.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          174,
+          255
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          170,
+          251
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.00346
+      },
+      "z_order": 17
+    },
+    {
+      "path": "root/top_right_utilities",
+      "name": "top_right_utilities",
+      "type": "container",
+      "bbox": [
+        1450,
+        12,
+        201,
+        96
+      ],
+      "parent_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "layout": {
+        "type": "row",
+        "spacing": 9,
+        "align": "start",
+        "vAlign": "middle"
+      },
+      "z_order": 18
+    },
+    {
+      "path": "root/top_right_utilities/settings",
+      "name": "settings",
+      "type": "container",
+      "bbox": [
+        1450,
+        12,
+        96,
+        96
+      ],
+      "parent_bbox": [
+        1450,
+        12,
+        201,
+        96
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 19
+    },
+    {
+      "path": "root/top_right_utilities/settings/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1450,
+        12,
+        96,
+        96
+      ],
+      "parent_bbox": [
+        1450,
+        12,
+        96,
+        96
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1456,
+        18,
+        84,
+        83
+      ],
+      "asset": {
+        "requested": "components/button_utility_round.png",
+        "resolved": "components/button_utility_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          136,
+          136
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          124,
+          124
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.0
+      },
+      "z_order": 20
+    },
+    {
+      "path": "root/top_right_utilities/settings/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1469,
+        30,
+        58,
+        60
+      ],
+      "parent_bbox": [
+        1450,
+        12,
+        96,
+        96
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1469,
+        30,
+        58,
+        60
+      ],
+      "asset": {
+        "requested": "icons/icon_settings.png",
+        "resolved": "icons/icon_settings.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          235,
+          241
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          231,
+          237
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.008728
+      },
+      "z_order": 21
+    },
+    {
+      "path": "root/top_right_utilities/mail",
+      "name": "mail",
+      "type": "container",
+      "bbox": [
+        1555,
+        12,
+        96,
+        96
+      ],
+      "parent_bbox": [
+        1450,
+        12,
+        201,
+        96
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 22
+    },
+    {
+      "path": "root/top_right_utilities/mail/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1555,
+        12,
+        96,
+        96
+      ],
+      "parent_bbox": [
+        1555,
+        12,
+        96,
+        96
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1561,
+        18,
+        84,
+        83
+      ],
+      "asset": {
+        "requested": "components/button_utility_round.png",
+        "resolved": "components/button_utility_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          136,
+          136
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          124,
+          124
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.0
+      },
+      "z_order": 23
+    },
+    {
+      "path": "root/top_right_utilities/mail/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1571,
+        34,
+        65,
+        52
+      ],
+      "parent_bbox": [
+        1555,
+        12,
+        96,
+        96
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1572,
+        35,
+        63,
+        50
+      ],
+      "asset": {
+        "requested": "icons/icon_mail.png",
+        "resolved": "icons/icon_mail.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          230,
+          184
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          218,
+          172
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.0
+      },
+      "z_order": 24
+    },
+    {
+      "path": "root/quest_panel",
+      "name": "quest_panel",
+      "type": "container",
+      "bbox": [
+        8,
+        268,
+        493,
+        400
+      ],
+      "parent_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 25
+    },
+    {
+      "path": "root/quest_panel/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        8,
+        268,
+        493,
+        400
+      ],
+      "parent_bbox": [
+        8,
+        268,
+        493,
+        400
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        20,
+        280,
+        477,
+        385
+      ],
+      "asset": {
+        "requested": "components/panel_quest.png",
+        "resolved": "components/panel_quest.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          372,
+          286
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          368,
+          283
+        ],
+        "render_mode": "nine_slice",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.055334,
+        "nine_slice_margins": {
+          "left": 48,
+          "top": 52,
+          "right": 48,
+          "bottom": 42
+        }
+      },
+      "z_order": 26
+    },
+    {
+      "path": "root/quest_panel/title",
+      "name": "title",
+      "type": "text",
+      "bbox": [
+        93,
+        327,
+        333,
+        43
+      ],
+      "parent_bbox": [
+        8,
+        268,
+        493,
+        400
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        208,
+        334,
+        103,
+        29
+      ],
+      "text": {
+        "text_box": [
+          93,
+          327,
+          333,
+          43
+        ],
+        "ink_bbox": [
+          208,
+          334,
+          103,
+          29
+        ],
+        "line_ink_bboxes": [
+          [
+            208,
+            334,
+            103,
+            29
+          ]
+        ],
+        "visible_bbox": [
+          208,
+          334,
+          103,
+          29
+        ],
+        "ink_overflow": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        },
+        "font": {
+          "requested": "C:/Windows/Fonts/georgia.ttf",
+          "resolved": "C:\\Windows\\Fonts\\georgia.ttf",
+          "resolved_sha256": "38dffcaf1fac89492f7c56c600a14daf36ae42f7c21985cd4134ae113124a58f",
+          "pillow_version": "12.2.0",
+          "fallback": false
+        },
+        "font_size": 31,
+        "line_height": 35,
+        "text_scale_x": 1.0,
+        "stroke_width": 1,
+        "alignment": "center",
+        "vertical_alignment": "middle",
+        "line_count": 1
+      },
+      "z_order": 27
+    },
+    {
+      "path": "root/quest_panel/divider",
+      "name": "divider",
+      "type": "image",
+      "bbox": [
+        58,
+        360,
+        393,
+        34
+      ],
+      "parent_bbox": [
+        8,
+        268,
+        493,
+        400
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        65,
+        362,
+        385,
+        30
+      ],
+      "asset": {
+        "requested": "components/divider_gold.png",
+        "resolved": "components/divider_gold.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          512,
+          95
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          508,
+          84
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 1.144704
+      },
+      "z_order": 28
+    },
+    {
+      "path": "root/quest_panel/quest_list",
+      "name": "quest_list",
+      "type": "container",
+      "bbox": [
+        31,
+        378,
+        450,
+        264
+      ],
+      "parent_bbox": [
+        8,
+        268,
+        493,
+        400
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "layout": {
+        "type": "column",
+        "spacing": 8,
+        "align": "start",
+        "vAlign": "start"
+      },
+      "z_order": 29
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest",
+      "name": "fire_quest",
+      "type": "container",
+      "bbox": [
+        31,
+        378,
+        450,
+        128
+      ],
+      "parent_bbox": [
+        31,
+        378,
+        450,
+        264
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 30
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest/background",
+      "name": "background",
+      "type": "image",
+      "bbox": [
+        50,
+        384,
+        425,
+        108
+      ],
+      "parent_bbox": [
+        31,
+        378,
+        450,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": true,
+      "visible_bbox": [
+        50,
+        384,
+        425,
+        108
+      ],
+      "asset": {
+        "requested": "quest-backgrounds/quest_bg_fire.png",
+        "resolved": "quest-backgrounds/quest_bg_fire.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          1024,
+          280
+        ],
+        "source_alpha_bbox": [
+          0,
+          0,
+          1024,
+          280
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.076027
+      },
+      "z_order": 31
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        31,
+        378,
+        450,
+        128
+      ],
+      "parent_bbox": [
+        31,
+        378,
+        450,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        43,
+        390,
+        434,
+        104
+      ],
+      "asset": {
+        "requested": "components/card_quest_frame.png",
+        "resolved": "components/card_quest_frame.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          383,
+          155
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          379,
+          143
+        ],
+        "render_mode": "nine_slice",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.422773,
+        "nine_slice_margins": {
+          "left": 48,
+          "top": 30,
+          "right": 48,
+          "bottom": 30
+        }
+      },
+      "z_order": 32
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest/action_base",
+      "name": "action_base",
+      "type": "image",
+      "bbox": [
+        41,
+        378,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        31,
+        378,
+        450,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        43,
+        381,
+        124,
+        123
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000781
+      },
+      "z_order": 33
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        71,
+        398,
+        70,
+        88
+      ],
+      "parent_bbox": [
+        31,
+        378,
+        450,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        72,
+        399,
+        68,
+        86
+      ],
+      "asset": {
+        "requested": "icons/icon_fire_sigil.png",
+        "resolved": "icons/icon_fire_sigil.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          237,
+          297
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          225,
+          293
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.003175
+      },
+      "z_order": 34
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest",
+      "name": "frost_quest",
+      "type": "container",
+      "bbox": [
+        31,
+        514,
+        450,
+        128
+      ],
+      "parent_bbox": [
+        31,
+        378,
+        450,
+        264
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 35
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/background",
+      "name": "background",
+      "type": "image",
+      "bbox": [
+        50,
+        520,
+        425,
+        108
+      ],
+      "parent_bbox": [
+        31,
+        514,
+        450,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": true,
+      "visible_bbox": [
+        50,
+        520,
+        425,
+        108
+      ],
+      "asset": {
+        "requested": "quest-backgrounds/quest_bg_frost.png",
+        "resolved": "quest-backgrounds/quest_bg_frost.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          1024,
+          280
+        ],
+        "source_alpha_bbox": [
+          0,
+          0,
+          1024,
+          280
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.076027
+      },
+      "z_order": 36
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        31,
+        514,
+        450,
+        128
+      ],
+      "parent_bbox": [
+        31,
+        514,
+        450,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        43,
+        526,
+        434,
+        104
+      ],
+      "asset": {
+        "requested": "components/card_quest_frame.png",
+        "resolved": "components/card_quest_frame.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          383,
+          155
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          379,
+          143
+        ],
+        "render_mode": "nine_slice",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.422773,
+        "nine_slice_margins": {
+          "left": 48,
+          "top": 30,
+          "right": 48,
+          "bottom": 30
+        }
+      },
+      "z_order": 37
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/action_base",
+      "name": "action_base",
+      "type": "image",
+      "bbox": [
+        41,
+        514,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        31,
+        514,
+        450,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        43,
+        517,
+        124,
+        123
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000781
+      },
+      "z_order": 38
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        73,
+        535,
+        66,
+        85
+      ],
+      "parent_bbox": [
+        31,
+        514,
+        450,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        74,
+        536,
+        65,
+        83
+      ],
+      "asset": {
+        "requested": "icons/icon_frozen_skull.png",
+        "resolved": "icons/icon_frozen_skull.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          210,
+          271
+        ],
+        "source_alpha_bbox": [
+          11,
+          12,
+          206,
+          259
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.002017
+      },
+      "z_order": 39
+    },
+    {
+      "path": "root/right_actions",
+      "name": "right_actions",
+      "type": "container",
+      "bbox": [
+        1411,
+        119,
+        211,
+        568
+      ],
+      "parent_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "layout": {
+        "type": "column",
+        "spacing": -37,
+        "align": "start",
+        "vAlign": "start"
+      },
+      "z_order": 40
+    },
+    {
+      "path": "root/right_actions/sword",
+      "name": "sword",
+      "type": "container",
+      "bbox": [
+        1411,
+        119,
+        211,
+        214
+      ],
+      "parent_bbox": [
+        1411,
+        119,
+        211,
+        568
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 41
+    },
+    {
+      "path": "root/right_actions/sword/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1411,
+        119,
+        211,
+        214
+      ],
+      "parent_bbox": [
+        1411,
+        119,
+        211,
+        214
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1417,
+        125,
+        205,
+        202
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.002414
+      },
+      "z_order": 42
+    },
+    {
+      "path": "root/right_actions/sword/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1473,
+        173,
+        88,
+        106
+      ],
+      "parent_bbox": [
+        1411,
+        119,
+        211,
+        214
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1475,
+        175,
+        86,
+        102
+      ],
+      "asset": {
+        "requested": "icons/icon_sword.png",
+        "resolved": "icons/icon_sword.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          242,
+          292
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          238,
+          280
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.001715
+      },
+      "z_order": 43
+    },
+    {
+      "path": "root/right_actions/helmet",
+      "name": "helmet",
+      "type": "container",
+      "bbox": [
+        1411,
+        296,
+        211,
+        214
+      ],
+      "parent_bbox": [
+        1411,
+        119,
+        211,
+        568
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 44
+    },
+    {
+      "path": "root/right_actions/helmet/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1411,
+        296,
+        211,
+        214
+      ],
+      "parent_bbox": [
+        1411,
+        296,
+        211,
+        214
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1417,
+        302,
+        205,
+        202
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.002414
+      },
+      "z_order": 45
+    },
+    {
+      "path": "root/right_actions/helmet/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1474,
+        352,
+        86,
+        101
+      ],
+      "parent_bbox": [
+        1411,
+        296,
+        211,
+        214
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1476,
+        354,
+        84,
+        97
+      ],
+      "asset": {
+        "requested": "icons/icon_helmet.png",
+        "resolved": "icons/icon_helmet.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          231,
+          271
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          227,
+          259
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.001073
+      },
+      "z_order": 46
+    },
+    {
+      "path": "root/right_actions/spectral_flame",
+      "name": "spectral_flame",
+      "type": "container",
+      "bbox": [
+        1411,
+        473,
+        211,
+        214
+      ],
+      "parent_bbox": [
+        1411,
+        119,
+        211,
+        568
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 47
+    },
+    {
+      "path": "root/right_actions/spectral_flame/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1411,
+        473,
+        211,
+        214
+      ],
+      "parent_bbox": [
+        1411,
+        473,
+        211,
+        214
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1417,
+        479,
+        205,
+        202
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.002414
+      },
+      "z_order": 48
+    },
+    {
+      "path": "root/right_actions/spectral_flame/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1469,
+        527,
+        96,
+        108
+      ],
+      "parent_bbox": [
+        1411,
+        473,
+        211,
+        214
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1471,
+        529,
+        94,
+        104
+      ],
+      "asset": {
+        "requested": "icons/icon_spectral_flame.png",
+        "resolved": "icons/icon_spectral_flame.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          239,
+          269
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          235,
+          257
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000465
+      },
+      "z_order": 49
+    },
+    {
+      "path": "root/bottom_navigation",
+      "name": "bottom_navigation",
+      "type": "container",
+      "bbox": [
+        410,
+        765,
+        812,
+        173
+      ],
+      "parent_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 50
+    },
+    {
+      "path": "root/bottom_navigation/dock",
+      "name": "dock",
+      "type": "image",
+      "bbox": [
+        410,
+        775,
+        812,
+        150
+      ],
+      "parent_bbox": [
+        410,
+        765,
+        812,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        410,
+        787,
+        812,
+        126
+      ],
+      "asset": {
+        "requested": "components/dock_navigation_5slot.png",
+        "resolved": "components/dock_navigation_5slot.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          377,
+          120
+        ],
+        "source_alpha_bbox": [
+          0,
+          11,
+          375,
+          108
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.723077
+      },
+      "z_order": 51
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons",
+      "name": "nav_buttons",
+      "type": "container",
+      "bbox": [
+        469,
+        765,
+        722,
+        173
+      ],
+      "parent_bbox": [
+        410,
+        765,
+        812,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "layout": {
+        "type": "row",
+        "spacing": 0,
+        "align": "space-between",
+        "vAlign": "middle"
+      },
+      "z_order": 52
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/equipment",
+      "name": "equipment",
+      "type": "container",
+      "bbox": [
+        472,
+        793,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        469,
+        765,
+        722,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 53
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/equipment/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        472,
+        793,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        472,
+        793,
+        126,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        474,
+        796,
+        124,
+        123
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000781
+      },
+      "z_order": 54
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/equipment/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        505,
+        807,
+        61,
+        87
+      ],
+      "parent_bbox": [
+        472,
+        793,
+        126,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        506,
+        808,
+        60,
+        85
+      ],
+      "asset": {
+        "requested": "icons/icon_shield_crest.png",
+        "resolved": "icons/icon_shield_crest.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          197,
+          282
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          193,
+          270
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.003676
+      },
+      "z_order": 55
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/armor",
+      "name": "armor",
+      "type": "container",
+      "bbox": [
+        603,
+        793,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        469,
+        765,
+        722,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 56
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/armor/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        603,
+        793,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        603,
+        793,
+        126,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        605,
+        796,
+        124,
+        123
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000781
+      },
+      "z_order": 57
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/armor/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        644,
+        817,
+        58,
+        68
+      ],
+      "parent_bbox": [
+        603,
+        793,
+        126,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        645,
+        818,
+        57,
+        66
+      ],
+      "asset": {
+        "requested": "icons/icon_helmet.png",
+        "resolved": "icons/icon_helmet.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          231,
+          271
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          227,
+          259
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000637
+      },
+      "z_order": 58
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/talents",
+      "name": "talents",
+      "type": "container",
+      "bbox": [
+        752,
+        765,
+        170,
+        173
+      ],
+      "parent_bbox": [
+        469,
+        765,
+        722,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 59
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/talents/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        752,
+        765,
+        170,
+        173
+      ],
+      "parent_bbox": [
+        752,
+        765,
+        170,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        756,
+        769,
+        166,
+        165
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000964
+      },
+      "z_order": 60
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/talents/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        793,
+        796,
+        88,
+        110
+      ],
+      "parent_bbox": [
+        752,
+        765,
+        170,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        795,
+        798,
+        84,
+        108
+      ],
+      "asset": {
+        "requested": "icons/icon_fire_sigil.png",
+        "resolved": "icons/icon_fire_sigil.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          237,
+          297
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          225,
+          293
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 42,
+        "aspect_scale_error": 0.002532
+      },
+      "z_order": 61
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/spellbook",
+      "name": "spellbook",
+      "type": "container",
+      "bbox": [
+        931,
+        793,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        469,
+        765,
+        722,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 62
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/spellbook/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        931,
+        793,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        931,
+        793,
+        126,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        933,
+        796,
+        124,
+        123
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000781
+      },
+      "z_order": 63
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/spellbook/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        949,
+        819,
+        77,
+        65
+      ],
+      "parent_bbox": [
+        931,
+        793,
+        126,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        950,
+        820,
+        76,
+        63
+      ],
+      "asset": {
+        "requested": "icons/icon_spellbook.png",
+        "resolved": "icons/icon_spellbook.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          263,
+          222
+        ],
+        "source_alpha_bbox": [
+          11,
+          12,
+          259,
+          210
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 5.9e-05
+      },
+      "z_order": 64
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/map",
+      "name": "map",
+      "type": "container",
+      "bbox": [
+        1063,
+        793,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        469,
+        765,
+        722,
+        173
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 65
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/map/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1063,
+        793,
+        126,
+        128
+      ],
+      "parent_bbox": [
+        1063,
+        793,
+        126,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1065,
+        796,
+        124,
+        123
+      ],
+      "asset": {
+        "requested": "components/button_action_round.png",
+        "resolved": "components/button_action_round.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          300,
+          305
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          296,
+          294
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.000781
+      },
+      "z_order": 66
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/map/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1090,
+        816,
+        70,
+        70
+      ],
+      "parent_bbox": [
+        1063,
+        793,
+        126,
+        128
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1091,
+        817,
+        68,
+        68
+      ],
+      "asset": {
+        "requested": "icons/icon_compass.png",
+        "resolved": "icons/icon_compass.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          271,
+          273
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          260,
+          261
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.00738
+      },
+      "z_order": 67
+    },
+    {
+      "path": "root/enter_button",
+      "name": "enter_button",
+      "type": "container",
+      "bbox": [
+        1199,
+        668,
+        465,
+        253
+      ],
+      "parent_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "z_order": 68
+    },
+    {
+      "path": "root/enter_button/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1199,
+        668,
+        465,
+        253
+      ],
+      "parent_bbox": [
+        1199,
+        668,
+        465,
+        253
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1209,
+        678,
+        455,
+        233
+      ],
+      "asset": {
+        "requested": "components/button_primary.png",
+        "resolved": "components/button_primary.png",
+        "found": true,
+        "render_error": null,
+        "source_size": [
+          445,
+          239
+        ],
+        "source_alpha_bbox": [
+          12,
+          12,
+          445,
+          227
+        ],
+        "render_mode": "stretch",
+        "hue_shift": 0,
+        "aspect_scale_error": 0.013047
+      },
+      "z_order": 69
+    },
+    {
+      "path": "root/enter_button/label",
+      "name": "label",
+      "type": "text",
+      "bbox": [
+        1264,
+        745,
+        345,
+        105
+      ],
+      "parent_bbox": [
+        1199,
+        668,
+        465,
+        253
+      ],
+      "opacity": 1.0,
+      "fully_opaque": false,
+      "visible_bbox": [
+        1299,
+        769,
+        274,
+        56
+      ],
+      "text": {
+        "text_box": [
+          1264,
+          745,
+          345,
+          105
+        ],
+        "ink_bbox": [
+          1299,
+          769,
+          274,
+          56
+        ],
+        "line_ink_bboxes": [
+          [
+            1299,
+            769,
+            274,
+            56
+          ]
+        ],
+        "visible_bbox": [
+          1299,
+          769,
+          274,
+          56
+        ],
+        "ink_overflow": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        },
+        "font": {
+          "requested": "C:/Windows/Fonts/georgia.ttf",
+          "resolved": "C:\\Windows\\Fonts\\georgia.ttf",
+          "resolved_sha256": "38dffcaf1fac89492f7c56c600a14daf36ae42f7c21985cd4134ae113124a58f",
+          "pillow_version": "12.2.0",
+          "fallback": false
+        },
+        "font_size": 74,
+        "line_height": 78,
+        "text_scale_x": 1.08,
+        "stroke_width": 2,
+        "alignment": "center",
+        "vertical_alignment": "middle",
+        "line_count": 1
+      },
+      "z_order": 70
+    }
+  ]
+}

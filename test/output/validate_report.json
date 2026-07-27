@@ -1,0 +1,14 @@
+{
+  "valid": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "stats": {
+    "elements": 71,
+    "positioned": 57,
+    "asset_refs": 42,
+    "texts": 3,
+    "layouts": 5
+  },
+  "errors": [],
+  "warnings": []
+}

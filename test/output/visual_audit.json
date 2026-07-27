@@ -1,0 +1,14 @@
+{
+  "valid": true,
+  "error_count": 0,
+  "warning_count": 0,
+  "issue_count": 0,
+  "thresholds": {
+    "atomic_asset_aspect": 0.08,
+    "parent_overflow_px": 4,
+    "text_overflow_px": 1
+  },
+  "issues": [],
+  "evidence": "G:\\GitHub\\Image-To-UI\\test\\output\\detail_comparison.png",
+  "elapsed_ms": 110.66
+}

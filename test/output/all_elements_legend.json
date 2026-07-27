@@ -1,0 +1,783 @@
+{
+  "mode": "all_elements",
+  "element_path": null,
+  "target_count": 70,
+  "is_group": false,
+  "targets": [
+    {
+      "label": "1",
+      "path": "root/background",
+      "name": "background",
+      "abs_bbox": [
+        0,
+        0,
+        1672,
+        941
+      ]
+    },
+    {
+      "label": "2",
+      "path": "root/top_left_hud",
+      "name": "top_left_hud",
+      "abs_bbox": [
+        8,
+        2,
+        570,
+        205
+      ]
+    },
+    {
+      "label": "3",
+      "path": "root/top_left_hud/status_bars",
+      "name": "status_bars",
+      "abs_bbox": [
+        151,
+        43,
+        425,
+        88
+      ]
+    },
+    {
+      "label": "4",
+      "path": "root/top_left_hud/portrait",
+      "name": "portrait",
+      "abs_bbox": [
+        8,
+        2,
+        190,
+        203
+      ]
+    },
+    {
+      "label": "5",
+      "path": "root/top_left_hud/portrait/frame",
+      "name": "frame",
+      "abs_bbox": [
+        8,
+        2,
+        190,
+        185
+      ]
+    },
+    {
+      "label": "6",
+      "path": "root/top_left_hud/portrait/level_badge",
+      "name": "level_badge",
+      "abs_bbox": [
+        35,
+        158,
+        132,
+        47
+      ]
+    },
+    {
+      "label": "7",
+      "path": "root/top_left_hud/portrait/level_badge/base",
+      "name": "base",
+      "abs_bbox": [
+        35,
+        158,
+        132,
+        47
+      ]
+    },
+    {
+      "label": "8",
+      "path": "root/top_left_hud/portrait/level_badge/label",
+      "name": "label",
+      "abs_bbox": [
+        41,
+        167,
+        120,
+        39
+      ]
+    },
+    {
+      "label": "9",
+      "path": "root/resource_bar",
+      "name": "resource_bar",
+      "abs_bbox": [
+        649,
+        17,
+        463,
+        62
+      ]
+    },
+    {
+      "label": "10",
+      "path": "root/resource_bar/coin",
+      "name": "coin",
+      "abs_bbox": [
+        649,
+        17,
+        223,
+        62
+      ]
+    },
+    {
+      "label": "11",
+      "path": "root/resource_bar/coin/capsule",
+      "name": "capsule",
+      "abs_bbox": [
+        662,
+        18,
+        210,
+        60
+      ]
+    },
+    {
+      "label": "12",
+      "path": "root/resource_bar/coin/frame",
+      "name": "frame",
+      "abs_bbox": [
+        649,
+        17,
+        62,
+        62
+      ]
+    },
+    {
+      "label": "13",
+      "path": "root/resource_bar/coin/icon",
+      "name": "icon",
+      "abs_bbox": [
+        659,
+        25,
+        43,
+        46
+      ]
+    },
+    {
+      "label": "14",
+      "path": "root/resource_bar/crystal",
+      "name": "crystal",
+      "abs_bbox": [
+        889,
+        17,
+        223,
+        62
+      ]
+    },
+    {
+      "label": "15",
+      "path": "root/resource_bar/crystal/capsule",
+      "name": "capsule",
+      "abs_bbox": [
+        902,
+        18,
+        210,
+        60
+      ]
+    },
+    {
+      "label": "16",
+      "path": "root/resource_bar/crystal/frame",
+      "name": "frame",
+      "abs_bbox": [
+        889,
+        17,
+        62,
+        62
+      ]
+    },
+    {
+      "label": "17",
+      "path": "root/resource_bar/crystal/icon",
+      "name": "icon",
+      "abs_bbox": [
+        903,
+        23,
+        34,
+        50
+      ]
+    },
+    {
+      "label": "18",
+      "path": "root/top_right_utilities",
+      "name": "top_right_utilities",
+      "abs_bbox": [
+        1450,
+        12,
+        201,
+        96
+      ]
+    },
+    {
+      "label": "19",
+      "path": "root/top_right_utilities/settings",
+      "name": "settings",
+      "abs_bbox": [
+        1450,
+        12,
+        96,
+        96
+      ]
+    },
+    {
+      "label": "20",
+      "path": "root/top_right_utilities/settings/base",
+      "name": "base",
+      "abs_bbox": [
+        1450,
+        12,
+        96,
+        96
+      ]
+    },
+    {
+      "label": "21",
+      "path": "root/top_right_utilities/settings/icon",
+      "name": "icon",
+      "abs_bbox": [
+        1469,
+        30,
+        58,
+        60
+      ]
+    },
+    {
+      "label": "22",
+      "path": "root/top_right_utilities/mail",
+      "name": "mail",
+      "abs_bbox": [
+        1555,
+        12,
+        96,
+        96
+      ]
+    },
+    {
+      "label": "23",
+      "path": "root/top_right_utilities/mail/base",
+      "name": "base",
+      "abs_bbox": [
+        1555,
+        12,
+        96,
+        96
+      ]
+    },
+    {
+      "label": "24",
+      "path": "root/top_right_utilities/mail/icon",
+      "name": "icon",
+      "abs_bbox": [
+        1571,
+        34,
+        65,
+        52
+      ]
+    },
+    {
+      "label": "25",
+      "path": "root/quest_panel",
+      "name": "quest_panel",
+      "abs_bbox": [
+        8,
+        268,
+        493,
+        400
+      ]
+    },
+    {
+      "label": "26",
+      "path": "root/quest_panel/base",
+      "name": "base",
+      "abs_bbox": [
+        8,
+        268,
+        493,
+        400
+      ]
+    },
+    {
+      "label": "27",
+      "path": "root/quest_panel/title",
+      "name": "title",
+      "abs_bbox": [
+        93,
+        327,
+        333,
+        43
+      ]
+    },
+    {
+      "label": "28",
+      "path": "root/quest_panel/divider",
+      "name": "divider",
+      "abs_bbox": [
+        58,
+        360,
+        393,
+        34
+      ]
+    },
+    {
+      "label": "29",
+      "path": "root/quest_panel/quest_list",
+      "name": "quest_list",
+      "abs_bbox": [
+        31,
+        378,
+        450,
+        264
+      ]
+    },
+    {
+      "label": "30",
+      "path": "root/quest_panel/quest_list/fire_quest",
+      "name": "fire_quest",
+      "abs_bbox": [
+        31,
+        378,
+        450,
+        128
+      ]
+    },
+    {
+      "label": "31",
+      "path": "root/quest_panel/quest_list/fire_quest/background",
+      "name": "background",
+      "abs_bbox": [
+        50,
+        384,
+        425,
+        108
+      ]
+    },
+    {
+      "label": "32",
+      "path": "root/quest_panel/quest_list/fire_quest/frame",
+      "name": "frame",
+      "abs_bbox": [
+        31,
+        378,
+        450,
+        128
+      ]
+    },
+    {
+      "label": "33",
+      "path": "root/quest_panel/quest_list/fire_quest/action_base",
+      "name": "action_base",
+      "abs_bbox": [
+        41,
+        378,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "34",
+      "path": "root/quest_panel/quest_list/fire_quest/icon",
+      "name": "icon",
+      "abs_bbox": [
+        71,
+        398,
+        70,
+        88
+      ]
+    },
+    {
+      "label": "35",
+      "path": "root/quest_panel/quest_list/frost_quest",
+      "name": "frost_quest",
+      "abs_bbox": [
+        31,
+        514,
+        450,
+        128
+      ]
+    },
+    {
+      "label": "36",
+      "path": "root/quest_panel/quest_list/frost_quest/background",
+      "name": "background",
+      "abs_bbox": [
+        50,
+        520,
+        425,
+        108
+      ]
+    },
+    {
+      "label": "37",
+      "path": "root/quest_panel/quest_list/frost_quest/frame",
+      "name": "frame",
+      "abs_bbox": [
+        31,
+        514,
+        450,
+        128
+      ]
+    },
+    {
+      "label": "38",
+      "path": "root/quest_panel/quest_list/frost_quest/action_base",
+      "name": "action_base",
+      "abs_bbox": [
+        41,
+        514,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "39",
+      "path": "root/quest_panel/quest_list/frost_quest/icon",
+      "name": "icon",
+      "abs_bbox": [
+        73,
+        535,
+        66,
+        85
+      ]
+    },
+    {
+      "label": "40",
+      "path": "root/right_actions",
+      "name": "right_actions",
+      "abs_bbox": [
+        1411,
+        119,
+        211,
+        568
+      ]
+    },
+    {
+      "label": "41",
+      "path": "root/right_actions/sword",
+      "name": "sword",
+      "abs_bbox": [
+        1411,
+        119,
+        211,
+        214
+      ]
+    },
+    {
+      "label": "42",
+      "path": "root/right_actions/sword/base",
+      "name": "base",
+      "abs_bbox": [
+        1411,
+        119,
+        211,
+        214
+      ]
+    },
+    {
+      "label": "43",
+      "path": "root/right_actions/sword/icon",
+      "name": "icon",
+      "abs_bbox": [
+        1473,
+        173,
+        88,
+        106
+      ]
+    },
+    {
+      "label": "44",
+      "path": "root/right_actions/helmet",
+      "name": "helmet",
+      "abs_bbox": [
+        1411,
+        296,
+        211,
+        214
+      ]
+    },
+    {
+      "label": "45",
+      "path": "root/right_actions/helmet/base",
+      "name": "base",
+      "abs_bbox": [
+        1411,
+        296,
+        211,
+        214
+      ]
+    },
+    {
+      "label": "46",
+      "path": "root/right_actions/helmet/icon",
+      "name": "icon",
+      "abs_bbox": [
+        1474,
+        352,
+        86,
+        101
+      ]
+    },
+    {
+      "label": "47",
+      "path": "root/right_actions/spectral_flame",
+      "name": "spectral_flame",
+      "abs_bbox": [
+        1411,
+        473,
+        211,
+        214
+      ]
+    },
+    {
+      "label": "48",
+      "path": "root/right_actions/spectral_flame/base",
+      "name": "base",
+      "abs_bbox": [
+        1411,
+        473,
+        211,
+        214
+      ]
+    },
+    {
+      "label": "49",
+      "path": "root/right_actions/spectral_flame/icon",
+      "name": "icon",
+      "abs_bbox": [
+        1469,
+        527,
+        96,
+        108
+      ]
+    },
+    {
+      "label": "50",
+      "path": "root/bottom_navigation",
+      "name": "bottom_navigation",
+      "abs_bbox": [
+        410,
+        765,
+        812,
+        173
+      ]
+    },
+    {
+      "label": "51",
+      "path": "root/bottom_navigation/dock",
+      "name": "dock",
+      "abs_bbox": [
+        410,
+        775,
+        812,
+        150
+      ]
+    },
+    {
+      "label": "52",
+      "path": "root/bottom_navigation/nav_buttons",
+      "name": "nav_buttons",
+      "abs_bbox": [
+        469,
+        765,
+        722,
+        173
+      ]
+    },
+    {
+      "label": "53",
+      "path": "root/bottom_navigation/nav_buttons/equipment",
+      "name": "equipment",
+      "abs_bbox": [
+        472,
+        793,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "54",
+      "path": "root/bottom_navigation/nav_buttons/equipment/base",
+      "name": "base",
+      "abs_bbox": [
+        472,
+        793,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "55",
+      "path": "root/bottom_navigation/nav_buttons/equipment/icon",
+      "name": "icon",
+      "abs_bbox": [
+        505,
+        807,
+        61,
+        87
+      ]
+    },
+    {
+      "label": "56",
+      "path": "root/bottom_navigation/nav_buttons/armor",
+      "name": "armor",
+      "abs_bbox": [
+        603,
+        793,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "57",
+      "path": "root/bottom_navigation/nav_buttons/armor/base",
+      "name": "base",
+      "abs_bbox": [
+        603,
+        793,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "58",
+      "path": "root/bottom_navigation/nav_buttons/armor/icon",
+      "name": "icon",
+      "abs_bbox": [
+        644,
+        817,
+        58,
+        68
+      ]
+    },
+    {
+      "label": "59",
+      "path": "root/bottom_navigation/nav_buttons/talents",
+      "name": "talents",
+      "abs_bbox": [
+        752,
+        765,
+        170,
+        173
+      ]
+    },
+    {
+      "label": "60",
+      "path": "root/bottom_navigation/nav_buttons/talents/base",
+      "name": "base",
+      "abs_bbox": [
+        752,
+        765,
+        170,
+        173
+      ]
+    },
+    {
+      "label": "61",
+      "path": "root/bottom_navigation/nav_buttons/talents/icon",
+      "name": "icon",
+      "abs_bbox": [
+        793,
+        796,
+        88,
+        110
+      ]
+    },
+    {
+      "label": "62",
+      "path": "root/bottom_navigation/nav_buttons/spellbook",
+      "name": "spellbook",
+      "abs_bbox": [
+        931,
+        793,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "63",
+      "path": "root/bottom_navigation/nav_buttons/spellbook/base",
+      "name": "base",
+      "abs_bbox": [
+        931,
+        793,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "64",
+      "path": "root/bottom_navigation/nav_buttons/spellbook/icon",
+      "name": "icon",
+      "abs_bbox": [
+        949,
+        819,
+        77,
+        65
+      ]
+    },
+    {
+      "label": "65",
+      "path": "root/bottom_navigation/nav_buttons/map",
+      "name": "map",
+      "abs_bbox": [
+        1063,
+        793,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "66",
+      "path": "root/bottom_navigation/nav_buttons/map/base",
+      "name": "base",
+      "abs_bbox": [
+        1063,
+        793,
+        126,
+        128
+      ]
+    },
+    {
+      "label": "67",
+      "path": "root/bottom_navigation/nav_buttons/map/icon",
+      "name": "icon",
+      "abs_bbox": [
+        1090,
+        816,
+        70,
+        70
+      ]
+    },
+    {
+      "label": "68",
+      "path": "root/enter_button",
+      "name": "enter_button",
+      "abs_bbox": [
+        1199,
+        668,
+        465,
+        253
+      ]
+    },
+    {
+      "label": "69",
+      "path": "root/enter_button/base",
+      "name": "base",
+      "abs_bbox": [
+        1199,
+        668,
+        465,
+        253
+      ]
+    },
+    {
+      "label": "70",
+      "path": "root/enter_button/label",
+      "name": "label",
+      "abs_bbox": [
+        1264,
+        745,
+        345,
+        105
+      ]
+    }
+  ],
+  "design_size": [
+    1672,
+    941
+  ],
+  "output": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png"
+}

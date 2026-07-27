@@ -1,0 +1,15 @@
+{
+  "design": "G:\\GitHub\\Image-To-UI\\test\\source\\design\\emberfall-ui-mockup.png",
+  "grid_image": "G:\\GitHub\\Image-To-UI\\test\\output\\design_grid.png",
+  "canvas": {
+    "width": 1672,
+    "height": 941
+  },
+  "grid": {
+    "cols": 37,
+    "rows": 21
+  },
+  "px_per_cell_x": 45.189189189189186,
+  "px_per_cell_y": 44.80952380952381,
+  "cell_size_target": 45
+}

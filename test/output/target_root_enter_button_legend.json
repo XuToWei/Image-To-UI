@@ -1,0 +1,24 @@
+{
+  "mode": "element",
+  "element_path": "root/enter_button",
+  "target_count": 1,
+  "is_group": false,
+  "targets": [
+    {
+      "label": "enter_button",
+      "path": "root/enter_button",
+      "name": "enter_button",
+      "abs_bbox": [
+        1199,
+        668,
+        465,
+        253
+      ]
+    }
+  ],
+  "design_size": [
+    1672,
+    941
+  ],
+  "output": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button.png"
+}

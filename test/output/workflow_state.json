@@ -1,0 +1,237 @@
+{
+  "version": 2,
+  "status": "completed",
+  "inputs": {
+    "design": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\source\\design\\emberfall-ui-mockup.png",
+      "size": 2702738,
+      "mtime_ns": 1784901252000000000,
+      "sha256": "479d86dbe135d26744493f307a0127393d68270887269a601b3ee2f81953d6eb"
+    },
+    "assets": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\source\\sprites",
+      "file_count": 28,
+      "signature": "72bfb93099a3ff24fd120ece22d790ae58616d72c5ebdf9ca5391356c028035e"
+    }
+  },
+  "output": "G:\\GitHub\\Image-To-UI\\test\\output",
+  "evidence_generation": 9,
+  "artifacts": {
+    "inventory": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json",
+    "grid": "G:\\GitHub\\Image-To-UI\\test\\output\\design_grid.png",
+    "grid_metrics": "G:\\GitHub\\Image-To-UI\\test\\output\\design_grid_metrics.json"
+  },
+  "structure": {
+    "path": "G:\\GitHub\\Image-To-UI\\test\\output\\ui_structure.json",
+    "size": 28480,
+    "mtime_ns": 1785123991290359200,
+    "sha256": "fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef"
+  },
+  "structure_revision": 5,
+  "check_count": 5,
+  "checked_at": "2026-07-27T03:46:48.010849+00:00",
+  "check": {
+    "allow_warnings": false,
+    "transparent_bg": false,
+    "artifacts": {
+      "validation": "G:\\GitHub\\Image-To-UI\\test\\output\\validate_report.json",
+      "bbox": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png",
+      "bbox_legend": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements_legend.json",
+      "comparison": "G:\\GitHub\\Image-To-UI\\test\\output\\comparison.png",
+      "reconstruction": "G:\\GitHub\\Image-To-UI\\test\\output\\reconstruction.png",
+      "render_trace": "G:\\GitHub\\Image-To-UI\\test\\output\\render_trace.json",
+      "visual_audit": "G:\\GitHub\\Image-To-UI\\test\\output\\visual_audit.json",
+      "assets_inventory": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json"
+    },
+    "artifact_snapshots": {
+      "validation": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\validate_report.json",
+        "size": 225,
+        "mtime_ns": 1785124045792083600,
+        "sha256": "165ba1bae35a23bb24ff80fc21051effa1038efad4a43b211f266f161bf2233a"
+      },
+      "bbox": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png",
+        "size": 2652002,
+        "mtime_ns": 1785124007574767200,
+        "sha256": "58ad4cdc20bfc6026e6a9fe0d3d4dc2ff46476cb9ba8323d92e7206868b4d7cb"
+      },
+      "bbox_legend": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements_legend.json",
+        "size": 14222,
+        "mtime_ns": 1785124007577768600,
+        "sha256": "6b46aaa2b4771a3f87b32d713557a43a630b95076d094291ba8fe3787b73ec56"
+      },
+      "comparison": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\comparison.png",
+        "size": 5299478,
+        "mtime_ns": 1785124046981682600,
+        "sha256": "8e38da207a299a08570f1dd835fc913541111e7e5c9928251e7e7eab35c21eea"
+      },
+      "reconstruction": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\reconstruction.png",
+        "size": 2894950,
+        "mtime_ns": 1785124046504453500,
+        "sha256": "e5ef8f32bcbe462ba9dddc6cbcf7a0a42ea2f76ea0e76e275aba2d3376e13806"
+      },
+      "render_trace": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\render_trace.json",
+        "size": 53871,
+        "mtime_ns": 1785124046507453500,
+        "sha256": "a9e4b4d50117f656fd124fca9dc256f519102c8e1a52a0f9d80c856b3be76fd6"
+      },
+      "visual_audit": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\visual_audit.json",
+        "size": 325,
+        "mtime_ns": 1785124137163642600,
+        "sha256": "b7322944955b9b5835178465f2651eaf4837a8ba933678e575cba4c519372a86"
+      },
+      "assets_inventory": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json",
+        "size": 9647,
+        "mtime_ns": 1785121820398445700,
+        "sha256": "f1b03e9d031d3f4c7d3e89229f48392d791f27c33c46f846ef539236d4708838"
+      }
+    },
+    "render_dependencies": {
+      "version": 2,
+      "files": {
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\workflow.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\workflow.py",
+          "size": 57190,
+          "mtime_ns": 1783835290711899700,
+          "sha256": "ffb806d3d2193ff69b4f1e7a20bc0741cded43bc49fc80c19643cc71b63439ae"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\inventory_assets.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\inventory_assets.py",
+          "size": 11334,
+          "mtime_ns": 1783653373774370200,
+          "sha256": "7ce40276ace2e180145b931812579bec9ba252df734d51a9c227d1fd5f232081"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\annotate_grid.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\annotate_grid.py",
+          "size": 6365,
+          "mtime_ns": 1783653373773370500,
+          "sha256": "df8ce7f3229b36c766a8afa341bdfe752e006aac41c6d4dee5e4bf8adce66bd0"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\validate_structure.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\validate_structure.py",
+          "size": 23366,
+          "mtime_ns": 1783837623672445200,
+          "sha256": "bd81a79e5dedb41e117c85d68cb824e753a9a6a8791c87c33520276cc4782db5"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\layout.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\layout.py",
+          "size": 12939,
+          "mtime_ns": 1783831494007714800,
+          "sha256": "d421ee004864fe57b86a87073b0602752db228563998e38564f32d05ef2fd235"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\render_comparison.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\render_comparison.py",
+          "size": 40004,
+          "mtime_ns": 1783837623671447300,
+          "sha256": "624133780cfd8b11be9a8f19a7b00f5d2e50abb1636f17f86850c512d1e962ff"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\annotate_element.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\annotate_element.py",
+          "size": 11106,
+          "mtime_ns": 1783833367913267100,
+          "sha256": "f3155200b621c60c6deafc8e577fd5d3cace0d7e495b8543bc326b3e55a3f771"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\audit_render.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\audit_render.py",
+          "size": 18482,
+          "mtime_ns": 1783833524591085200,
+          "sha256": "0816b6bc48f82bfc707f1339790125b10ed8870fbf7dce183801019c1de6e1cd"
+        },
+        "C:\\Windows\\Fonts\\georgiab.ttf": {
+          "path": "C:\\Windows\\Fonts\\georgiab.ttf",
+          "size": 207476,
+          "mtime_ns": 1575709706146696300,
+          "sha256": "72a6cd94fab6c179392075d3fb361e269cdddfad41bb7ab385fa22a37e49a900"
+        },
+        "C:\\Windows\\Fonts\\georgia.ttf": {
+          "path": "C:\\Windows\\Fonts\\georgia.ttf",
+          "size": 219712,
+          "mtime_ns": 1575709706146696300,
+          "sha256": "38dffcaf1fac89492f7c56c600a14daf36ae42f7c21985cd4134ae113124a58f"
+        },
+        "C:\\Windows\\Fonts\\arial.ttf": {
+          "path": "C:\\Windows\\Fonts\\arial.ttf",
+          "size": 1036584,
+          "mtime_ns": 1575709706097212500,
+          "sha256": "c9b76220a5be42ead4733611e417cd65c5fd8aeaa33eb56576ac378a37d130a1"
+        },
+        "C:\\Windows\\Fonts\\arialbd.ttf": {
+          "path": "C:\\Windows\\Fonts\\arialbd.ttf",
+          "size": 980756,
+          "mtime_ns": 1575709706097212500,
+          "sha256": "766f06ac8761f82f25d032a220e89438f6064591af9915061f20b949efdedf69"
+        }
+      },
+      "packages": {
+        "Python": "CPython 3.12.7",
+        "Pillow": "12.2.0",
+        "NumPy": "2.4.4"
+      }
+    }
+  },
+  "target_count": 12,
+  "targeted_at": "2026-07-27T03:47:29.944338+00:00",
+  "finalize_count": 2,
+  "finalize_attempted_at": "2026-07-27T03:48:57.600678+00:00",
+  "targets": {
+    "structure_sha256": "fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef",
+    "artifacts": {
+      "target_root_enter_button.png": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button.png",
+        "size": 2709573,
+        "mtime_ns": 1785124047488755800,
+        "sha256": "8501e11750952891dfacfcda8e921bcc1bbbdebf27f820e74b1d963be91c1235"
+      },
+      "target_root_enter_button_legend.json": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button_legend.json",
+        "size": 462,
+        "mtime_ns": 1785124047489757000,
+        "sha256": "df5f2e836f59bacb1bf5c2f7f5fb0fae2fea90dd73e6e1f982de9973f80022fd"
+      },
+      "target_root_quest_panel_quest_list_fire_quest_background.png": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_fire_quest_background.png",
+        "size": 2709826,
+        "mtime_ns": 1785124048487959400,
+        "sha256": "6d796eb867c865c2b3633fab98f16d49f26548435b7964463574894a74f857e3"
+      },
+      "target_root_quest_panel_quest_list_fire_quest_background_legend.json": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_fire_quest_background_legend.json",
+        "size": 552,
+        "mtime_ns": 1785124048488959300,
+        "sha256": "f2630b27082dfa705c708018e0226ef9b53947f5124bb43f217de3ebbd2b3065"
+      },
+      "target_root_quest_panel_quest_list_frost_quest_background.png": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_frost_quest_background.png",
+        "size": 2709042,
+        "mtime_ns": 1785124049083211100,
+        "sha256": "b02a236bc4317571ce17a6489fd67faf4570be8ff4133ddfe2e083f1fb184570"
+      },
+      "target_root_quest_panel_quest_list_frost_quest_background_legend.json": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_frost_quest_background_legend.json",
+        "size": 555,
+        "mtime_ns": 1785124049086210800,
+        "sha256": "f464b9a4404bab3bad27ddfdfed9eb153c859bbfea306b080886d7e4e02a1720"
+      }
+    }
+  },
+  "completion": {
+    "path": "G:\\GitHub\\Image-To-UI\\test\\output\\completion_report.json",
+    "size": 6249,
+    "mtime_ns": 1785124137583679700,
+    "sha256": "f0711985e22f8403bbb9c8586a7f0f90a763b8ba98ac2736bfe4cfc3fbafa897"
+  },
+  "completed_at": "2026-07-27T03:48:57.581679+00:00",
+  "finalized_at": "2026-07-27T03:48:57.581679+00:00",
+  "review_binding": {
+    "structure_sha256": "fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef",
+    "artifacts_sha256": "ac7b4edb5214309642cac3dfc2f7c9579f392746122ff0ee14df16169f1ba288",
+    "review_sha256": "27214feaf7699384a5f7f9b33b8e0c3a6df3e6f802eb56389258b4974de8c47d"
+  }
+}

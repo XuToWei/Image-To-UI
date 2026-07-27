@@ -1,0 +1,1040 @@
+{
+  "canvas": {
+    "width": 1672,
+    "height": 941,
+    "name": "EmberfallMainUI"
+  },
+  "root": {
+    "type": "container",
+    "name": "root",
+    "position": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 1672,
+      "height": 941
+    },
+    "children": [
+      {
+        "type": "image",
+        "name": "background",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "size": {
+          "width": 1672,
+          "height": 941
+        },
+        "asset": "backgrounds/bg_citadel.png"
+      },
+      {
+        "type": "container",
+        "name": "top_left_hud",
+        "position": {
+          "x": 8,
+          "y": 2
+        },
+        "size": {
+          "width": 570,
+          "height": 205
+        },
+        "children": [
+          {
+            "type": "image",
+            "name": "status_bars",
+            "position": {
+              "x": 143,
+              "y": 41
+            },
+            "size": {
+              "width": 425,
+              "height": 88
+            },
+            "asset": "components/frame_status_dual.png"
+          },
+          {
+            "type": "container",
+            "name": "portrait",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "size": {
+              "width": 190,
+              "height": 203
+            },
+            "children": [
+              {
+                "type": "image",
+                "name": "frame",
+                "position": {
+                  "x": 0,
+                  "y": 0
+                },
+                "size": {
+                  "width": 190,
+                  "height": 185
+                },
+                "asset": "components/frame_portrait.png"
+              },
+              {
+                "type": "container",
+                "name": "level_badge",
+                "position": {
+                  "x": 27,
+                  "y": 156
+                },
+                "size": {
+                  "width": 132,
+                  "height": 47
+                },
+                "children": [
+                  {
+                    "type": "image",
+                    "name": "base",
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 132,
+                      "height": 47
+                    },
+                    "asset": "components/frame_resource_capsule.png"
+                  },
+                  {
+                    "type": "text",
+                    "name": "label",
+                    "position": {
+                      "x": 6,
+                      "y": 9
+                    },
+                    "size": {
+                      "width": 120,
+                      "height": 39
+                    },
+                    "text": "LV.18",
+                    "fontFamily": "C:/Windows/Fonts/georgiab.ttf",
+                    "fontSize": 22,
+                    "color": "#F6D699",
+                    "strokeColor": "#4A250F",
+                    "strokeWidth": 1,
+                    "alignment": "center",
+                    "textVAlign": "middle"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "container",
+        "name": "resource_bar",
+        "position": {
+          "x": 649,
+          "y": 17
+        },
+        "size": {
+          "width": 463,
+          "height": 62
+        },
+        "layout": {
+          "type": "row",
+          "spacing": 17,
+          "align": "start",
+          "vAlign": "middle"
+        },
+        "children": [
+          {
+            "type": "container",
+            "name": "coin",
+            "size": {
+              "width": 223,
+              "height": 62
+            },
+            "children": [
+              {
+                "type": "image",
+                "name": "capsule",
+                "position": {
+                  "x": 13,
+                  "y": 1
+                },
+                "size": {
+                  "width": 210,
+                  "height": 60
+                },
+                "asset": "components/frame_resource_capsule.png"
+              },
+              {
+                "type": "image",
+                "name": "frame",
+                "position": {
+                  "x": 0,
+                  "y": 0
+                },
+                "size": {
+                  "width": 62,
+                  "height": 62
+                },
+                "asset": "components/button_utility_round.png"
+              },
+              {
+                "type": "image",
+                "name": "icon",
+                "position": {
+                  "x": 10,
+                  "y": 8
+                },
+                "size": {
+                  "width": 43,
+                  "height": 46
+                },
+                "asset": "icons/icon_coin.png"
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "name": "crystal",
+            "size": {
+              "width": 223,
+              "height": 62
+            },
+            "children": [
+              {
+                "type": "image",
+                "name": "capsule",
+                "position": {
+                  "x": 13,
+                  "y": 1
+                },
+                "size": {
+                  "width": 210,
+                  "height": 60
+                },
+                "asset": "components/frame_resource_capsule.png"
+              },
+              {
+                "type": "image",
+                "name": "frame",
+                "position": {
+                  "x": 0,
+                  "y": 0
+                },
+                "size": {
+                  "width": 62,
+                  "height": 62
+                },
+                "asset": "components/button_utility_round.png"
+              },
+              {
+                "type": "image",
+                "name": "icon",
+                "position": {
+                  "x": 14,
+                  "y": 6
+                },
+                "size": {
+                  "width": 34,
+                  "height": 50
+                },
+                "asset": "icons/icon_crystal.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "container",
+        "name": "top_right_utilities",
+        "position": {
+          "x": 1450,
+          "y": 12
+        },
+        "size": {
+          "width": 201,
+          "height": 96
+        },
+        "layout": {
+          "type": "row",
+          "spacing": 9,
+          "align": "start",
+          "vAlign": "middle"
+        },
+        "children": [
+          {
+            "type": "container",
+            "name": "settings",
+            "size": {
+              "width": 96,
+              "height": 96
+            },
+            "children": [
+              {
+                "type": "image",
+                "name": "base",
+                "position": {
+                  "x": 0,
+                  "y": 0
+                },
+                "size": {
+                  "width": 96,
+                  "height": 96
+                },
+                "asset": "components/button_utility_round.png"
+              },
+              {
+                "type": "image",
+                "name": "icon",
+                "position": {
+                  "x": 19,
+                  "y": 18
+                },
+                "size": {
+                  "width": 58,
+                  "height": 60
+                },
+                "asset": "icons/icon_settings.png"
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "name": "mail",
+            "size": {
+              "width": 96,
+              "height": 96
+            },
+            "children": [
+              {
+                "type": "image",
+                "name": "base",
+                "position": {
+                  "x": 0,
+                  "y": 0
+                },
+                "size": {
+                  "width": 96,
+                  "height": 96
+                },
+                "asset": "components/button_utility_round.png"
+              },
+              {
+                "type": "image",
+                "name": "icon",
+                "position": {
+                  "x": 16,
+                  "y": 22
+                },
+                "size": {
+                  "width": 65,
+                  "height": 52
+                },
+                "asset": "icons/icon_mail.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "container",
+        "name": "quest_panel",
+        "position": {
+          "x": 8,
+          "y": 268
+        },
+        "size": {
+          "width": 493,
+          "height": 400
+        },
+        "children": [
+          {
+            "type": "image",
+            "name": "base",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "size": {
+              "width": 493,
+              "height": 400
+            },
+            "asset": "components/panel_quest.png",
+            "nineSlice": {
+              "left": 48,
+              "top": 52,
+              "right": 48,
+              "bottom": 42
+            }
+          },
+          {
+            "type": "text",
+            "name": "title",
+            "position": {
+              "x": 85,
+              "y": 59
+            },
+            "size": {
+              "width": 333,
+              "height": 43
+            },
+            "text": "QUEST",
+            "fontFamily": "C:/Windows/Fonts/georgia.ttf",
+            "fontSize": 31,
+            "color": "#F3D49A",
+            "strokeColor": "#5A2B10",
+            "strokeWidth": 1,
+            "alignment": "center",
+            "textVAlign": "middle"
+          },
+          {
+            "type": "image",
+            "name": "divider",
+            "position": {
+              "x": 50,
+              "y": 92
+            },
+            "size": {
+              "width": 393,
+              "height": 34
+            },
+            "asset": "components/divider_gold.png"
+          },
+          {
+            "type": "container",
+            "name": "quest_list",
+            "position": {
+              "x": 23,
+              "y": 110
+            },
+            "size": {
+              "width": 450,
+              "height": 264
+            },
+            "layout": {
+              "type": "column",
+              "spacing": 8,
+              "align": "start",
+              "vAlign": "start"
+            },
+            "children": [
+              {
+                "type": "container",
+                "name": "fire_quest",
+                "size": {
+                  "width": 450,
+                  "height": 128
+                },
+                "children": [
+                  {
+                    "type": "image",
+                    "name": "background",
+                    "position": {
+                      "x": 19,
+                      "y": 6
+                    },
+                    "size": {
+                      "width": 425,
+                      "height": 108
+                    },
+                    "asset": "quest-backgrounds/quest_bg_fire.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "frame",
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 450,
+                      "height": 128
+                    },
+                    "asset": "components/card_quest_frame.png",
+                    "nineSlice": {
+                      "left": 48,
+                      "top": 30,
+                      "right": 48,
+                      "bottom": 30
+                    }
+                  },
+                  {
+                    "type": "image",
+                    "name": "action_base",
+                    "position": {
+                      "x": 10,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 126,
+                      "height": 128
+                    },
+                    "asset": "components/button_action_round.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "icon",
+                    "position": {
+                      "x": 40,
+                      "y": 20
+                    },
+                    "size": {
+                      "width": 70,
+                      "height": 88
+                    },
+                    "asset": "icons/icon_fire_sigil.png"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "name": "frost_quest",
+                "size": {
+                  "width": 450,
+                  "height": 128
+                },
+                "children": [
+                  {
+                    "type": "image",
+                    "name": "background",
+                    "position": {
+                      "x": 19,
+                      "y": 6
+                    },
+                    "size": {
+                      "width": 425,
+                      "height": 108
+                    },
+                    "asset": "quest-backgrounds/quest_bg_frost.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "frame",
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 450,
+                      "height": 128
+                    },
+                    "asset": "components/card_quest_frame.png",
+                    "nineSlice": {
+                      "left": 48,
+                      "top": 30,
+                      "right": 48,
+                      "bottom": 30
+                    }
+                  },
+                  {
+                    "type": "image",
+                    "name": "action_base",
+                    "position": {
+                      "x": 10,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 126,
+                      "height": 128
+                    },
+                    "asset": "components/button_action_round.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "icon",
+                    "position": {
+                      "x": 42,
+                      "y": 21
+                    },
+                    "size": {
+                      "width": 66,
+                      "height": 85
+                    },
+                    "asset": "icons/icon_frozen_skull.png"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "container",
+        "name": "right_actions",
+        "position": {
+          "x": 1411,
+          "y": 119
+        },
+        "size": {
+          "width": 211,
+          "height": 568
+        },
+        "layout": {
+          "type": "column",
+          "spacing": -37,
+          "align": "start",
+          "vAlign": "start"
+        },
+        "children": [
+          {
+            "type": "container",
+            "name": "sword",
+            "size": {
+              "width": 211,
+              "height": 214
+            },
+            "children": [
+              {
+                "type": "image",
+                "name": "base",
+                "position": {
+                  "x": 0,
+                  "y": 0
+                },
+                "size": {
+                  "width": 211,
+                  "height": 214
+                },
+                "asset": "components/button_action_round.png"
+              },
+              {
+                "type": "image",
+                "name": "icon",
+                "position": {
+                  "x": 62,
+                  "y": 54
+                },
+                "size": {
+                  "width": 88,
+                  "height": 106
+                },
+                "asset": "icons/icon_sword.png"
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "name": "helmet",
+            "size": {
+              "width": 211,
+              "height": 214
+            },
+            "children": [
+              {
+                "type": "image",
+                "name": "base",
+                "position": {
+                  "x": 0,
+                  "y": 0
+                },
+                "size": {
+                  "width": 211,
+                  "height": 214
+                },
+                "asset": "components/button_action_round.png"
+              },
+              {
+                "type": "image",
+                "name": "icon",
+                "position": {
+                  "x": 63,
+                  "y": 56
+                },
+                "size": {
+                  "width": 86,
+                  "height": 101
+                },
+                "asset": "icons/icon_helmet.png"
+              }
+            ]
+          },
+          {
+            "type": "container",
+            "name": "spectral_flame",
+            "size": {
+              "width": 211,
+              "height": 214
+            },
+            "children": [
+              {
+                "type": "image",
+                "name": "base",
+                "position": {
+                  "x": 0,
+                  "y": 0
+                },
+                "size": {
+                  "width": 211,
+                  "height": 214
+                },
+                "asset": "components/button_action_round.png"
+              },
+              {
+                "type": "image",
+                "name": "icon",
+                "position": {
+                  "x": 58,
+                  "y": 54
+                },
+                "size": {
+                  "width": 96,
+                  "height": 108
+                },
+                "asset": "icons/icon_spectral_flame.png"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "container",
+        "name": "bottom_navigation",
+        "position": {
+          "x": 410,
+          "y": 765
+        },
+        "size": {
+          "width": 812,
+          "height": 173
+        },
+        "children": [
+          {
+            "type": "image",
+            "name": "dock",
+            "position": {
+              "x": 0,
+              "y": 10
+            },
+            "size": {
+              "width": 812,
+              "height": 150
+            },
+            "asset": "components/dock_navigation_5slot.png"
+          },
+          {
+            "type": "container",
+            "name": "nav_buttons",
+            "position": {
+              "x": 59,
+              "y": 0
+            },
+            "size": {
+              "width": 722,
+              "height": 173
+            },
+            "layout": {
+              "type": "row",
+              "spacing": 0,
+              "align": "space-between",
+              "vAlign": "middle"
+            },
+            "children": [
+              {
+                "type": "container",
+                "name": "equipment",
+                "offset": {
+                  "x": 3,
+                  "y": 6
+                },
+                "size": {
+                  "width": 126,
+                  "height": 128
+                },
+                "children": [
+                  {
+                    "type": "image",
+                    "name": "base",
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 126,
+                      "height": 128
+                    },
+                    "asset": "components/button_action_round.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "icon",
+                    "position": {
+                      "x": 33,
+                      "y": 14
+                    },
+                    "size": {
+                      "width": 61,
+                      "height": 87
+                    },
+                    "asset": "icons/icon_shield_crest.png"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "name": "armor",
+                "offset": {
+                  "x": -4,
+                  "y": 6
+                },
+                "size": {
+                  "width": 126,
+                  "height": 128
+                },
+                "children": [
+                  {
+                    "type": "image",
+                    "name": "base",
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 126,
+                      "height": 128
+                    },
+                    "asset": "components/button_action_round.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "icon",
+                    "position": {
+                      "x": 41,
+                      "y": 24
+                    },
+                    "size": {
+                      "width": 58,
+                      "height": 68
+                    },
+                    "asset": "icons/icon_helmet.png"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "name": "talents",
+                "offset": {
+                  "x": 7,
+                  "y": 0
+                },
+                "size": {
+                  "width": 170,
+                  "height": 173
+                },
+                "children": [
+                  {
+                    "type": "image",
+                    "name": "base",
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 170,
+                      "height": 173
+                    },
+                    "asset": "components/button_action_round.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "icon",
+                    "position": {
+                      "x": 41,
+                      "y": 31
+                    },
+                    "size": {
+                      "width": 88,
+                      "height": 110
+                    },
+                    "asset": "icons/icon_fire_sigil.png",
+                    "hueShift": 42,
+                    "color": "#FFE4A0"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "name": "spellbook",
+                "offset": {
+                  "x": 4,
+                  "y": 6
+                },
+                "size": {
+                  "width": 126,
+                  "height": 128
+                },
+                "children": [
+                  {
+                    "type": "image",
+                    "name": "base",
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 126,
+                      "height": 128
+                    },
+                    "asset": "components/button_action_round.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "icon",
+                    "position": {
+                      "x": 18,
+                      "y": 26
+                    },
+                    "size": {
+                      "width": 77,
+                      "height": 65
+                    },
+                    "asset": "icons/icon_spellbook.png"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "name": "map",
+                "offset": {
+                  "x": -2,
+                  "y": 6
+                },
+                "size": {
+                  "width": 126,
+                  "height": 128
+                },
+                "children": [
+                  {
+                    "type": "image",
+                    "name": "base",
+                    "position": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "size": {
+                      "width": 126,
+                      "height": 128
+                    },
+                    "asset": "components/button_action_round.png"
+                  },
+                  {
+                    "type": "image",
+                    "name": "icon",
+                    "position": {
+                      "x": 27,
+                      "y": 23
+                    },
+                    "size": {
+                      "width": 70,
+                      "height": 70
+                    },
+                    "asset": "icons/icon_compass.png"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "container",
+        "name": "enter_button",
+        "position": {
+          "x": 1199,
+          "y": 668
+        },
+        "size": {
+          "width": 465,
+          "height": 253
+        },
+        "children": [
+          {
+            "type": "image",
+            "name": "base",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "size": {
+              "width": 465,
+              "height": 253
+            },
+            "asset": "components/button_primary.png"
+          },
+          {
+            "type": "text",
+            "name": "label",
+            "position": {
+              "x": 65,
+              "y": 77
+            },
+            "size": {
+              "width": 345,
+              "height": 105
+            },
+            "text": "ENTER",
+            "fontFamily": "C:/Windows/Fonts/georgia.ttf",
+            "fontSize": 74,
+            "textScaleX": 1.08,
+            "color": "#FFE3A1",
+            "strokeColor": "#76190D",
+            "strokeWidth": 2,
+            "alignment": "center",
+            "textVAlign": "middle"
+          }
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "notes": "The supplied sliced assets model the HUD and background. The unsliced hero character is treated as scene content and is intentionally omitted.",
+    "approximations": [
+      {
+        "path": "root/background",
+        "kind": "missing_scene_layer",
+        "reason": "The central hero visible in the reference is not present in the supplied sprite directory; the supplied citadel background is used without that scene layer.",
+        "accepted": true
+      },
+      {
+        "path": "root/top_left_hud/portrait/frame",
+        "kind": "missing_asset",
+        "reason": "No portrait artwork was supplied, so the portrait frame keeps its authored dark center.",
+        "accepted": true
+      },
+      {
+        "path": "root/top_left_hud/portrait/level_badge/base",
+        "kind": "asset_substitution",
+        "reason": "No dedicated level plaque was supplied; the resource capsule is resized to approximate the small framed level badge.",
+        "accepted": true
+      },
+      {
+        "path": "root/top_left_hud/portrait/level_badge/label",
+        "kind": "font_substitution",
+        "reason": "No UI font was supplied; Georgia Bold is used as the closest available serif substitute.",
+        "accepted": true
+      },
+      {
+        "path": "root/quest_panel/title",
+        "kind": "font_substitution",
+        "reason": "No UI font was supplied; Georgia is used as the closest available serif substitute.",
+        "accepted": true
+      },
+      {
+        "path": "root/bottom_navigation/nav_buttons/talents/icon",
+        "kind": "asset_color",
+        "reason": "No gold central crest sprite was supplied; the fire sigil is recolored to approximate the highlighted navigation emblem.",
+        "accepted": true
+      },
+      {
+        "path": "root/enter_button/label",
+        "kind": "font_substitution",
+        "reason": "No UI font was supplied; Georgia is used as the closest available serif substitute.",
+        "accepted": true
+      }
+    ],
+    "auditWaivers": []
+  }
+}
