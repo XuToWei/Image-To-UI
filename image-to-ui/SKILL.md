@@ -28,8 +28,10 @@ py -B <skill>/scripts/workflow.py prepare --design <design.png> --assets <sprite
 ```
 
 This checks Python dependencies, inventories assets, creates grouped contact
-sheets, overlays a measurement grid, and writes grid metrics. If dependencies
-are missing, install only those named by the error and rerun the same command.
+sheets, overlays a measurement grid using a complementary color selected from
+the design's dominant tone plus a contrast halo, and writes grid metrics. If
+dependencies are missing, install only those named by the error and rerun the
+same command.
 
 Inspect these files first:
 

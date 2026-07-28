@@ -52,7 +52,7 @@ from PIL import Image, ImageDraw, ImageFont
 # Make the sibling layout.py importable when this script is run from anywhere
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import layout as layout_mod  # noqa: E402
-from annotate_grid import draw_grid  # noqa: E402
+from annotate_grid import draw_grid, select_grid_palette  # noqa: E402
 
 
 # Distinct, high-contrast colors for group members (cycled)
@@ -243,7 +243,7 @@ def main():
 
     full_img = Image.alpha_composite(base, overlay)
     # Overlay the same grid used in Step 1 so the bbox can be read against it.
-    full_img = draw_grid(full_img)
+    full_img = draw_grid(full_img, palette=select_grid_palette(base))
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     full_img.convert("RGB").save(args.output)
 

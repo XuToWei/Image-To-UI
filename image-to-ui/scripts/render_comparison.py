@@ -27,7 +27,7 @@ from PIL import Image, ImageDraw, ImageFont, __version__ as PILLOW_VERSION
 # Make sibling layout.py importable when run from anywhere
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import layout as layout_mod  # noqa: E402
-from annotate_grid import draw_grid  # noqa: E402
+from annotate_grid import draw_grid, select_grid_palette  # noqa: E402
 
 
 class RenderError(RuntimeError):
@@ -1074,8 +1074,9 @@ def main():
     if not args.no_grid:
         # Same grid (cell ~= 45 px) on both panels so they can be cross-read
         print("Overlaying grid on both panels...")
-        design_img = draw_grid(design_img)
-        reconstruction = draw_grid(reconstruction)
+        grid_palette = select_grid_palette(design_img)
+        design_img = draw_grid(design_img, palette=grid_palette)
+        reconstruction = draw_grid(reconstruction, palette=grid_palette)
 
     print("Building side-by-side comparison...")
     comparison = build_side_by_side(design_img, reconstruction)
