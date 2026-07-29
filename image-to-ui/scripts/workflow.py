@@ -39,6 +39,7 @@ CRITICAL_SCRIPT_NAMES = (
     "render_comparison.py",
     "annotate_element.py",
     "audit_render.py",
+    "review_risk.py",
 )
 REVIEW_BINDING_ARTIFACTS = (
     "validation",
@@ -48,6 +49,9 @@ REVIEW_BINDING_ARTIFACTS = (
     "reconstruction",
     "render_trace",
     "assets_inventory",
+    "review_risk",
+    "risk_review",
+    "risk_review_legend",
 )
 REVIEW_BINDING_PATTERN = re.compile(
     r"<!--\s*image-to-ui-review-binding:\s*"
@@ -251,6 +255,9 @@ def clean_check_artifacts(output: Path) -> None:
         "reconstruction.png",
         "render_trace.json",
         "visual_audit.json",
+        "review_risk.json",
+        "risk_review.png",
+        "risk_review_legend.json",
         "detail_comparison.png",
         "completion_report.json",
     ):
@@ -458,6 +465,7 @@ def workflow_font_dependency_paths(output: Path) -> list[Path]:
             {max(12, shortest_side // 90), max(18, shortest_side // 60)},
         ),
         ("audit_render.py", {12, 15, 18}),
+        ("review_risk.py", {12, 15}),
     )
     paths: set[Path] = set()
     for script_name, sizes in providers:
@@ -651,6 +659,24 @@ def visual_audit(
     run_script("audit_render.py", *arguments)
 
 
+def review_risk(output: Path, design: Path) -> None:
+    run_script(
+        "review_risk.py",
+        "--trace",
+        str(output / "render_trace.json"),
+        "--design",
+        str(design),
+        "--reconstruction",
+        str(output / "reconstruction.png"),
+        "--output",
+        str(output / "review_risk.json"),
+        "--evidence",
+        str(output / "risk_review.png"),
+        "--legend",
+        str(output / "risk_review_legend.json"),
+    )
+
+
 def check_artifact_snapshots(output: Path) -> dict[str, dict[str, Any]]:
     paths = {
         "validation": output / "validate_report.json",
@@ -661,6 +687,9 @@ def check_artifact_snapshots(output: Path) -> dict[str, dict[str, Any]]:
         "render_trace": output / "render_trace.json",
         "visual_audit": output / "visual_audit.json",
         "assets_inventory": output / "assets" / "assets_inventory.json",
+        "review_risk": output / "review_risk.json",
+        "risk_review": output / "risk_review.png",
+        "risk_review_legend": output / "risk_review_legend.json",
     }
     for name, path in paths.items():
         require_file(path, f"Check artifact {name}")
@@ -706,6 +735,7 @@ def check(args: argparse.Namespace) -> None:
             str(output / "all_elements_legend.json"),
         )
         visual_audit(output, design, fail_on_error=True)
+        review_risk(output, design)
         ensure_inputs_current(state, design, assets)
     except WorkflowError as exc:
         state["status"] = "check_failed"
@@ -744,6 +774,9 @@ def check(args: argparse.Namespace) -> None:
             "assets_inventory": str(
                 output / "assets" / "assets_inventory.json"
             ),
+            "review_risk": str(output / "review_risk.json"),
+            "risk_review": str(output / "risk_review.png"),
+            "risk_review_legend": str(output / "risk_review_legend.json"),
         },
         "artifact_snapshots": check_artifact_snapshots(output),
         "render_dependencies": render_dependency_snapshots(output),
@@ -815,6 +848,7 @@ def target(args: argparse.Namespace) -> None:
             )
             generated_targets.extend((image_path, legend_path))
         visual_audit(output, design, fail_on_error=True)
+        review_risk(output, design)
         ensure_inputs_current(state, design, assets)
         current_artifacts = check_artifact_snapshots(output)
         replaced_preserved = [
@@ -1103,6 +1137,16 @@ def target_legend_covers_path(legend: dict[str, Any], review_path: str) -> bool:
     return review_path in covered
 
 
+def review_risk_by_path(output: Path) -> tuple[dict[str, dict[str, Any]], dict[str, Any]]:
+    report = read_json_file(output / "review_risk.json", "review risk report")
+    items = {
+        item["path"]: item
+        for item in report.get("items", [])
+        if isinstance(item, dict) and isinstance(item.get("path"), str)
+    }
+    return items, report
+
+
 def review_coverage(
     output: Path, state: dict[str, Any]
 ) -> tuple[dict[str, Any], list[str]]:
@@ -1146,6 +1190,13 @@ def review_coverage(
     invalid_evidence: list[str] = []
     evidence_files: set[str] = set()
     check_snapshots = state.get("check", {}).get("artifact_snapshots", {})
+    risk_items, risk_report = review_risk_by_path(output)
+    high_risk_paths = {
+        path for path in expected
+        if risk_items.get(path, {}).get("risk_level") == "high"
+    }
+    focused_high_risk_paths: set[str] = set()
+    missing_high_risk_evidence: list[str] = []
     overview_artifacts = {
         "all_elements.png": "bbox",
         "comparison.png": "comparison",
@@ -1165,7 +1216,10 @@ def review_coverage(
         invalid_evidence.extend(f"{path}: {item}" for item in invalid)
         if not evidence:
             missing_evidence.append(path)
+            if path in high_risk_paths:
+                missing_high_risk_evidence.append(path)
             continue
+        has_focused_evidence = False
         for evidence_path in evidence:
             if not evidence_path.is_file():
                 invalid_evidence.append(f"{path}: missing {evidence_path.name}")
@@ -1186,6 +1240,32 @@ def review_coverage(
                         "check artifact hash"
                     )
                     continue
+            elif evidence_name == "risk_review.png":
+                risk_legend_path = output / "risk_review_legend.json"
+                if (
+                    not snapshot_matches_file(
+                        check_snapshots.get("risk_review"), evidence_path
+                    )
+                    or not snapshot_matches_file(
+                        check_snapshots.get("risk_review_legend"),
+                        risk_legend_path,
+                    )
+                ):
+                    invalid_evidence.append(
+                        f"{path}: risk_review.png or its legend does not match "
+                        "the current check artifact hash"
+                    )
+                    continue
+                risk_legend = read_json_file(
+                    risk_legend_path, "review risk evidence legend"
+                )
+                if not target_legend_covers_path(risk_legend, path):
+                    invalid_evidence.append(
+                        "risk_review_legend.json does not cover review path "
+                        f"{path}; run a targeted review for that path"
+                    )
+                    continue
+                has_focused_evidence = True
             elif evidence_name.startswith("target_"):
                 target_legend_path = evidence_path.with_name(
                     f"{evidence_path.stem}_legend.json"
@@ -1225,14 +1305,20 @@ def review_coverage(
                         "legend.element_path or targets[].path must match"
                     )
                     continue
+                has_focused_evidence = True
             else:
                 invalid_evidence.append(
                     f"{path}: {evidence_path.name} is not an allowed recheck PNG; "
-                    "use current all_elements.png, comparison.png, or a target_*.png "
-                    "registered by workflow target"
+                    "use current all_elements.png, comparison.png, risk_review.png, "
+                    "or a target_*.png registered by workflow target"
                 )
                 continue
             evidence_files.add(str(evidence_path))
+        if path in high_risk_paths:
+            if has_focused_evidence:
+                focused_high_risk_paths.add(path)
+            else:
+                missing_high_risk_evidence.append(path)
 
     if invalid_statuses:
         blockers.append(
@@ -1254,6 +1340,12 @@ def review_coverage(
             "Alignment review references invalid evidence: "
             + "; ".join(invalid_evidence)
         )
+    if missing_high_risk_evidence:
+        blockers.append(
+            "High-risk review rows require current focused evidence "
+            "(risk_review.png or a covering target_*.png): "
+            + ", ".join(missing_high_risk_evidence)
+        )
 
     review_fresh = False
     if review_path.is_file():
@@ -1273,6 +1365,16 @@ def review_coverage(
         "status_counts": status_counts,
         "evidence_count": len(evidence_files),
         "evidence": sorted(evidence_files),
+        "risk_strategy": risk_report.get("strategy"),
+        "risk_level_counts": (
+            risk_report.get("summary", {}).get("risk_level_counts", {})
+        ),
+        "high_risk_required": sum(
+            1 for path in high_risk_paths
+            if rows.get(path, {}).get("status") != "skipped"
+        ),
+        "high_risk_focused": len(focused_high_risk_paths),
+        "missing_high_risk_evidence": missing_high_risk_evidence,
         "fresh": review_fresh,
         "review": str(review_path),
         "expected_binding": review_binding_comment(state),
@@ -1435,6 +1537,7 @@ def finalize(args: argparse.Namespace) -> None:
             output / "validate_report.json", "validation report"
         )
         audit = read_json_file(output / "visual_audit.json", "visual audit")
+        risk = read_json_file(output / "review_risk.json", "review risk report")
         audit_waivers, audit_waiver_blockers = audit_warning_gate(
             structure, audit
         )
@@ -1480,6 +1583,12 @@ def finalize(args: argparse.Namespace) -> None:
                 "error_count": audit.get("error_count", 0),
                 "warning_count": audit.get("warning_count", 0),
                 "elapsed_ms": audit.get("elapsed_ms"),
+            },
+            "review_risk": {
+                "strategy": risk.get("strategy"),
+                "thresholds": risk.get("thresholds", {}),
+                "summary": risk.get("summary", {}),
+                "evidence": risk.get("evidence", {}),
             },
             "approximations": approximations,
             "audit_waivers": audit_waivers,

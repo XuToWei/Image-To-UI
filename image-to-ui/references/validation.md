@@ -25,6 +25,12 @@ Visual-audit errors also fail `check`. Visual-audit warnings are diagnostic at
 check time, but `finalize` requires an exact accepted `metadata.auditWaivers`
 entry for each current warning and rejects stale entries.
 
+Review-risk scores are neither structural errors nor visual-audit warnings.
+They control evidence depth. `finalize` rejects a non-skipped high-risk review
+row that cites only overview evidence; cite current `risk_review.png` or a
+covering workflow-generated target. It also rejects changed or stale
+`review_risk.json`, `risk_review.png`, and `risk_review_legend.json`.
+
 ## Common Issues
 
 - Canvas mismatch: set `canvas.width` / `canvas.height` to the design's native
@@ -51,6 +57,8 @@ entry for each current warning and rejects stale entries.
   portraits, unless the design visibly uses non-uniform scaling.
 - Parent overflow warning: inspect intentional badge/focus overhangs; otherwise
   fix the child or parent bounds.
+- High-risk overview-only review: inspect `risk_review.png`, then cite it or run
+  `workflow.py target` for that exact element path.
 
 Run `workflow.py finalize` after writing `alignment_review.md`. It rejects
 stale artifact hashes, incomplete path coverage, visual-audit errors, and any

@@ -64,6 +64,37 @@ Do not treat `all_elements.png` existing on disk as Step 4 completion. Step 4 is
 complete only when every reviewed foreground element is `aligned` or `skipped`,
 and every `adjusted` element has been rechecked.
 
+## Review Risk Prioritization
+
+Read `review_risk.json` after every successful `check` or `target`. The report
+uses only render evidence, not node-name semantics. It combines:
+
+- visual salience from visible area, text size, local contrast, and foreground
+  order;
+- crop residual from color, luminance, edges, and changed-pixel area between
+  the native design and reconstruction.
+
+The residual calculation composites transparent reconstruction pixels over the
+design first, so intentionally omitted scene content does not become a false
+difference. Scores prioritize evidence and never authorize automatic coordinate
+changes. A legitimate asset substitution may remain high-risk even after its
+bbox is correct; inspect it and record an accepted approximation instead of
+forcing unrelated geometry to reduce the residual.
+
+Use the reported evidence level:
+
+- `low`: current `all_elements.png` or `comparison.png` is sufficient;
+- `medium`: inspect `risk_review.png`; generate a target when the sheet remains
+  ambiguous;
+- `high`: inspect focused evidence and cite `risk_review.png` or a covering
+  current `target_*.png` in the review row.
+
+In `risk_review.png`, orange outlines show the authored bbox over the design,
+cyan outlines show it over the reconstruction, green outlines show rendered
+per-line text ink, and the third panel amplifies the crop residual. Review the
+reason codes and all three panels together. Do not infer correctness from the
+score alone.
+
 ## Position Correction
 
 Compare bbox edges to the actual element using grid lines.

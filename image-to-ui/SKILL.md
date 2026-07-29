@@ -109,6 +109,7 @@ it writes:
 - `comparison.png`
 - `reconstruction.png` and `render_trace.json`
 - `visual_audit.json`
+- `review_risk.json`, `risk_review.png`, and `risk_review_legend.json`
 
 The render trace is collected during the same render pass. The audit blocks
 missing requested fonts and visible text ink outside its box. Atomic sprite
@@ -116,6 +117,15 @@ aspect changes and child boxes outside their parents are diagnostic warnings;
 review them in context instead of moving elements automatically. Every current
 visual-audit warning requires an exact accepted entry in
 `metadata.auditWaivers`; stale waivers also block completion.
+
+Use `review_risk.json` to prioritize inspection. It scores every rendered
+visual leaf from visual salience (visible area, text size, local contrast, and
+foreground order) plus the residual between the native design crop and the
+same reconstruction crop. The score is name-agnostic. It selects evidence
+depth only: never treat it as a similarity verdict or use it to change
+coordinates automatically. Inspect every high-risk row in `risk_review.png`;
+orange outlines mark design bboxes, cyan outlines mark reconstruction bboxes,
+and green outlines mark rendered text-line ink.
 
 Every successful `check` or `target` must rewrite `comparison.png` from the
 current structure. Before validation, the workflow removes the old comparison
@@ -155,9 +165,16 @@ with every path from `all_elements_legend.json`: element path, status
 (`aligned`, `adjusted`, or `skipped`), observed issue/change, and recheck PNG.
 Copy the exact `Review binding:` HTML comment printed by that final command
 into the review. An aligned/adjusted row must cite current `all_elements.png`,
-`comparison.png`, or a current workflow-generated `target_*.png`; a target is
-valid only for paths covered by its companion legend. A skipped row must
-explain why.
+`comparison.png`, `risk_review.png`, or a current workflow-generated
+`target_*.png`; focused evidence is valid only for paths covered by its
+companion legend. A skipped row must explain why.
+
+Every non-skipped high-risk row must cite `risk_review.png` or a current
+covering `target_*.png`. Overview-only evidence cannot finalize a high-risk
+row. A high residual remains review guidance rather than a blocking visual
+error; after inspecting the focused evidence, correct the structure or record
+an accepted approximation as appropriate. Read
+[references/alignment.md](references/alignment.md) for score interpretation.
 
 Record intentional substitutions or known visual limits in
 `metadata.approximations`; each needs an element `path`, `kind`, `reason`, and
@@ -187,7 +204,8 @@ sets workflow status to `completed`.
 ## Deliver
 
 Keep `ui_structure.json`, `comparison.png`, `reconstruction.png`, render/audit
-reports, `alignment_review.md`, `completion_report.json`, `workflow_state.json`,
-inventories, grid files, bbox images, and legends in the task folder. Report
-element/layout counts, structure revision and check counts, accepted warnings
-and approximations, and anything skipped or uncertain.
+reports, review-risk report/evidence, `alignment_review.md`,
+`completion_report.json`, `workflow_state.json`, inventories, grid files, bbox
+images, and legends in the task folder. Report element/layout counts, structure
+revision and check counts, high-risk review coverage, accepted warnings and
+approximations, and anything skipped or uncertain.
