@@ -15,6 +15,7 @@ Image to UI 不只是提取一组大概坐标。仓库内的 Codex skill 会盘�
 - 递归盘点 PNG/JPG 切图，检测重名资源，并支持可选的 Unity
   `.png.meta` 边框数据。
 - 支持容器、行列布局、图片、文本、程序化矩形和遮罩层。
+- 每个结构节点都包含必填的九宫格锚点对齐信息，并提供旧 JSON 补齐工具。
 - 支持九宫格、字体追踪、染色、透明度与色相偏移。
 - 严格的 JSON 结构校验和渲染结果视觉审计。
 - 生成左右对比图、全元素包围框和局部复核图。
@@ -34,6 +35,7 @@ Image to UI 不只是提取一组大概坐标。仓库内的 Codex skill 会盘�
 当前案例在 `1672 × 941` 画布上包含：
 
 - 71 个结构化元素；
+- 71/71 个节点包含必填锚点对齐信息；
 - 42 个切图引用；
 - 5 个行/列布局；
 - 70/70 个元素路径完成审查；
@@ -82,7 +84,18 @@ python -B image-to-ui/scripts/workflow.py prepare --design test/source/design/em
 ### 2. 编写 UI 结构
 
 结合网格与资源清单创建 `test/output-local/ui_structure.json`。层级、
-布局和坐标编写通常由 Codex skill 完成。
+布局和坐标编写通常由 Codex skill 完成。每个节点都必须包含
+`anchor.horizontal` 和 `anchor.vertical`。
+
+已有结构可用以下命令补齐锚点，不会改变任何包围框坐标：
+
+```bash
+python -B image-to-ui/scripts/backfill_anchors.py --structure old.json --output upgraded.json
+```
+
+水平方向只允许 `left` / `center` / `right`，垂直方向只允许
+`top` / `middle` / `bottom`。手工选择规则和原文件原子升级方式见
+[结构说明](image-to-ui/references/schema.md#anchor-alignment)。
 
 ### 3. 校验并渲染
 
@@ -116,7 +129,7 @@ python -B image-to-ui/scripts/workflow.py finalize --output test/output-local
 
 | 产物 | 用途 |
 | --- | --- |
-| `ui_structure.json` | 面向引擎的 UI 层级、几何信息、文本和资源引用。 |
+| `ui_structure.json` | 面向引擎的 UI 层级、锚点、几何信息、文本和资源引用。 |
 | `reconstruction.png` | 根据当前结构渲染的重建结果。 |
 | `comparison.png` | 带网格的效果图与重建图左右对比。 |
 | `all_elements.png` / `all_elements_legend.json` | 所有元素的解析后包围框和路径总览。 |

@@ -3,6 +3,7 @@ Validate ui_structure.json before bbox annotation and rendering.
 
 Checks:
   - JSON shape, required fields, positive sizes, and duplicate element paths
+  - required anchor alignment metadata on every node
   - canvas size against the design image
   - asset references against the sliced asset directory
   - layout, alignment, color, opacity, and nine-slice field sanity
@@ -42,6 +43,9 @@ ALIGN_X = {"left", "center", "right", "start", "end"}
 ALIGN_Y = {"top", "middle", "bottom", "start", "end", "center"}
 TEXT_ALIGN = {"left", "center", "right"}
 TEXT_VALIGN = {"top", "middle", "bottom", "start", "end", "center"}
+ANCHOR_HORIZONTAL = {"left", "center", "right"}
+ANCHOR_VERTICAL = {"top", "middle", "bottom"}
+ANCHOR_FIELDS = {"horizontal", "vertical"}
 NINE_SLICE_SIDES = ("left", "top", "right", "bottom")
 COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$")
 
@@ -182,6 +186,27 @@ def check_size(obj: Any, path: str, reporter: Reporter) -> None:
             reporter.error(path, f"size.{key} is required")
         elif not positive_number(obj[key]):
             reporter.error(path, f"size.{key} must be a positive number")
+
+
+def check_anchor(obj: Any, path: str, reporter: Reporter) -> None:
+    if not isinstance(obj, dict):
+        reporter.error(path, "anchor must be an object")
+        return
+    unknown = sorted(set(obj) - ANCHOR_FIELDS)
+    if unknown:
+        reporter.error(path, f"anchor has unknown fields: {', '.join(unknown)}")
+    allowed_by_field = {
+        "horizontal": ANCHOR_HORIZONTAL,
+        "vertical": ANCHOR_VERTICAL,
+    }
+    for field, allowed in allowed_by_field.items():
+        if field not in obj:
+            reporter.error(path, f"anchor.{field} is required")
+        elif not isinstance(obj[field], str) or obj[field] not in allowed:
+            reporter.error(
+                path,
+                f"anchor.{field} must be one of {sorted(allowed)}",
+            )
 
 
 def check_color(value: Any, path: str, field: str, reporter: Reporter) -> None:
@@ -346,6 +371,11 @@ def validate_tree(
         reporter.error(path, "size is required")
     else:
         check_size(elem["size"], path, reporter)
+    if "anchor" not in elem:
+        reporter.error(path, "anchor is required")
+    else:
+        check_anchor(elem["anchor"], path, reporter)
+        stats["anchored"] += 1
 
     if path in seen_paths:
         reporter.error(path, "duplicate element path")

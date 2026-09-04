@@ -1,0 +1,1710 @@
+{
+  "version": 1,
+  "strategy": "visual-salience-plus-residual",
+  "policy": "Scores prioritize evidence only; they never change geometry and residuals are not standalone correctness failures.",
+  "design": "G:\\GitHub\\Image-To-UI\\test\\source\\design\\emberfall-ui-mockup.png",
+  "reconstruction": "G:\\GitHub\\Image-To-UI\\test\\output\\reconstruction.png",
+  "canvas": {
+    "width": 1672,
+    "height": 941
+  },
+  "thresholds": {
+    "medium_risk": 0.38,
+    "high_risk": 0.62,
+    "residual_normalization": 0.33
+  },
+  "summary": {
+    "analyzed": 45,
+    "risk_level_counts": {
+      "high": 5,
+      "medium": 36,
+      "low": 4
+    },
+    "high_risk_paths": [
+      "root/enter_button/label",
+      "root/bottom_navigation/nav_buttons/spellbook/icon",
+      "root/bottom_navigation/nav_buttons/talents/icon",
+      "root/top_left_hud/portrait/level_badge/label",
+      "root/top_right_utilities/mail/icon"
+    ],
+    "focused_evidence_paths": [
+      "root/bottom_navigation/dock",
+      "root/bottom_navigation/nav_buttons/armor/icon",
+      "root/bottom_navigation/nav_buttons/equipment/icon",
+      "root/bottom_navigation/nav_buttons/map/icon",
+      "root/bottom_navigation/nav_buttons/spellbook/icon",
+      "root/bottom_navigation/nav_buttons/talents/base",
+      "root/bottom_navigation/nav_buttons/talents/icon",
+      "root/enter_button/base",
+      "root/enter_button/label",
+      "root/quest_panel/quest_list/frost_quest/icon",
+      "root/quest_panel/title",
+      "root/resource_bar/coin/icon",
+      "root/resource_bar/crystal/icon",
+      "root/right_actions/spectral_flame/icon",
+      "root/top_left_hud/portrait/level_badge/label",
+      "root/top_right_utilities/mail/icon",
+      "root/top_right_utilities/settings/icon"
+    ]
+  },
+  "evidence": {
+    "image": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review.png",
+    "legend": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review_legend.json"
+  },
+  "items": [
+    {
+      "path": "root/enter_button/label",
+      "name": "label",
+      "type": "text",
+      "bbox": [
+        1299,
+        769,
+        274,
+        56
+      ],
+      "risk_level": "high",
+      "risk_score": 0.8399,
+      "reasons": [
+        "salience.large-text",
+        "salience.high-local-contrast",
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused",
+      "salience": {
+        "area_ratio": 0.009752,
+        "area_score": 0.4032,
+        "font_score": 1.0,
+        "contrast_score": 0.7969,
+        "foreground_score": 1.0,
+        "score": 0.7505
+      },
+      "residual": {
+        "rgb_mae": 0.2634,
+        "luminance_mae": 0.2865,
+        "edge_mae": 0.1326,
+        "changed_fraction": 0.6473,
+        "raw": 0.3132,
+        "score": 0.9492
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/spellbook/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        950,
+        820,
+        76,
+        63
+      ],
+      "risk_level": "high",
+      "risk_score": 0.6531,
+      "reasons": [
+        "salience.high-local-contrast",
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused",
+      "salience": {
+        "area_ratio": 0.003043,
+        "area_score": 0.2252,
+        "font_score": 0.0,
+        "contrast_score": 0.8234,
+        "foreground_score": 0.9143,
+        "score": 0.3807
+      },
+      "residual": {
+        "rgb_mae": 0.2359,
+        "luminance_mae": 0.2494,
+        "edge_mae": 0.1771,
+        "changed_fraction": 0.74,
+        "raw": 0.3254,
+        "score": 0.986
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/talents/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        795,
+        798,
+        84,
+        108
+      ],
+      "risk_level": "high",
+      "risk_score": 0.6464,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused",
+      "salience": {
+        "area_ratio": 0.005766,
+        "area_score": 0.31,
+        "font_score": 0.0,
+        "contrast_score": 0.6262,
+        "foreground_score": 0.8714,
+        "score": 0.3645
+      },
+      "residual": {
+        "rgb_mae": 0.2241,
+        "luminance_mae": 0.2402,
+        "edge_mae": 0.2028,
+        "changed_fraction": 0.7453,
+        "raw": 0.327,
+        "score": 0.991
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/top_left_hud/portrait/level_badge/label",
+      "name": "label",
+      "type": "text",
+      "bbox": [
+        68,
+        177,
+        66,
+        18
+      ],
+      "risk_level": "high",
+      "risk_score": 0.6344,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused",
+      "salience": {
+        "area_ratio": 0.000755,
+        "area_score": 0.1122,
+        "font_score": 0.4251,
+        "contrast_score": 0.757,
+        "foreground_score": 0.1143,
+        "score": 0.3353
+      },
+      "residual": {
+        "rgb_mae": 0.2845,
+        "luminance_mae": 0.3,
+        "edge_mae": 0.2008,
+        "changed_fraction": 0.665,
+        "raw": 0.3435,
+        "score": 1.0
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/top_right_utilities/mail/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1572,
+        35,
+        63,
+        50
+      ],
+      "risk_level": "high",
+      "risk_score": 0.6235,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused",
+      "salience": {
+        "area_ratio": 0.002002,
+        "area_score": 0.1827,
+        "font_score": 0.0,
+        "contrast_score": 1.0,
+        "foreground_score": 0.3429,
+        "score": 0.3154
+      },
+      "residual": {
+        "rgb_mae": 0.2851,
+        "luminance_mae": 0.3043,
+        "edge_mae": 0.1815,
+        "changed_fraction": 0.779,
+        "raw": 0.3628,
+        "score": 1.0
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/bottom_navigation/dock",
+      "name": "dock",
+      "type": "image",
+      "bbox": [
+        410,
+        787,
+        812,
+        126
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.6149,
+      "reasons": [
+        "salience.large-visible-area",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.065028,
+        "area_score": 1.0,
+        "font_score": 0.0,
+        "contrast_score": 0.4317,
+        "foreground_score": 0.7286,
+        "score": 0.5456
+      },
+      "residual": {
+        "rgb_mae": 0.1626,
+        "luminance_mae": 0.1696,
+        "edge_mae": 0.1413,
+        "changed_fraction": 0.522,
+        "raw": 0.2309,
+        "score": 0.6997
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/quest_panel/title",
+      "name": "title",
+      "type": "text",
+      "bbox": [
+        208,
+        334,
+        103,
+        29
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.607,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.001898,
+        "area_score": 0.1779,
+        "font_score": 0.599,
+        "contrast_score": 0.6085,
+        "foreground_score": 0.3857,
+        "score": 0.4215
+      },
+      "residual": {
+        "rgb_mae": 0.2269,
+        "luminance_mae": 0.2383,
+        "edge_mae": 0.1598,
+        "changed_fraction": 0.5377,
+        "raw": 0.2751,
+        "score": 0.8337
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/armor/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        645,
+        818,
+        57,
+        66
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5955,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.002391,
+        "area_score": 0.1996,
+        "font_score": 0.0,
+        "contrast_score": 0.616,
+        "foreground_score": 0.8286,
+        "score": 0.3174
+      },
+      "residual": {
+        "rgb_mae": 0.2102,
+        "luminance_mae": 0.2267,
+        "edge_mae": 0.1672,
+        "changed_fraction": 0.7358,
+        "raw": 0.3087,
+        "score": 0.9354
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/right_actions/spectral_flame/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1471,
+        529,
+        94,
+        104
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5887,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.006213,
+        "area_score": 0.3218,
+        "font_score": 0.0,
+        "contrast_score": 0.58,
+        "foreground_score": 0.7,
+        "score": 0.3336
+      },
+      "residual": {
+        "rgb_mae": 0.2108,
+        "luminance_mae": 0.2043,
+        "edge_mae": 0.1352,
+        "changed_fraction": 0.745,
+        "raw": 0.2971,
+        "score": 0.9004
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/top_right_utilities/settings/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1469,
+        30,
+        58,
+        60
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5764,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.002212,
+        "area_score": 0.192,
+        "font_score": 0.0,
+        "contrast_score": 0.7996,
+        "foreground_score": 0.3,
+        "score": 0.2721
+      },
+      "residual": {
+        "rgb_mae": 0.2432,
+        "luminance_mae": 0.2579,
+        "edge_mae": 0.1884,
+        "changed_fraction": 0.642,
+        "raw": 0.3129,
+        "score": 0.9483
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        74,
+        536,
+        65,
+        83
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5722,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.003429,
+        "area_score": 0.2391,
+        "font_score": 0.0,
+        "contrast_score": 0.5952,
+        "foreground_score": 0.5571,
+        "score": 0.2863
+      },
+      "residual": {
+        "rgb_mae": 0.2044,
+        "luminance_mae": 0.1992,
+        "edge_mae": 0.1633,
+        "changed_fraction": 0.7611,
+        "raw": 0.3041,
+        "score": 0.9216
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/resource_bar/coin/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        659,
+        25,
+        43,
+        46
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5679,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.001257,
+        "area_score": 0.1448,
+        "font_score": 0.0,
+        "contrast_score": 0.6791,
+        "foreground_score": 0.1857,
+        "score": 0.2143
+      },
+      "residual": {
+        "rgb_mae": 0.2247,
+        "luminance_mae": 0.2377,
+        "edge_mae": 0.1907,
+        "changed_fraction": 0.7892,
+        "raw": 0.3324,
+        "score": 1.0
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/map/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1091,
+        817,
+        68,
+        68
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5669,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.002939,
+        "area_score": 0.2213,
+        "font_score": 0.0,
+        "contrast_score": 0.5653,
+        "foreground_score": 0.9571,
+        "score": 0.3341
+      },
+      "residual": {
+        "rgb_mae": 0.1921,
+        "luminance_mae": 0.2013,
+        "edge_mae": 0.1745,
+        "changed_fraction": 0.6471,
+        "raw": 0.281,
+        "score": 0.8515
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/talents/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        756,
+        769,
+        166,
+        165
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5666,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.017409,
+        "area_score": 0.5387,
+        "font_score": 0.0,
+        "contrast_score": 0.4382,
+        "foreground_score": 0.8571,
+        "score": 0.4047
+      },
+      "residual": {
+        "rgb_mae": 0.1734,
+        "luminance_mae": 0.181,
+        "edge_mae": 0.1501,
+        "changed_fraction": 0.5874,
+        "raw": 0.2523,
+        "score": 0.7645
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/equipment/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        506,
+        808,
+        60,
+        85
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5658,
+      "reasons": [
+        "salience.high-local-contrast",
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.003241,
+        "area_score": 0.2324,
+        "font_score": 0.0,
+        "contrast_score": 0.6568,
+        "foreground_score": 0.7857,
+        "score": 0.3306
+      },
+      "residual": {
+        "rgb_mae": 0.1923,
+        "luminance_mae": 0.2025,
+        "edge_mae": 0.1743,
+        "changed_fraction": 0.6484,
+        "raw": 0.2816,
+        "score": 0.8533
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/enter_button/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1209,
+        678,
+        455,
+        233
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5579,
+      "reasons": [
+        "salience.large-visible-area",
+        "salience.foreground-layer",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.067382,
+        "area_score": 1.0,
+        "font_score": 0.0,
+        "contrast_score": 0.3614,
+        "foreground_score": 0.9857,
+        "score": 0.5701
+      },
+      "residual": {
+        "rgb_mae": 0.1343,
+        "luminance_mae": 0.1379,
+        "edge_mae": 0.095,
+        "changed_fraction": 0.4145,
+        "raw": 0.1814,
+        "score": 0.5498
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/resource_bar/crystal/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        903,
+        23,
+        34,
+        50
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5547,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.00108,
+        "area_score": 0.1342,
+        "font_score": 0.0,
+        "contrast_score": 0.7906,
+        "foreground_score": 0.2429,
+        "score": 0.2415
+      },
+      "residual": {
+        "rgb_mae": 0.2018,
+        "luminance_mae": 0.2087,
+        "edge_mae": 0.1899,
+        "changed_fraction": 0.7459,
+        "raw": 0.3094,
+        "score": 0.9375
+      },
+      "risk_review_covered": true
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/spellbook/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        933,
+        796,
+        124,
+        123
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.54,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.009694,
+        "area_score": 0.402,
+        "font_score": 0.0,
+        "contrast_score": 0.524,
+        "foreground_score": 0.9,
+        "score": 0.3805
+      },
+      "residual": {
+        "rgb_mae": 0.1755,
+        "luminance_mae": 0.1838,
+        "edge_mae": 0.1488,
+        "changed_fraction": 0.5338,
+        "raw": 0.2426,
+        "score": 0.735
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/armor/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        605,
+        796,
+        124,
+        123
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5381,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.009694,
+        "area_score": 0.402,
+        "font_score": 0.0,
+        "contrast_score": 0.4431,
+        "foreground_score": 0.8143,
+        "score": 0.3514
+      },
+      "residual": {
+        "rgb_mae": 0.1754,
+        "luminance_mae": 0.183,
+        "edge_mae": 0.1491,
+        "changed_fraction": 0.586,
+        "raw": 0.2528,
+        "score": 0.7662
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        72,
+        399,
+        68,
+        86
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5251,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.003717,
+        "area_score": 0.2489,
+        "font_score": 0.0,
+        "contrast_score": 0.438,
+        "foreground_score": 0.4857,
+        "score": 0.2476
+      },
+      "residual": {
+        "rgb_mae": 0.1805,
+        "luminance_mae": 0.1762,
+        "edge_mae": 0.158,
+        "changed_fraction": 0.7375,
+        "raw": 0.2852,
+        "score": 0.8642
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/action_base",
+      "name": "action_base",
+      "type": "image",
+      "bbox": [
+        43,
+        517,
+        124,
+        123
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5192,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.009694,
+        "area_score": 0.402,
+        "font_score": 0.0,
+        "contrast_score": 0.4837,
+        "foreground_score": 0.5429,
+        "score": 0.3189
+      },
+      "residual": {
+        "rgb_mae": 0.1745,
+        "luminance_mae": 0.1779,
+        "edge_mae": 0.1603,
+        "changed_fraction": 0.5763,
+        "raw": 0.2521,
+        "score": 0.764
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/equipment/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        474,
+        796,
+        124,
+        123
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5173,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.009694,
+        "area_score": 0.402,
+        "font_score": 0.0,
+        "contrast_score": 0.4896,
+        "foreground_score": 0.7714,
+        "score": 0.3543
+      },
+      "residual": {
+        "rgb_mae": 0.1661,
+        "luminance_mae": 0.174,
+        "edge_mae": 0.1489,
+        "changed_fraction": 0.5293,
+        "raw": 0.2364,
+        "score": 0.7165
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/top_right_utilities/mail/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1561,
+        18,
+        84,
+        83
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5163,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.004431,
+        "area_score": 0.2718,
+        "font_score": 0.0,
+        "contrast_score": 0.7488,
+        "foreground_score": 0.3286,
+        "score": 0.2942
+      },
+      "residual": {
+        "rgb_mae": 0.1986,
+        "luminance_mae": 0.2108,
+        "edge_mae": 0.1509,
+        "changed_fraction": 0.5498,
+        "raw": 0.26,
+        "score": 0.7877
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        43,
+        526,
+        434,
+        104
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5093,
+      "reasons": [
+        "salience.large-visible-area",
+        "residual.color",
+        "residual.luminance",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.028688,
+        "area_score": 0.6915,
+        "font_score": 0.0,
+        "contrast_score": 0.4509,
+        "foreground_score": 0.5286,
+        "score": 0.4115
+      },
+      "residual": {
+        "rgb_mae": 0.1466,
+        "luminance_mae": 0.1518,
+        "edge_mae": 0.1189,
+        "changed_fraction": 0.4794,
+        "raw": 0.2075,
+        "score": 0.6288
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/map/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1065,
+        796,
+        124,
+        123
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5077,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.009694,
+        "area_score": 0.402,
+        "font_score": 0.0,
+        "contrast_score": 0.4298,
+        "foreground_score": 0.9429,
+        "score": 0.3681
+      },
+      "residual": {
+        "rgb_mae": 0.1568,
+        "luminance_mae": 0.1634,
+        "edge_mae": 0.1416,
+        "changed_fraction": 0.5028,
+        "raw": 0.2239,
+        "score": 0.6783
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/background",
+      "name": "background",
+      "type": "image",
+      "bbox": [
+        50,
+        520,
+        425,
+        108
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5009,
+      "reasons": [
+        "salience.large-visible-area",
+        "residual.color",
+        "residual.luminance",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.029173,
+        "area_score": 0.6973,
+        "font_score": 0.0,
+        "contrast_score": 0.4415,
+        "foreground_score": 0.5143,
+        "score": 0.4095
+      },
+      "residual": {
+        "rgb_mae": 0.1434,
+        "luminance_mae": 0.1482,
+        "edge_mae": 0.1152,
+        "changed_fraction": 0.4667,
+        "raw": 0.2022,
+        "score": 0.6127
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/resource_bar/coin/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        652,
+        20,
+        56,
+        56
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4949,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.001993,
+        "area_score": 0.1823,
+        "font_score": 0.0,
+        "contrast_score": 0.5447,
+        "foreground_score": 0.1714,
+        "score": 0.1985
+      },
+      "residual": {
+        "rgb_mae": 0.1879,
+        "luminance_mae": 0.1956,
+        "edge_mae": 0.1616,
+        "changed_fraction": 0.6859,
+        "raw": 0.2829,
+        "score": 0.8572
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest/action_base",
+      "name": "action_base",
+      "type": "image",
+      "bbox": [
+        43,
+        381,
+        124,
+        123
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4867,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.009694,
+        "area_score": 0.402,
+        "font_score": 0.0,
+        "contrast_score": 0.3891,
+        "foreground_score": 0.4714,
+        "score": 0.2892
+      },
+      "residual": {
+        "rgb_mae": 0.1619,
+        "luminance_mae": 0.1656,
+        "edge_mae": 0.1579,
+        "changed_fraction": 0.5542,
+        "raw": 0.2403,
+        "score": 0.7281
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/right_actions/helmet/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1476,
+        354,
+        84,
+        97
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4848,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.005179,
+        "area_score": 0.2938,
+        "font_score": 0.0,
+        "contrast_score": 0.5634,
+        "foreground_score": 0.6571,
+        "score": 0.3141
+      },
+      "residual": {
+        "rgb_mae": 0.1522,
+        "luminance_mae": 0.157,
+        "edge_mae": 0.1242,
+        "changed_fraction": 0.5643,
+        "raw": 0.2288,
+        "score": 0.6934
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        20,
+        280,
+        477,
+        385
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.483,
+      "reasons": [
+        "salience.large-visible-area",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.116722,
+        "area_score": 1.0,
+        "font_score": 0.0,
+        "contrast_score": 0.32,
+        "foreground_score": 0.3714,
+        "score": 0.4697
+      },
+      "residual": {
+        "rgb_mae": 0.119,
+        "luminance_mae": 0.123,
+        "edge_mae": 0.105,
+        "changed_fraction": 0.3602,
+        "raw": 0.1647,
+        "score": 0.4992
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/top_right_utilities/settings/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1456,
+        18,
+        84,
+        83
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4801,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.004431,
+        "area_score": 0.2718,
+        "font_score": 0.0,
+        "contrast_score": 0.631,
+        "foreground_score": 0.2857,
+        "score": 0.2642
+      },
+      "residual": {
+        "rgb_mae": 0.186,
+        "luminance_mae": 0.1965,
+        "edge_mae": 0.1546,
+        "changed_fraction": 0.5095,
+        "raw": 0.2455,
+        "score": 0.7439
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/resource_bar/crystal/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        892,
+        20,
+        56,
+        56
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4629,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.001993,
+        "area_score": 0.1823,
+        "font_score": 0.0,
+        "contrast_score": 0.5569,
+        "foreground_score": 0.2286,
+        "score": 0.2095
+      },
+      "residual": {
+        "rgb_mae": 0.1709,
+        "luminance_mae": 0.177,
+        "edge_mae": 0.1646,
+        "changed_fraction": 0.5915,
+        "raw": 0.255,
+        "score": 0.7726
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/right_actions/spectral_flame/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1417,
+        479,
+        205,
+        202
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4491,
+      "reasons": [
+        "salience.large-visible-area",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.02632,
+        "area_score": 0.6623,
+        "font_score": 0.0,
+        "contrast_score": 0.3182,
+        "foreground_score": 0.6857,
+        "score": 0.3983
+      },
+      "residual": {
+        "rgb_mae": 0.1214,
+        "luminance_mae": 0.1212,
+        "edge_mae": 0.0985,
+        "changed_fraction": 0.3869,
+        "raw": 0.1687,
+        "score": 0.5112
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/top_left_hud/status_bars",
+      "name": "status_bars",
+      "type": "image",
+      "bbox": [
+        163,
+        49,
+        409,
+        76
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4417,
+      "reasons": [
+        "residual.color",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.019757,
+        "area_score": 0.5738,
+        "font_score": 0.0,
+        "contrast_score": 0.3754,
+        "foreground_score": 0.0429,
+        "score": 0.2823
+      },
+      "residual": {
+        "rgb_mae": 0.143,
+        "luminance_mae": 0.1285,
+        "edge_mae": 0.113,
+        "changed_fraction": 0.5339,
+        "raw": 0.2101,
+        "score": 0.6366
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        43,
+        390,
+        434,
+        104
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.441,
+      "reasons": [
+        "salience.large-visible-area",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.028688,
+        "area_score": 0.6915,
+        "font_score": 0.0,
+        "contrast_score": 0.3058,
+        "foreground_score": 0.4571,
+        "score": 0.3718
+      },
+      "residual": {
+        "rgb_mae": 0.1199,
+        "luminance_mae": 0.1213,
+        "edge_mae": 0.1134,
+        "changed_fraction": 0.3938,
+        "raw": 0.1734,
+        "score": 0.5255
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/top_left_hud/portrait/level_badge/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        37,
+        161,
+        130,
+        41
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4352,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.003388,
+        "area_score": 0.2376,
+        "font_score": 0.0,
+        "contrast_score": 0.4539,
+        "foreground_score": 0.1,
+        "score": 0.1889
+      },
+      "residual": {
+        "rgb_mae": 0.1801,
+        "luminance_mae": 0.1882,
+        "edge_mae": 0.1438,
+        "changed_fraction": 0.5295,
+        "raw": 0.2429,
+        "score": 0.7362
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/quest_list/fire_quest/background",
+      "name": "background",
+      "type": "image",
+      "bbox": [
+        50,
+        384,
+        425,
+        108
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.432,
+      "reasons": [
+        "salience.large-visible-area",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.029173,
+        "area_score": 0.6973,
+        "font_score": 0.0,
+        "contrast_score": 0.2972,
+        "foreground_score": 0.4429,
+        "score": 0.3699
+      },
+      "residual": {
+        "rgb_mae": 0.1168,
+        "luminance_mae": 0.1177,
+        "edge_mae": 0.1101,
+        "changed_fraction": 0.3781,
+        "raw": 0.1676,
+        "score": 0.5079
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/right_actions/sword/icon",
+      "name": "icon",
+      "type": "image",
+      "bbox": [
+        1475,
+        175,
+        86,
+        102
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4181,
+      "reasons": [
+        "residual.color",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.005575,
+        "area_score": 0.3048,
+        "font_score": 0.0,
+        "contrast_score": 0.4276,
+        "foreground_score": 0.6143,
+        "score": 0.2844
+      },
+      "residual": {
+        "rgb_mae": 0.1418,
+        "luminance_mae": 0.137,
+        "edge_mae": 0.0996,
+        "changed_fraction": 0.451,
+        "raw": 0.1919,
+        "score": 0.5815
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/right_actions/helmet/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1417,
+        302,
+        205,
+        202
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4088,
+      "reasons": [
+        "salience.large-visible-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.02632,
+        "area_score": 0.6623,
+        "font_score": 0.0,
+        "contrast_score": 0.3075,
+        "foreground_score": 0.6429,
+        "score": 0.3897
+      },
+      "residual": {
+        "rgb_mae": 0.102,
+        "luminance_mae": 0.1043,
+        "edge_mae": 0.0869,
+        "changed_fraction": 0.321,
+        "raw": 0.1426,
+        "score": 0.4321
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/top_left_hud/portrait/frame",
+      "name": "frame",
+      "type": "image",
+      "bbox": [
+        14,
+        8,
+        184,
+        179
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4069,
+      "reasons": [
+        "residual.luminance",
+        "residual.changed-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 0.020934,
+        "area_score": 0.5907,
+        "font_score": 0.0,
+        "contrast_score": 0.2687,
+        "foreground_score": 0.0714,
+        "score": 0.2712
+      },
+      "residual": {
+        "rgb_mae": 0.1377,
+        "luminance_mae": 0.1411,
+        "edge_mae": 0.1167,
+        "changed_fraction": 0.416,
+        "raw": 0.189,
+        "score": 0.5727
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/background",
+      "name": "background",
+      "type": "image",
+      "bbox": [
+        0,
+        0,
+        1672,
+        941
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.4056,
+      "reasons": [
+        "salience.large-visible-area"
+      ],
+      "required_evidence": "focused-recommended",
+      "salience": {
+        "area_ratio": 1.0,
+        "area_score": 1.0,
+        "font_score": 0.0,
+        "contrast_score": 0.4324,
+        "foreground_score": 0.0143,
+        "score": 0.4386
+      },
+      "residual": {
+        "rgb_mae": 0.0897,
+        "luminance_mae": 0.088,
+        "edge_mae": 0.0611,
+        "changed_fraction": 0.3122,
+        "raw": 0.1266,
+        "score": 0.3836
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/right_actions/sword/base",
+      "name": "base",
+      "type": "image",
+      "bbox": [
+        1417,
+        125,
+        205,
+        202
+      ],
+      "risk_level": "low",
+      "risk_score": 0.378,
+      "reasons": [
+        "salience.large-visible-area"
+      ],
+      "required_evidence": "overview",
+      "salience": {
+        "area_ratio": 0.02632,
+        "area_score": 0.6623,
+        "font_score": 0.0,
+        "contrast_score": 0.2906,
+        "foreground_score": 0.6,
+        "score": 0.3799
+      },
+      "residual": {
+        "rgb_mae": 0.0944,
+        "luminance_mae": 0.0946,
+        "edge_mae": 0.0745,
+        "changed_fraction": 0.2687,
+        "raw": 0.1244,
+        "score": 0.3768
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/quest_panel/divider",
+      "name": "divider",
+      "type": "image",
+      "bbox": [
+        65,
+        362,
+        385,
+        30
+      ],
+      "risk_level": "low",
+      "risk_score": 0.315,
+      "reasons": [
+        "residual.review-priority"
+      ],
+      "required_evidence": "overview",
+      "salience": {
+        "area_ratio": 0.007341,
+        "area_score": 0.3498,
+        "font_score": 0.0,
+        "contrast_score": 0.1941,
+        "foreground_score": 0.4,
+        "score": 0.2213
+      },
+      "residual": {
+        "rgb_mae": 0.1125,
+        "luminance_mae": 0.1149,
+        "edge_mae": 0.0907,
+        "changed_fraction": 0.2829,
+        "raw": 0.1417,
+        "score": 0.4295
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/resource_bar/crystal/capsule",
+      "name": "capsule",
+      "type": "image",
+      "bbox": [
+        906,
+        22,
+        206,
+        51
+      ],
+      "risk_level": "low",
+      "risk_score": 0.3053,
+      "reasons": [
+        "residual.review-priority"
+      ],
+      "required_evidence": "overview",
+      "salience": {
+        "area_ratio": 0.006677,
+        "area_score": 0.3336,
+        "font_score": 0.0,
+        "contrast_score": 0.3518,
+        "foreground_score": 0.2143,
+        "score": 0.2193
+      },
+      "residual": {
+        "rgb_mae": 0.098,
+        "luminance_mae": 0.1015,
+        "edge_mae": 0.0882,
+        "changed_fraction": 0.2932,
+        "raw": 0.1355,
+        "score": 0.4105
+      },
+      "risk_review_covered": false
+    },
+    {
+      "path": "root/resource_bar/coin/capsule",
+      "name": "capsule",
+      "type": "image",
+      "bbox": [
+        666,
+        22,
+        206,
+        51
+      ],
+      "risk_level": "low",
+      "risk_score": 0.2974,
+      "reasons": [
+        "residual.review-priority"
+      ],
+      "required_evidence": "overview",
+      "salience": {
+        "area_ratio": 0.006677,
+        "area_score": 0.3336,
+        "font_score": 0.0,
+        "contrast_score": 0.4087,
+        "foreground_score": 0.1571,
+        "score": 0.2221
+      },
+      "residual": {
+        "rgb_mae": 0.0935,
+        "luminance_mae": 0.0977,
+        "edge_mae": 0.0786,
+        "changed_fraction": 0.2819,
+        "raw": 0.1285,
+        "score": 0.3895
+      },
+      "risk_review_covered": false
+    }
+  ]
+}

@@ -15,6 +15,10 @@
       "width": 1672,
       "height": 941
     },
+    "anchor": {
+      "horizontal": "left",
+      "vertical": "top"
+    },
     "children": [
       {
         "type": "image",
@@ -26,6 +30,10 @@
         "size": {
           "width": 1672,
           "height": 941
+        },
+        "anchor": {
+          "horizontal": "left",
+          "vertical": "top"
         },
         "asset": "backgrounds/bg_citadel.png"
       },
@@ -40,6 +48,10 @@
           "width": 570,
           "height": 205
         },
+        "anchor": {
+          "horizontal": "left",
+          "vertical": "top"
+        },
         "children": [
           {
             "type": "image",
@@ -51,6 +63,10 @@
             "size": {
               "width": 425,
               "height": 88
+            },
+            "anchor": {
+              "horizontal": "right",
+              "vertical": "middle"
             },
             "asset": "components/frame_status_dual.png"
           },
@@ -65,6 +81,10 @@
               "width": 190,
               "height": 203
             },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "top"
+            },
             "children": [
               {
                 "type": "image",
@@ -76,6 +96,10 @@
                 "size": {
                   "width": 190,
                   "height": 185
+                },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
                 },
                 "asset": "components/frame_portrait.png"
               },
@@ -90,6 +114,10 @@
                   "width": 132,
                   "height": 47
                 },
+                "anchor": {
+                  "horizontal": "center",
+                  "vertical": "bottom"
+                },
                 "children": [
                   {
                     "type": "image",
@@ -101,6 +129,10 @@
                     "size": {
                       "width": 132,
                       "height": 47
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
                     },
                     "asset": "components/frame_resource_capsule.png"
                   },
@@ -114,6 +146,10 @@
                     "size": {
                       "width": 120,
                       "height": 39
+                    },
+                    "anchor": {
+                      "horizontal": "center",
+                      "vertical": "bottom"
                     },
                     "text": "LV.18",
                     "fontFamily": "C:/Windows/Fonts/georgiab.ttf",
@@ -141,6 +177,10 @@
           "width": 463,
           "height": 62
         },
+        "anchor": {
+          "horizontal": "center",
+          "vertical": "top"
+        },
         "layout": {
           "type": "row",
           "spacing": 17,
@@ -155,6 +195,10 @@
               "width": 223,
               "height": 62
             },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "middle"
+            },
             "children": [
               {
                 "type": "image",
@@ -166,6 +210,10 @@
                 "size": {
                   "width": 210,
                   "height": 60
+                },
+                "anchor": {
+                  "horizontal": "right",
+                  "vertical": "middle"
                 },
                 "asset": "components/frame_resource_capsule.png"
               },
@@ -179,6 +227,10 @@
                 "size": {
                   "width": 62,
                   "height": 62
+                },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
                 },
                 "asset": "components/button_utility_round.png"
               },
@@ -193,6 +245,10 @@
                   "width": 43,
                   "height": 46
                 },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "middle"
+                },
                 "asset": "icons/icon_coin.png"
               }
             ]
@@ -203,6 +259,10 @@
             "size": {
               "width": 223,
               "height": 62
+            },
+            "anchor": {
+              "horizontal": "right",
+              "vertical": "middle"
             },
             "children": [
               {
@@ -215,6 +275,10 @@
                 "size": {
                   "width": 210,
                   "height": 60
+                },
+                "anchor": {
+                  "horizontal": "right",
+                  "vertical": "middle"
                 },
                 "asset": "components/frame_resource_capsule.png"
               },
@@ -229,6 +293,10 @@
                   "width": 62,
                   "height": 62
                 },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
+                },
                 "asset": "components/button_utility_round.png"
               },
               {
@@ -241,6 +309,10 @@
                 "size": {
                   "width": 34,
                   "height": 50
+                },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "middle"
                 },
                 "asset": "icons/icon_crystal.png"
               }
@@ -259,6 +331,10 @@
           "width": 201,
           "height": 96
         },
+        "anchor": {
+          "horizontal": "right",
+          "vertical": "top"
+        },
         "layout": {
           "type": "row",
           "spacing": 9,
@@ -273,6 +349,10 @@
               "width": 96,
               "height": 96
             },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "middle"
+            },
             "children": [
               {
                 "type": "image",
@@ -284,6 +364,10 @@
                 "size": {
                   "width": 96,
                   "height": 96
+                },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
                 },
                 "asset": "components/button_utility_round.png"
               },
@@ -298,6 +382,10 @@
                   "width": 58,
                   "height": 60
                 },
+                "anchor": {
+                  "horizontal": "center",
+                  "vertical": "middle"
+                },
                 "asset": "icons/icon_settings.png"
               }
             ]
@@ -308,6 +396,10 @@
             "size": {
               "width": 96,
               "height": 96
+            },
+            "anchor": {
+              "horizontal": "right",
+              "vertical": "middle"
             },
             "children": [
               {
@@ -321,6 +413,10 @@
                   "width": 96,
                   "height": 96
                 },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
+                },
                 "asset": "components/button_utility_round.png"
               },
               {
@@ -333,6 +429,10 @@
                 "size": {
                   "width": 65,
                   "height": 52
+                },
+                "anchor": {
+                  "horizontal": "center",
+                  "vertical": "middle"
                 },
                 "asset": "icons/icon_mail.png"
               }
@@ -351,6 +451,10 @@
           "width": 493,
           "height": 400
         },
+        "anchor": {
+          "horizontal": "left",
+          "vertical": "middle"
+        },
         "children": [
           {
             "type": "image",
@@ -362,6 +466,10 @@
             "size": {
               "width": 493,
               "height": 400
+            },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "top"
             },
             "asset": "components/panel_quest.png",
             "nineSlice": {
@@ -381,6 +489,10 @@
             "size": {
               "width": 333,
               "height": 43
+            },
+            "anchor": {
+              "horizontal": "center",
+              "vertical": "top"
             },
             "text": "QUEST",
             "fontFamily": "C:/Windows/Fonts/georgia.ttf",
@@ -402,6 +514,10 @@
               "width": 393,
               "height": 34
             },
+            "anchor": {
+              "horizontal": "center",
+              "vertical": "middle"
+            },
             "asset": "components/divider_gold.png"
           },
           {
@@ -414,6 +530,10 @@
             "size": {
               "width": 450,
               "height": 264
+            },
+            "anchor": {
+              "horizontal": "center",
+              "vertical": "bottom"
             },
             "layout": {
               "type": "column",
@@ -429,6 +549,10 @@
                   "width": 450,
                   "height": 128
                 },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
+                },
                 "children": [
                   {
                     "type": "image",
@@ -440,6 +564,10 @@
                     "size": {
                       "width": 425,
                       "height": 108
+                    },
+                    "anchor": {
+                      "horizontal": "right",
+                      "vertical": "middle"
                     },
                     "asset": "quest-backgrounds/quest_bg_fire.png"
                   },
@@ -454,6 +582,10 @@
                       "width": 450,
                       "height": 128
                     },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
+                    },
                     "asset": "components/card_quest_frame.png",
                     "nineSlice": {
                       "left": 48,
@@ -472,6 +604,10 @@
                     "size": {
                       "width": 126,
                       "height": 128
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
                     },
                     "asset": "components/button_action_round.png"
                   },
@@ -486,6 +622,10 @@
                       "width": 70,
                       "height": 88
                     },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "middle"
+                    },
                     "asset": "icons/icon_fire_sigil.png"
                   }
                 ]
@@ -496,6 +636,10 @@
                 "size": {
                   "width": 450,
                   "height": 128
+                },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "bottom"
                 },
                 "children": [
                   {
@@ -509,6 +653,10 @@
                       "width": 425,
                       "height": 108
                     },
+                    "anchor": {
+                      "horizontal": "right",
+                      "vertical": "middle"
+                    },
                     "asset": "quest-backgrounds/quest_bg_frost.png"
                   },
                   {
@@ -521,6 +669,10 @@
                     "size": {
                       "width": 450,
                       "height": 128
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
                     },
                     "asset": "components/card_quest_frame.png",
                     "nineSlice": {
@@ -541,6 +693,10 @@
                       "width": 126,
                       "height": 128
                     },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
+                    },
                     "asset": "components/button_action_round.png"
                   },
                   {
@@ -553,6 +709,10 @@
                     "size": {
                       "width": 66,
                       "height": 85
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "middle"
                     },
                     "asset": "icons/icon_frozen_skull.png"
                   }
@@ -573,6 +733,10 @@
           "width": 211,
           "height": 568
         },
+        "anchor": {
+          "horizontal": "right",
+          "vertical": "middle"
+        },
         "layout": {
           "type": "column",
           "spacing": -37,
@@ -587,6 +751,10 @@
               "width": 211,
               "height": 214
             },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "top"
+            },
             "children": [
               {
                 "type": "image",
@@ -598,6 +766,10 @@
                 "size": {
                   "width": 211,
                   "height": 214
+                },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
                 },
                 "asset": "components/button_action_round.png"
               },
@@ -612,6 +784,10 @@
                   "width": 88,
                   "height": 106
                 },
+                "anchor": {
+                  "horizontal": "center",
+                  "vertical": "middle"
+                },
                 "asset": "icons/icon_sword.png"
               }
             ]
@@ -622,6 +798,10 @@
             "size": {
               "width": 211,
               "height": 214
+            },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "middle"
             },
             "children": [
               {
@@ -634,6 +814,10 @@
                 "size": {
                   "width": 211,
                   "height": 214
+                },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
                 },
                 "asset": "components/button_action_round.png"
               },
@@ -648,6 +832,10 @@
                   "width": 86,
                   "height": 101
                 },
+                "anchor": {
+                  "horizontal": "center",
+                  "vertical": "middle"
+                },
                 "asset": "icons/icon_helmet.png"
               }
             ]
@@ -658,6 +846,10 @@
             "size": {
               "width": 211,
               "height": 214
+            },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "bottom"
             },
             "children": [
               {
@@ -671,6 +863,10 @@
                   "width": 211,
                   "height": 214
                 },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "top"
+                },
                 "asset": "components/button_action_round.png"
               },
               {
@@ -683,6 +879,10 @@
                 "size": {
                   "width": 96,
                   "height": 108
+                },
+                "anchor": {
+                  "horizontal": "center",
+                  "vertical": "middle"
                 },
                 "asset": "icons/icon_spectral_flame.png"
               }
@@ -701,6 +901,10 @@
           "width": 812,
           "height": 173
         },
+        "anchor": {
+          "horizontal": "center",
+          "vertical": "bottom"
+        },
         "children": [
           {
             "type": "image",
@@ -712,6 +916,10 @@
             "size": {
               "width": 812,
               "height": 150
+            },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "middle"
             },
             "asset": "components/dock_navigation_5slot.png"
           },
@@ -725,6 +933,10 @@
             "size": {
               "width": 722,
               "height": 173
+            },
+            "anchor": {
+              "horizontal": "center",
+              "vertical": "top"
             },
             "layout": {
               "type": "row",
@@ -744,6 +956,10 @@
                   "width": 126,
                   "height": 128
                 },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "middle"
+                },
                 "children": [
                   {
                     "type": "image",
@@ -755,6 +971,10 @@
                     "size": {
                       "width": 126,
                       "height": 128
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
                     },
                     "asset": "components/button_action_round.png"
                   },
@@ -768,6 +988,10 @@
                     "size": {
                       "width": 61,
                       "height": 87
+                    },
+                    "anchor": {
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
                     "asset": "icons/icon_shield_crest.png"
                   }
@@ -784,6 +1008,10 @@
                   "width": 126,
                   "height": 128
                 },
+                "anchor": {
+                  "horizontal": "left",
+                  "vertical": "middle"
+                },
                 "children": [
                   {
                     "type": "image",
@@ -795,6 +1023,10 @@
                     "size": {
                       "width": 126,
                       "height": 128
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
                     },
                     "asset": "components/button_action_round.png"
                   },
@@ -808,6 +1040,10 @@
                     "size": {
                       "width": 58,
                       "height": 68
+                    },
+                    "anchor": {
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
                     "asset": "icons/icon_helmet.png"
                   }
@@ -824,6 +1060,10 @@
                   "width": 170,
                   "height": 173
                 },
+                "anchor": {
+                  "horizontal": "center",
+                  "vertical": "middle"
+                },
                 "children": [
                   {
                     "type": "image",
@@ -835,6 +1075,10 @@
                     "size": {
                       "width": 170,
                       "height": 173
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
                     },
                     "asset": "components/button_action_round.png"
                   },
@@ -848,6 +1092,10 @@
                     "size": {
                       "width": 88,
                       "height": 110
+                    },
+                    "anchor": {
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
                     "asset": "icons/icon_fire_sigil.png",
                     "hueShift": 42,
@@ -866,6 +1114,10 @@
                   "width": 126,
                   "height": 128
                 },
+                "anchor": {
+                  "horizontal": "right",
+                  "vertical": "middle"
+                },
                 "children": [
                   {
                     "type": "image",
@@ -877,6 +1129,10 @@
                     "size": {
                       "width": 126,
                       "height": 128
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
                     },
                     "asset": "components/button_action_round.png"
                   },
@@ -890,6 +1146,10 @@
                     "size": {
                       "width": 77,
                       "height": 65
+                    },
+                    "anchor": {
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
                     "asset": "icons/icon_spellbook.png"
                   }
@@ -906,6 +1166,10 @@
                   "width": 126,
                   "height": 128
                 },
+                "anchor": {
+                  "horizontal": "right",
+                  "vertical": "middle"
+                },
                 "children": [
                   {
                     "type": "image",
@@ -917,6 +1181,10 @@
                     "size": {
                       "width": 126,
                       "height": 128
+                    },
+                    "anchor": {
+                      "horizontal": "left",
+                      "vertical": "top"
                     },
                     "asset": "components/button_action_round.png"
                   },
@@ -930,6 +1198,10 @@
                     "size": {
                       "width": 70,
                       "height": 70
+                    },
+                    "anchor": {
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
                     "asset": "icons/icon_compass.png"
                   }
@@ -950,6 +1222,10 @@
           "width": 465,
           "height": 253
         },
+        "anchor": {
+          "horizontal": "right",
+          "vertical": "bottom"
+        },
         "children": [
           {
             "type": "image",
@@ -961,6 +1237,10 @@
             "size": {
               "width": 465,
               "height": 253
+            },
+            "anchor": {
+              "horizontal": "left",
+              "vertical": "top"
             },
             "asset": "components/button_primary.png"
           },
@@ -974,6 +1254,10 @@
             "size": {
               "width": 345,
               "height": 105
+            },
+            "anchor": {
+              "horizontal": "center",
+              "vertical": "middle"
             },
             "text": "ENTER",
             "fontFamily": "C:/Windows/Fonts/georgia.ttf",

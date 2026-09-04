@@ -17,6 +17,8 @@ evidence-backed review before marking a task complete.
   Unity `.png.meta` border support.
 - Structured containers, rows, columns, images, text, generated rectangles, and
   overlays.
+- Required nine-position anchor alignment metadata on every structure node,
+  with a migration tool for older JSON.
 - Nine-slice rendering, font tracing, tint, opacity, and hue-shift support.
 - Strict structure validation plus visual-audit reports.
 - Side-by-side comparison, element bounding boxes, and focused recheck images.
@@ -36,6 +38,7 @@ This repository includes a complete example:
 The checked-in run reconstructs a `1672 × 941` HUD with:
 
 - 71 structured elements;
+- 71/71 nodes with required anchor alignment metadata;
 - 42 sprite references;
 - 5 row/column layouts;
 - 70/70 reviewed element paths;
@@ -86,7 +89,19 @@ and `workflow_state.json`.
 ### 2. Write the structure
 
 Create `test/output-local/ui_structure.json` using the grid and asset inventory.
-The Codex skill performs this hierarchy and layout work.
+The Codex skill performs this hierarchy and layout work. Every node must include
+`anchor.horizontal` and `anchor.vertical`.
+
+For an older structure, fill missing anchors without changing its bboxes:
+
+```bash
+python -B image-to-ui/scripts/backfill_anchors.py --structure old.json --output upgraded.json
+```
+
+The accepted combinations use horizontal `left` / `center` / `right` and
+vertical `top` / `middle` / `bottom`. See the
+[schema reference](image-to-ui/references/schema.md#anchor-alignment) for the
+selection rules and atomic in-place upgrade form.
 
 ### 3. Validate and render
 
@@ -120,7 +135,7 @@ The task is complete only when `completion_report.json` contains
 
 | Artifact | Purpose |
 | --- | --- |
-| `ui_structure.json` | Engine-oriented UI hierarchy, geometry, text, and asset references. |
+| `ui_structure.json` | Engine-oriented UI hierarchy, anchors, geometry, text, and asset references. |
 | `reconstruction.png` | Rendered result from the current structure. |
 | `comparison.png` | Gridded design and reconstruction shown side by side. |
 | `all_elements.png` / `all_elements_legend.json` | Overview of resolved element bounds and paths. |

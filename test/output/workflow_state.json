@@ -15,7 +15,7 @@
     }
   },
   "output": "G:\\GitHub\\Image-To-UI\\test\\output",
-  "evidence_generation": 9,
+  "evidence_generation": 14,
   "artifacts": {
     "inventory": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json",
     "grid": "G:\\GitHub\\Image-To-UI\\test\\output\\design_grid.png",
@@ -23,13 +23,13 @@
   },
   "structure": {
     "path": "G:\\GitHub\\Image-To-UI\\test\\output\\ui_structure.json",
-    "size": 28480,
-    "mtime_ns": 1785123991290359200,
-    "sha256": "fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef"
+    "size": 38456,
+    "mtime_ns": 1788496953654724100,
+    "sha256": "2f29855f9f4efb623196a32623ad07af5ca48c2aa442582a271edfc769e0a57c"
   },
-  "structure_revision": 5,
-  "check_count": 5,
-  "checked_at": "2026-07-27T03:46:48.010849+00:00",
+  "structure_revision": 6,
+  "check_count": 8,
+  "checked_at": "2026-09-04T04:47:18.421731+00:00",
   "check": {
     "allow_warnings": false,
     "transparent_bg": false,
@@ -41,56 +41,77 @@
       "reconstruction": "G:\\GitHub\\Image-To-UI\\test\\output\\reconstruction.png",
       "render_trace": "G:\\GitHub\\Image-To-UI\\test\\output\\render_trace.json",
       "visual_audit": "G:\\GitHub\\Image-To-UI\\test\\output\\visual_audit.json",
-      "assets_inventory": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json"
+      "assets_inventory": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json",
+      "review_risk": "G:\\GitHub\\Image-To-UI\\test\\output\\review_risk.json",
+      "risk_review": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review.png",
+      "risk_review_legend": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review_legend.json"
     },
     "artifact_snapshots": {
       "validation": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\validate_report.json",
-        "size": 225,
-        "mtime_ns": 1785124045792083600,
-        "sha256": "165ba1bae35a23bb24ff80fc21051effa1038efad4a43b211f266f161bf2233a"
+        "size": 246,
+        "mtime_ns": 1788497244864870700,
+        "sha256": "af6eee89f0b866b605518e143d64313ed92a93bdafe95ec582a36bc07c322524"
       },
       "bbox": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png",
-        "size": 2652002,
-        "mtime_ns": 1785124007574767200,
-        "sha256": "58ad4cdc20bfc6026e6a9fe0d3d4dc2ff46476cb9ba8323d92e7206868b4d7cb"
+        "size": 2575697,
+        "mtime_ns": 1788497237218076000,
+        "sha256": "c4331a79a29bdc1d0ef5f1ac6cdb07528732501cad97f091f21a655478fc6417"
       },
       "bbox_legend": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements_legend.json",
         "size": 14222,
-        "mtime_ns": 1785124007577768600,
+        "mtime_ns": 1788497237219076800,
         "sha256": "6b46aaa2b4771a3f87b32d713557a43a630b95076d094291ba8fe3787b73ec56"
       },
       "comparison": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\comparison.png",
-        "size": 5299478,
-        "mtime_ns": 1785124046981682600,
-        "sha256": "8e38da207a299a08570f1dd835fc913541111e7e5c9928251e7e7eab35c21eea"
+        "size": 5133757,
+        "mtime_ns": 1788497245782187700,
+        "sha256": "dcd22c8d6762e3d3eb6577d80c8db595552f35b6a7cfc5789f1a646962432cff"
       },
       "reconstruction": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\reconstruction.png",
         "size": 2894950,
-        "mtime_ns": 1785124046504453500,
+        "mtime_ns": 1788497245410705000,
         "sha256": "e5ef8f32bcbe462ba9dddc6cbcf7a0a42ea2f76ea0e76e275aba2d3376e13806"
       },
       "render_trace": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\render_trace.json",
         "size": 53871,
-        "mtime_ns": 1785124046507453500,
+        "mtime_ns": 1788497245413285200,
         "sha256": "a9e4b4d50117f656fd124fca9dc256f519102c8e1a52a0f9d80c856b3be76fd6"
       },
       "visual_audit": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\visual_audit.json",
-        "size": 325,
-        "mtime_ns": 1785124137163642600,
-        "sha256": "b7322944955b9b5835178465f2651eaf4837a8ba933678e575cba4c519372a86"
+        "size": 324,
+        "mtime_ns": 1788497267635214900,
+        "sha256": "bef88f807f626292c135207a815ad240ba02d712c8cc2c02db538218a2ee4258"
       },
       "assets_inventory": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json",
         "size": 9647,
         "mtime_ns": 1785121820398445700,
         "sha256": "f1b03e9d031d3f4c7d3e89229f48392d791f27c33c46f846ef539236d4708838"
+      },
+      "review_risk": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\review_risk.json",
+        "size": 43322,
+        "mtime_ns": 1788497247844001500,
+        "sha256": "f8fca04dbd3e8a2d3546b41d6ed17f3899433e9af0a0e0a077143152bb9e4670"
+      },
+      "risk_review": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review.png",
+        "size": 2232202,
+        "mtime_ns": 1788497247840996300,
+        "sha256": "b9c9fb70de498766bee49222be44ffc398cb675a9724ebadd3570b0eb09f8e4c"
+      },
+      "risk_review_legend": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review_legend.json",
+        "size": 6857,
+        "mtime_ns": 1788497247840996300,
+        "sha256": "ef8fc253bdf2ff95d9afc6f6754c6f3cbc82c44777e8987d187ff386cce8ce97"
       }
     },
     "render_dependencies": {
@@ -98,9 +119,9 @@
       "files": {
         "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\workflow.py": {
           "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\workflow.py",
-          "size": 57190,
-          "mtime_ns": 1783835290711899700,
-          "sha256": "ffb806d3d2193ff69b4f1e7a20bc0741cded43bc49fc80c19643cc71b63439ae"
+          "size": 61616,
+          "mtime_ns": 1788496276959749400,
+          "sha256": "9f66078a9c530ffb85c85b94fec50bd0adfac664101c84714b46962dd491833e"
         },
         "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\inventory_assets.py": {
           "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\inventory_assets.py",
@@ -110,39 +131,51 @@
         },
         "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\annotate_grid.py": {
           "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\annotate_grid.py",
-          "size": 6365,
-          "mtime_ns": 1783653373773370500,
-          "sha256": "df8ce7f3229b36c766a8afa341bdfe752e006aac41c6d4dee5e4bf8adce66bd0"
+          "size": 12244,
+          "mtime_ns": 1785220741538040100,
+          "sha256": "48bd30527904c9985bf6240b75299b4f2a80f9f462fb16390aa749ab7e21123e"
         },
         "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\validate_structure.py": {
           "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\validate_structure.py",
-          "size": 23366,
-          "mtime_ns": 1783837623672445200,
-          "sha256": "bd81a79e5dedb41e117c85d68cb824e753a9a6a8791c87c33520276cc4782db5"
+          "size": 24501,
+          "mtime_ns": 1788496275880617500,
+          "sha256": "21cd794666f8c0c972f7214be08d8ca63aa17bfba7c22403db5aa2e4f3f05a9f"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\backfill_anchors.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\backfill_anchors.py",
+          "size": 9907,
+          "mtime_ns": 1788497152650857100,
+          "sha256": "21133fb9d089a71836e91b3f0df587b16aa5bca5cac5742d10078367ef0b745a"
         },
         "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\layout.py": {
           "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\layout.py",
-          "size": 12939,
-          "mtime_ns": 1783831494007714800,
-          "sha256": "d421ee004864fe57b86a87073b0602752db228563998e38564f32d05ef2fd235"
+          "size": 13093,
+          "mtime_ns": 1788496796203928200,
+          "sha256": "5c8ecbbe63d15fabafee545ca979ee9ffbc0f1419d373723a4a7e748084b07b2"
         },
         "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\render_comparison.py": {
           "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\render_comparison.py",
-          "size": 40004,
-          "mtime_ns": 1783837623671447300,
-          "sha256": "624133780cfd8b11be9a8f19a7b00f5d2e50abb1636f17f86850c512d1e962ff"
+          "size": 40118,
+          "mtime_ns": 1785220869820727900,
+          "sha256": "0398343dbf1484481c87364ed36cbfa5215a09bf2d8f0425a95911e6218bf79b"
         },
         "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\annotate_element.py": {
           "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\annotate_element.py",
-          "size": 11106,
-          "mtime_ns": 1783833367913267100,
-          "sha256": "f3155200b621c60c6deafc8e577fd5d3cace0d7e495b8543bc326b3e55a3f771"
+          "size": 11157,
+          "mtime_ns": 1785220868541060900,
+          "sha256": "2ec63f5b22df0a3bdfc45b533940370599442c493ab1a1786b20f1ad94228cee"
         },
         "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\audit_render.py": {
           "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\audit_render.py",
           "size": 18482,
           "mtime_ns": 1783833524591085200,
           "sha256": "0816b6bc48f82bfc707f1339790125b10ed8870fbf7dce183801019c1de6e1cd"
+        },
+        "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\review_risk.py": {
+          "path": "G:\\GitHub\\Image-To-UI\\image-to-ui\\scripts\\review_risk.py",
+          "size": 21089,
+          "mtime_ns": 1785243207518010300,
+          "sha256": "f6eed9ff5537a3dec8e7f52994c3ecd023d7a2b6eb7dac47750809334b229580"
         },
         "C:\\Windows\\Fonts\\georgiab.ttf": {
           "path": "C:\\Windows\\Fonts\\georgiab.ttf",
@@ -176,62 +209,62 @@
       }
     }
   },
-  "target_count": 12,
-  "targeted_at": "2026-07-27T03:47:29.944338+00:00",
-  "finalize_count": 2,
-  "finalize_attempted_at": "2026-07-27T03:48:57.600678+00:00",
+  "target_count": 18,
+  "targeted_at": "2026-09-04T04:47:27.931643+00:00",
+  "finalize_count": 5,
+  "finalize_attempted_at": "2026-09-04T04:47:47.937694+00:00",
   "targets": {
-    "structure_sha256": "fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef",
+    "structure_sha256": "2f29855f9f4efb623196a32623ad07af5ca48c2aa442582a271edfc769e0a57c",
     "artifacts": {
-      "target_root_enter_button.png": {
-        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button.png",
-        "size": 2709573,
-        "mtime_ns": 1785124047488755800,
-        "sha256": "8501e11750952891dfacfcda8e921bcc1bbbdebf27f820e74b1d963be91c1235"
-      },
-      "target_root_enter_button_legend.json": {
-        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button_legend.json",
-        "size": 462,
-        "mtime_ns": 1785124047489757000,
-        "sha256": "df5f2e836f59bacb1bf5c2f7f5fb0fae2fea90dd73e6e1f982de9973f80022fd"
-      },
       "target_root_quest_panel_quest_list_fire_quest_background.png": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_fire_quest_background.png",
-        "size": 2709826,
-        "mtime_ns": 1785124048487959400,
-        "sha256": "6d796eb867c865c2b3633fab98f16d49f26548435b7964463574894a74f857e3"
+        "size": 2625571,
+        "mtime_ns": 1788497246085959600,
+        "sha256": "2eccf6e423370f5f897b68580937db113be08fe2236a752f6b1a1da414dbc7bc"
       },
       "target_root_quest_panel_quest_list_fire_quest_background_legend.json": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_fire_quest_background_legend.json",
         "size": 552,
-        "mtime_ns": 1785124048488959300,
+        "mtime_ns": 1788497246086963100,
         "sha256": "f2630b27082dfa705c708018e0226ef9b53947f5124bb43f217de3ebbd2b3065"
       },
       "target_root_quest_panel_quest_list_frost_quest_background.png": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_frost_quest_background.png",
-        "size": 2709042,
-        "mtime_ns": 1785124049083211100,
-        "sha256": "b02a236bc4317571ce17a6489fd67faf4570be8ff4133ddfe2e083f1fb184570"
+        "size": 2625219,
+        "mtime_ns": 1788497246388218600,
+        "sha256": "e8bfdfbc4704bb210a6e446a1f0580118af166fd363f0cf5faf6c8003e55ce29"
       },
       "target_root_quest_panel_quest_list_frost_quest_background_legend.json": {
         "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_frost_quest_background_legend.json",
         "size": 555,
-        "mtime_ns": 1785124049086210800,
+        "mtime_ns": 1788497246389219000,
         "sha256": "f464b9a4404bab3bad27ddfdfed9eb153c859bbfea306b080886d7e4e02a1720"
+      },
+      "target_root_enter_button.png": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button.png",
+        "size": 2625444,
+        "mtime_ns": 1788497246750639300,
+        "sha256": "e6d9dc11fad93308b1de6ace5ff5ad2b4a3435d43ac31cbf50dbe795f7eeb947"
+      },
+      "target_root_enter_button_legend.json": {
+        "path": "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button_legend.json",
+        "size": 462,
+        "mtime_ns": 1788497246751636900,
+        "sha256": "df5f2e836f59bacb1bf5c2f7f5fb0fae2fea90dd73e6e1f982de9973f80022fd"
       }
     }
   },
   "completion": {
     "path": "G:\\GitHub\\Image-To-UI\\test\\output\\completion_report.json",
-    "size": 6249,
-    "mtime_ns": 1785124137583679700,
-    "sha256": "f0711985e22f8403bbb9c8586a7f0f90a763b8ba98ac2736bfe4cfc3fbafa897"
+    "size": 9042,
+    "mtime_ns": 1788497267923475700,
+    "sha256": "15e1a3d546ccbc7f856187b1c45cbd60e6436af7af9a24020bde234d25252243"
   },
-  "completed_at": "2026-07-27T03:48:57.581679+00:00",
-  "finalized_at": "2026-07-27T03:48:57.581679+00:00",
+  "completed_at": "2026-09-04T04:47:47.921965+00:00",
+  "finalized_at": "2026-09-04T04:47:47.921965+00:00",
   "review_binding": {
-    "structure_sha256": "fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef",
-    "artifacts_sha256": "ac7b4edb5214309642cac3dfc2f7c9579f392746122ff0ee14df16169f1ba288",
-    "review_sha256": "27214feaf7699384a5f7f9b33b8e0c3a6df3e6f802eb56389258b4974de8c47d"
+    "structure_sha256": "2f29855f9f4efb623196a32623ad07af5ca48c2aa442582a271edfc769e0a57c",
+    "artifacts_sha256": "241e966988ace9ff48fb3a82926d6094152d1dfdfcfb2492ec298e9884206c72",
+    "review_sha256": "778ab3ccecc691ef31298b163b5ab457e2fcd14f389374934502febb2b2cf1d4"
   }
 }

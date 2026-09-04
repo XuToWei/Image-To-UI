@@ -35,6 +35,8 @@ Use `offset` for small per-child adjustments; remove the parent layout when a
 child needs a fully independent position.
 
 Backwards compatibility:
+  - Required `anchor` metadata describes attachment intent but does not alter
+    bbox resolution; `position` remains parent-relative top-left coordinates.
   - Elements without layout/align use their explicit `position` field as before.
   - This module never deletes or overwrites authored fields; it only annotates
     the tree with `_abs` for downstream consumers.

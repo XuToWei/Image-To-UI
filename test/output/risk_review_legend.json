@@ -1,0 +1,311 @@
+{
+  "version": 1,
+  "image": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review.png",
+  "targets": [
+    {
+      "path": "root/enter_button/label",
+      "bbox": [
+        1299,
+        769,
+        274,
+        56
+      ],
+      "risk_level": "high",
+      "risk_score": 0.8399,
+      "reasons": [
+        "salience.large-text",
+        "salience.high-local-contrast",
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/spellbook/icon",
+      "bbox": [
+        950,
+        820,
+        76,
+        63
+      ],
+      "risk_level": "high",
+      "risk_score": 0.6531,
+      "reasons": [
+        "salience.high-local-contrast",
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/talents/icon",
+      "bbox": [
+        795,
+        798,
+        84,
+        108
+      ],
+      "risk_level": "high",
+      "risk_score": 0.6464,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/top_left_hud/portrait/level_badge/label",
+      "bbox": [
+        68,
+        177,
+        66,
+        18
+      ],
+      "risk_level": "high",
+      "risk_score": 0.6344,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/top_right_utilities/mail/icon",
+      "bbox": [
+        1572,
+        35,
+        63,
+        50
+      ],
+      "risk_level": "high",
+      "risk_score": 0.6235,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/bottom_navigation/dock",
+      "bbox": [
+        410,
+        787,
+        812,
+        126
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.6149,
+      "reasons": [
+        "salience.large-visible-area",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/quest_panel/title",
+      "bbox": [
+        208,
+        334,
+        103,
+        29
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.607,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/armor/icon",
+      "bbox": [
+        645,
+        818,
+        57,
+        66
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5955,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/right_actions/spectral_flame/icon",
+      "bbox": [
+        1471,
+        529,
+        94,
+        104
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5887,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/top_right_utilities/settings/icon",
+      "bbox": [
+        1469,
+        30,
+        58,
+        60
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5764,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/quest_panel/quest_list/frost_quest/icon",
+      "bbox": [
+        74,
+        536,
+        65,
+        83
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5722,
+      "reasons": [
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/resource_bar/coin/icon",
+      "bbox": [
+        659,
+        25,
+        43,
+        46
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5679,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/map/icon",
+      "bbox": [
+        1091,
+        817,
+        68,
+        68
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5669,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/talents/base",
+      "bbox": [
+        756,
+        769,
+        166,
+        165
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5666,
+      "reasons": [
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/bottom_navigation/nav_buttons/equipment/icon",
+      "bbox": [
+        506,
+        808,
+        60,
+        85
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5658,
+      "reasons": [
+        "salience.high-local-contrast",
+        "salience.foreground-layer",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/enter_button/base",
+      "bbox": [
+        1209,
+        678,
+        455,
+        233
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5579,
+      "reasons": [
+        "salience.large-visible-area",
+        "salience.foreground-layer",
+        "residual.changed-area"
+      ]
+    },
+    {
+      "path": "root/resource_bar/crystal/icon",
+      "bbox": [
+        903,
+        23,
+        34,
+        50
+      ],
+      "risk_level": "medium",
+      "risk_score": 0.5547,
+      "reasons": [
+        "salience.high-local-contrast",
+        "residual.color",
+        "residual.luminance",
+        "residual.edges",
+        "residual.changed-area"
+      ]
+    }
+  ]
+}

@@ -1,16 +1,16 @@
 {
   "complete": true,
-  "completed_at": "2026-07-27T03:48:57.581679+00:00",
+  "completed_at": "2026-09-04T04:47:47.921965+00:00",
   "structure": {
     "path": "G:\\GitHub\\Image-To-UI\\test\\output\\ui_structure.json",
-    "size": 28480,
-    "mtime_ns": 1785123991290359200,
-    "sha256": "fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef"
+    "size": 38456,
+    "mtime_ns": 1788496953654724100,
+    "sha256": "2f29855f9f4efb623196a32623ad07af5ca48c2aa442582a271edfc769e0a57c"
   },
   "iterations": {
-    "check_count": 5,
-    "structure_revision": 5,
-    "target_count": 12
+    "check_count": 8,
+    "structure_revision": 6,
+    "target_count": 18
   },
   "review_coverage": {
     "required": 70,
@@ -22,17 +22,27 @@
       "aligned": 46,
       "skipped": 0
     },
-    "evidence_count": 5,
+    "evidence_count": 6,
     "evidence": [
       "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png",
       "G:\\GitHub\\Image-To-UI\\test\\output\\comparison.png",
+      "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review.png",
       "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_enter_button.png",
       "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_fire_quest_background.png",
       "G:\\GitHub\\Image-To-UI\\test\\output\\target_root_quest_panel_quest_list_frost_quest_background.png"
     ],
+    "risk_strategy": "visual-salience-plus-residual",
+    "risk_level_counts": {
+      "high": 5,
+      "medium": 36,
+      "low": 4
+    },
+    "high_risk_required": 5,
+    "high_risk_focused": 5,
+    "missing_high_risk_evidence": [],
     "fresh": true,
     "review": "G:\\GitHub\\Image-To-UI\\test\\output\\alignment_review.md",
-    "expected_binding": "<!-- image-to-ui-review-binding: structure=fba9ee1578534a04826ab8fc7e1ec10adb1776da134c8b9b5e58af279feafaef artifacts=ac7b4edb5214309642cac3dfc2f7c9579f392746122ff0ee14df16169f1ba288 -->"
+    "expected_binding": "<!-- image-to-ui-review-binding: structure=2f29855f9f4efb623196a32623ad07af5ca48c2aa442582a271edfc769e0a57c artifacts=241e966988ace9ff48fb3a82926d6094152d1dfdfcfb2492ec298e9884206c72 -->"
   },
   "validation": {
     "valid": true,
@@ -43,7 +53,53 @@
     "valid": true,
     "error_count": 0,
     "warning_count": 0,
-    "elapsed_ms": 110.66
+    "elapsed_ms": 84.14
+  },
+  "review_risk": {
+    "strategy": "visual-salience-plus-residual",
+    "thresholds": {
+      "medium_risk": 0.38,
+      "high_risk": 0.62,
+      "residual_normalization": 0.33
+    },
+    "summary": {
+      "analyzed": 45,
+      "risk_level_counts": {
+        "high": 5,
+        "medium": 36,
+        "low": 4
+      },
+      "high_risk_paths": [
+        "root/enter_button/label",
+        "root/bottom_navigation/nav_buttons/spellbook/icon",
+        "root/bottom_navigation/nav_buttons/talents/icon",
+        "root/top_left_hud/portrait/level_badge/label",
+        "root/top_right_utilities/mail/icon"
+      ],
+      "focused_evidence_paths": [
+        "root/bottom_navigation/dock",
+        "root/bottom_navigation/nav_buttons/armor/icon",
+        "root/bottom_navigation/nav_buttons/equipment/icon",
+        "root/bottom_navigation/nav_buttons/map/icon",
+        "root/bottom_navigation/nav_buttons/spellbook/icon",
+        "root/bottom_navigation/nav_buttons/talents/base",
+        "root/bottom_navigation/nav_buttons/talents/icon",
+        "root/enter_button/base",
+        "root/enter_button/label",
+        "root/quest_panel/quest_list/frost_quest/icon",
+        "root/quest_panel/title",
+        "root/resource_bar/coin/icon",
+        "root/resource_bar/crystal/icon",
+        "root/right_actions/spectral_flame/icon",
+        "root/top_left_hud/portrait/level_badge/label",
+        "root/top_right_utilities/mail/icon",
+        "root/top_right_utilities/settings/icon"
+      ]
+    },
+    "evidence": {
+      "image": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review.png",
+      "legend": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review_legend.json"
+    }
   },
   "approximations": {
     "total": 7,
@@ -101,45 +157,45 @@
   "artifact_snapshots": {
     "validation": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\validate_report.json",
-      "size": 225,
-      "mtime_ns": 1785124045792083600,
-      "sha256": "165ba1bae35a23bb24ff80fc21051effa1038efad4a43b211f266f161bf2233a"
+      "size": 246,
+      "mtime_ns": 1788497244864870700,
+      "sha256": "af6eee89f0b866b605518e143d64313ed92a93bdafe95ec582a36bc07c322524"
     },
     "bbox": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png",
-      "size": 2652002,
-      "mtime_ns": 1785124007574767200,
-      "sha256": "58ad4cdc20bfc6026e6a9fe0d3d4dc2ff46476cb9ba8323d92e7206868b4d7cb"
+      "size": 2575697,
+      "mtime_ns": 1788497237218076000,
+      "sha256": "c4331a79a29bdc1d0ef5f1ac6cdb07528732501cad97f091f21a655478fc6417"
     },
     "bbox_legend": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements_legend.json",
       "size": 14222,
-      "mtime_ns": 1785124007577768600,
+      "mtime_ns": 1788497237219076800,
       "sha256": "6b46aaa2b4771a3f87b32d713557a43a630b95076d094291ba8fe3787b73ec56"
     },
     "comparison": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\comparison.png",
-      "size": 5299478,
-      "mtime_ns": 1785124046981682600,
-      "sha256": "8e38da207a299a08570f1dd835fc913541111e7e5c9928251e7e7eab35c21eea"
+      "size": 5133757,
+      "mtime_ns": 1788497245782187700,
+      "sha256": "dcd22c8d6762e3d3eb6577d80c8db595552f35b6a7cfc5789f1a646962432cff"
     },
     "reconstruction": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\reconstruction.png",
       "size": 2894950,
-      "mtime_ns": 1785124046504453500,
+      "mtime_ns": 1788497245410705000,
       "sha256": "e5ef8f32bcbe462ba9dddc6cbcf7a0a42ea2f76ea0e76e275aba2d3376e13806"
     },
     "render_trace": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\render_trace.json",
       "size": 53871,
-      "mtime_ns": 1785124046507453500,
+      "mtime_ns": 1788497245413285200,
       "sha256": "a9e4b4d50117f656fd124fca9dc256f519102c8e1a52a0f9d80c856b3be76fd6"
     },
     "visual_audit": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\visual_audit.json",
-      "size": 325,
-      "mtime_ns": 1785124137163642600,
-      "sha256": "b7322944955b9b5835178465f2651eaf4837a8ba933678e575cba4c519372a86"
+      "size": 324,
+      "mtime_ns": 1788497267635214900,
+      "sha256": "bef88f807f626292c135207a815ad240ba02d712c8cc2c02db538218a2ee4258"
     },
     "assets_inventory": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json",
@@ -147,17 +203,35 @@
       "mtime_ns": 1785121820398445700,
       "sha256": "f1b03e9d031d3f4c7d3e89229f48392d791f27c33c46f846ef539236d4708838"
     },
+    "review_risk": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\review_risk.json",
+      "size": 43322,
+      "mtime_ns": 1788497247844001500,
+      "sha256": "f8fca04dbd3e8a2d3546b41d6ed17f3899433e9af0a0e0a077143152bb9e4670"
+    },
+    "risk_review": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review.png",
+      "size": 2232202,
+      "mtime_ns": 1788497247840996300,
+      "sha256": "b9c9fb70de498766bee49222be44ffc398cb675a9724ebadd3570b0eb09f8e4c"
+    },
+    "risk_review_legend": {
+      "path": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review_legend.json",
+      "size": 6857,
+      "mtime_ns": 1788497247840996300,
+      "sha256": "ef8fc253bdf2ff95d9afc6f6754c6f3cbc82c44777e8987d187ff386cce8ce97"
+    },
     "detail_comparison": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\detail_comparison.png",
       "size": 3442,
-      "mtime_ns": 1785124137161642400,
+      "mtime_ns": 1788497267633217100,
       "sha256": "cc21aae22c7255263d21941d9156c27ebc20d2351c7d9d0be16891f19425cf62"
     },
     "alignment_review": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\alignment_review.md",
-      "size": 11102,
-      "mtime_ns": 1785124125212649500,
-      "sha256": "27214feaf7699384a5f7f9b33b8e0c3a6df3e6f802eb56389258b4974de8c47d"
+      "size": 11101,
+      "mtime_ns": 1788497260869679500,
+      "sha256": "778ab3ccecc691ef31298b163b5ab457e2fcd14f389374934502febb2b2cf1d4"
     }
   },
   "blockers": []

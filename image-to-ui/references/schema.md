@@ -13,12 +13,14 @@ workflow in `SKILL.md`.
     "name": "root",
     "position": { "x": 0, "y": 0 },
     "size": { "width": 1080, "height": 1920 },
+    "anchor": { "horizontal": "left", "vertical": "top" },
     "children": [
       {
         "type": "image",
         "name": "background",
         "position": { "x": 0, "y": 0 },
         "size": { "width": 1080, "height": 1920 },
+        "anchor": { "horizontal": "left", "vertical": "top" },
         "asset": "bg_main.png",
         "nineSlice": true
       },
@@ -27,6 +29,7 @@ workflow in `SKILL.md`.
         "name": "rewards_row",
         "position": { "x": 100, "y": 600 },
         "size": { "width": 880, "height": 200 },
+        "anchor": { "horizontal": "center", "vertical": "middle" },
         "layout": {
           "type": "row",
           "spacing": "even",
@@ -35,9 +38,9 @@ workflow in `SKILL.md`.
           "vAlign": "middle"
         },
         "children": [
-          { "type": "image", "name": "gem", "size": { "width": 120, "height": 120 }, "asset": "icon_gem.png" },
-          { "type": "image", "name": "coin", "size": { "width": 120, "height": 120 }, "asset": "icon_coin.png" },
-          { "type": "image", "name": "key", "size": { "width": 120, "height": 120 }, "asset": "icon_key.png" }
+          { "type": "image", "name": "gem", "size": { "width": 120, "height": 120 }, "anchor": { "horizontal": "left", "vertical": "middle" }, "asset": "icon_gem.png" },
+          { "type": "image", "name": "coin", "size": { "width": 120, "height": 120 }, "anchor": { "horizontal": "center", "vertical": "middle" }, "asset": "icon_coin.png" },
+          { "type": "image", "name": "key", "size": { "width": 120, "height": 120 }, "anchor": { "horizontal": "right", "vertical": "middle" }, "asset": "icon_key.png" }
         ]
       },
       {
@@ -45,10 +48,11 @@ workflow in `SKILL.md`.
         "name": "play_button",
         "position": { "x": 0, "y": 1620 },
         "size": { "width": 300, "height": 100 },
+        "anchor": { "horizontal": "center", "vertical": "bottom" },
         "align": "center",
         "children": [
-          { "type": "image", "name": "base", "size": { "width": 300, "height": 100 }, "asset": "btn_play.png", "nineSlice": true },
-          { "type": "text", "name": "label", "size": { "width": 300, "height": 100 }, "align": "center", "vAlign": "middle", "text": "PLAY", "fontSize": 32, "color": "#FFFFFF" }
+          { "type": "image", "name": "base", "position": { "x": 0, "y": 0 }, "size": { "width": 300, "height": 100 }, "anchor": { "horizontal": "left", "vertical": "top" }, "asset": "btn_play.png", "nineSlice": true },
+          { "type": "text", "name": "label", "size": { "width": 300, "height": 100 }, "anchor": { "horizontal": "center", "vertical": "middle" }, "align": "center", "vAlign": "middle", "text": "PLAY", "fontSize": 32, "color": "#FFFFFF", "alignment": "center", "textVAlign": "middle" }
         ]
       }
     ]
@@ -69,12 +73,48 @@ workflow in `SKILL.md`.
 
 ## Required Fields
 
-`type`, `name`, and `size { width, height }` are required. `position` is
-required unless the element's position is fully derived from `align`/`vAlign`
-or from the parent's `layout`. Text must be non-empty. A non-root leaf
-`container` or `button` must have children or its own `asset`/`color` visual.
-Each `name` is one stable path segment: it cannot contain `/` or `\\`, and it
-cannot be `.` or `..`.
+`type`, `name`, `size { width, height }`, and
+`anchor { horizontal, vertical }` are required on every element, including
+`root`. `position` is required unless the element's position is fully derived
+from `align`/`vAlign` or from the parent's `layout`. Text must be non-empty. A
+non-root leaf `container` or `button` must have children or its own
+`asset`/`color` visual. Each `name` is one stable path segment: it cannot
+contain `/` or `\\`, and it cannot be `.` or `..`.
+
+## Anchor Alignment
+
+`anchor` records which parent reference the node should remain attached to in
+an engine adapter or responsive layout:
+
+```json
+"anchor": { "horizontal": "center", "vertical": "bottom" }
+```
+
+- `horizontal`: `left`, `center`, or `right`.
+- `vertical`: `top`, `middle`, or `bottom`.
+
+This creates nine possible anchor combinations. It applies to every element
+type, including containers and text boxes. It does not align glyphs inside a
+text box; text uses `alignment` and `textVAlign` for that purpose.
+
+The structure's `position` remains the node bbox's top-left coordinate relative
+to its parent. `anchor` is explicit alignment metadata and does not reposition
+the bbox in the verifier. For manual authoring, choose the edge or center whose
+spacing should remain stable if the parent is resized. Use `left` / `top` for
+ordinary top-left placement, `center` / `middle` for centered surfaces, and
+`right` / `bottom` for controls attached to those edges.
+
+To upgrade an existing structure, run:
+
+```bash
+py -B <skill>/scripts/backfill_anchors.py --structure <old.json> --output <new.json>
+```
+
+Passing the same file as input and output performs an atomic in-place upgrade.
+The tool preserves complete valid anchors. For missing axes, it prefers current
+`align` / `vAlign` or effective layout cross-axis intent, then selects the
+nearest resolved left/center/right and top/middle/bottom parent reference. Use
+`--overwrite` to deliberately recompute existing values.
 
 ## Optional Fields
 
@@ -111,6 +151,7 @@ they are absent from the asset inventory.
   "name": "progress_fill",
   "position": { "x": 24, "y": 8 },
   "size": { "width": 180, "height": 18 },
+  "anchor": { "horizontal": "left", "vertical": "top" },
   "color": "#45D86A",
   "opacity": 1
 }
@@ -128,6 +169,7 @@ model only the UI-owned scrim and its children.
   "name": "modal_overlay",
   "position": { "x": 0, "y": 0 },
   "size": { "width": 1080, "height": 1920 },
+  "anchor": { "horizontal": "left", "vertical": "top" },
   "color": "#000000",
   "opacity": 0.55,
   "children": [
@@ -136,6 +178,7 @@ model only the UI-owned scrim and its children.
       "name": "level_start_popup",
       "position": { "x": 87, "y": 490 },
       "size": { "width": 906, "height": 980 },
+      "anchor": { "horizontal": "center", "vertical": "middle" },
       "children": []
     }
   ]
@@ -168,6 +211,9 @@ The verifier supports fields that make comparisons closer to game UI exports:
 ```json
 {
   "type": "text",
+  "name": "play_label",
+  "size": { "width": 300, "height": 100 },
+  "anchor": { "horizontal": "center", "vertical": "middle" },
   "text": "PLAY",
   "fontFamily": "Cairo-Black 1.ttf",
   "fontSize": 72,

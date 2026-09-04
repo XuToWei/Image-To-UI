@@ -35,6 +35,9 @@ covering workflow-generated target. It also rejects changed or stale
 
 - Canvas mismatch: set `canvas.width` / `canvas.height` to the design's native
   size or rerun `scale_structure.py`.
+- Missing anchor: add `anchor.horizontal` (`left`, `center`, or `right`) and
+  `anchor.vertical` (`top`, `middle`, or `bottom`) to every node, or run
+  `backfill_anchors.py` once to infer missing values without moving bboxes.
 - Missing or ambiguous asset: copy the exact path from `assets_inventory.json`.
 - Invalid hue shift: use a finite degree value from `-360` to `360`; prefer
   `0` or omit the field when no hue correction is needed.

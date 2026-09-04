@@ -35,6 +35,7 @@ CRITICAL_SCRIPT_NAMES = (
     "inventory_assets.py",
     "annotate_grid.py",
     "validate_structure.py",
+    "backfill_anchors.py",
     "layout.py",
     "render_comparison.py",
     "annotate_element.py",

@@ -127,6 +127,9 @@ Use group-level fixes first:
 
 Prefer derived positioning where the design intent supports it:
 
+- Give every node an `anchor` describing the parent edge or center it should
+  remain attached to. This metadata is required but does not itself move the
+  bbox in the verifier.
 - Use `layout` for similar siblings in a row or column.
 - Use `align` / `vAlign` for centered or edge-aligned elements.
 - Use explicit `position` only for free placements.

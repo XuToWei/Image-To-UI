@@ -52,27 +52,32 @@ Apply these rules:
 
 1. Set `canvas` to the native design size from the metrics file.
 2. Build parent-relative hierarchy before fine coordinates.
-3. Use `layout`, `align`, and `vAlign` for derived positions; use explicit
+3. Give every element, including `root`, an `anchor` object with horizontal
+   `left` / `center` / `right` and vertical `top` / `middle` / `bottom`.
+   Choose the parent edge or center the element is intended to remain attached
+   to. `anchor` records engine-facing alignment intent; it does not change the
+   existing top-left `position` coordinates.
+4. Use `layout`, `align`, and `vAlign` for derived positions; use explicit
    `position` only for free placement. Every `layout` object must declare
    `"type": "row"` or `"type": "column"`.
-4. Model composite controls as layered children and flat generated shapes as
+5. Model composite controls as layered children and flat generated shapes as
    `rect` or `overlay`. Give the frame/base the control's outer bbox; keep an
    icon glyph at its own visible aspect ratio and center it inside the frame.
    Never stretch a small glyph to the full button bbox.
-5. Include the active UI surface and its scrim; omit unrelated scene content
+6. Include the active UI surface and its scrim; omit unrelated scene content
    behind it.
-6. Use exact relative asset paths when basenames are duplicated. Prefer Unity
+7. Use exact relative asset paths when basenames are duplicated. Prefer Unity
    sprite-border metadata for stretchable panels and buttons.
-7. Treat a text element's bbox as its text box. Use `alignment` and
+8. Treat a text element's bbox as its text box. Use `alignment` and
    `textVAlign` for visible-glyph alignment inside that box; use `align` and
    `vAlign` only to position the box inside its parent.
-8. For repeated siblings, measure their centers and use one row/column layout.
+9. For repeated siblings, measure their centers and use one row/column layout.
    Tune the parent position, spacing, and cross-axis alignment before adding
    child offsets.
-9. When choosing a family asset, inspect its sibling layers. A `Bg` commonly
+10. When choosing a family asset, inspect its sibling layers. A `Bg` commonly
    needs the matching `Shadow`, `BgLight`, `Glow`, `Border`, or `FocusLine`;
    include only layers visible in the design, in back-to-front child order.
-10. Do not add empty text or visual-less leaf containers as placeholders. They
+11. Do not add empty text or visual-less leaf containers as placeholders. They
     cannot count as foreground or review coverage.
 
 Convert grid readings with both axis scales:
@@ -89,6 +94,17 @@ When adapting an older draft, scale it once before manual review:
 ```bash
 py -B <skill>/scripts/scale_structure.py --structure <draft.json> --target-design <design.png> --output <task-dir>/ui_structure.json
 ```
+
+Then add any missing anchors without changing geometry:
+
+```bash
+py -B <skill>/scripts/backfill_anchors.py --structure <task-dir>/ui_structure.json --output <task-dir>/ui_structure.json
+```
+
+The backfill preserves complete valid anchors. It first uses explicit
+element/layout alignment intent, then chooses the nearest resolved parent edge
+or center for missing axes. Use `--overwrite` only when every existing anchor
+must be recomputed.
 
 ## 3. Check and iterate
 
@@ -206,6 +222,6 @@ sets workflow status to `completed`.
 Keep `ui_structure.json`, `comparison.png`, `reconstruction.png`, render/audit
 reports, review-risk report/evidence, `alignment_review.md`,
 `completion_report.json`, `workflow_state.json`, inventories, grid files, bbox
-images, and legends in the task folder. Report element/layout counts, structure
-revision and check counts, high-risk review coverage, accepted warnings and
-approximations, and anything skipped or uncertain.
+images, and legends in the task folder. Report element/anchor/layout counts,
+structure revision and check counts, high-risk review coverage, accepted
+warnings and approximations, and anything skipped or uncertain.
