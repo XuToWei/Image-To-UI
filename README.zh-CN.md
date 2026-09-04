@@ -16,6 +16,7 @@ Image to UI 不只是提取一组大概坐标。仓库内的 Codex skill 会盘�
   `.png.meta` 边框数据。
 - 支持容器、行列布局、图片、文本、程序化矩形和遮罩层。
 - 每个结构节点都包含必填的九宫格锚点对齐信息，并提供旧 JSON 补齐工具。
+- 结合明确上下文与整体视觉语义标记 `list` / `listItem`，并写入标注清单。
 - 支持九宫格、字体追踪、染色、透明度与色相偏移。
 - 严格的 JSON 结构校验和渲染结果视觉审计。
 - 生成左右对比图、全元素包围框和局部复核图。
@@ -38,6 +39,7 @@ Image to UI 不只是提取一组大概坐标。仓库内的 Codex skill 会盘�
 - 71/71 个节点包含必填锚点对齐信息；
 - 42 个切图引用；
 - 5 个行/列布局；
+- 1 个显式任务列表及 2 个列表项；
 - 70/70 个元素路径完成审查；
 - 结构校验和视觉审计均为零警告。
 
@@ -132,7 +134,7 @@ python -B image-to-ui/scripts/workflow.py finalize --output test/output-local
 | `ui_structure.json` | 面向引擎的 UI 层级、锚点、几何信息、文本和资源引用。 |
 | `reconstruction.png` | 根据当前结构渲染的重建结果。 |
 | `comparison.png` | 带网格的效果图与重建图左右对比。 |
-| `all_elements.png` / `all_elements_legend.json` | 所有元素的解析后包围框和路径总览。 |
+| `all_elements.png` / `all_elements_legend.json` | 所有元素的解析后包围框、路径和显式列表角色。 |
 | `target_*.png` / `target_*_legend.json` | 针对拥挤区域生成的可选局部证据。 |
 | `render_trace.json` | 解析后的包围框、可见像素、字体、层级和渲染细节。 |
 | `validate_report.json` / `visual_audit.json` | 结构与渲染结果诊断报告。 |

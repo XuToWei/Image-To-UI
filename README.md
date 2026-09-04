@@ -19,6 +19,8 @@ evidence-backed review before marking a task complete.
   overlays.
 - Required nine-position anchor alignment metadata on every structure node,
   with a migration tool for older JSON.
+- Opt-in `list` / `listItem` roles chosen from explicit context or holistic
+  visual semantics, then carried into element annotation legends.
 - Nine-slice rendering, font tracing, tint, opacity, and hue-shift support.
 - Strict structure validation plus visual-audit reports.
 - Side-by-side comparison, element bounding boxes, and focused recheck images.
@@ -41,6 +43,7 @@ The checked-in run reconstructs a `1672 × 941` HUD with:
 - 71/71 nodes with required anchor alignment metadata;
 - 42 sprite references;
 - 5 row/column layouts;
+- 1 explicitly identified quest list with 2 list items;
 - 70/70 reviewed element paths;
 - zero validation or visual-audit warnings.
 
@@ -138,7 +141,7 @@ The task is complete only when `completion_report.json` contains
 | `ui_structure.json` | Engine-oriented UI hierarchy, anchors, geometry, text, and asset references. |
 | `reconstruction.png` | Rendered result from the current structure. |
 | `comparison.png` | Gridded design and reconstruction shown side by side. |
-| `all_elements.png` / `all_elements_legend.json` | Overview of resolved element bounds and paths. |
+| `all_elements.png` / `all_elements_legend.json` | Overview of resolved element bounds, paths, and explicit list roles. |
 | `target_*.png` / `target_*_legend.json` | Optional focused evidence for crowded regions. |
 | `render_trace.json` | Resolved bboxes, visible pixels, fonts, layers, and render details. |
 | `validate_report.json` / `visual_audit.json` | Structural and rendered-output diagnostics. |

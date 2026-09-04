@@ -73,7 +73,17 @@ Apply these rules:
    `vAlign` only to position the box inside its parent.
 9. For repeated siblings, measure their centers and use one row/column layout.
    Tune the parent position, spacing, and cross-axis alignment before adding
-   child offsets.
+   child offsets. A layout describes geometry only; decide list roles from the
+   overall UI meaning. Mark a group as `"role": "list"` with direct-child
+   `"role": "listItem"` values when its siblings visually read as one
+   repeatable collection: many peer records use the same item template,
+   primarily vary by content, follow one continuous order, and could naturally
+   be added, removed, or reordered. A large collection can be a list without
+   visible scrolling or pagination. Explicit specs, data bindings, scrolling,
+   pagination, and clipped continuation strengthen the judgment but are not
+   required. Use no hard item-count threshold, and never use equal spacing or
+   a `list`-like name alone. Fixed-purpose slots, layered composites, toolbars,
+   resource bars, navigation, and button groups remain ordinary layouts.
 10. When choosing a family asset, inspect its sibling layers. A `Bg` commonly
    needs the matching `Shadow`, `BgLight`, `Glow`, `Border`, or `FocusLine`;
    include only layers visible in the design, in back-to-front child order.

@@ -116,6 +116,93 @@ The tool preserves complete valid anchors. For missing axes, it prefers current
 nearest resolved left/center/right and top/middle/bottom parent reference. Use
 `--overwrite` to deliberately recompute existing values.
 
+## List Semantics
+
+`layout` describes geometry; `role` describes meaning. Roles are opt-in and
+must not be inferred from a row/column layout. The `rewards_row` in the full
+example is therefore an ordinary layout: its three evenly spaced children are
+fixed slots.
+
+Use overall visual and product meaning rather than requiring one decisive cue.
+A group likely represents a list when several of these cues agree:
+
+- many peers use one repeated item template and vary mainly in record content;
+- the items form one continuous reading or interaction order;
+- adding, removing, or reordering an item would preserve the group's meaning;
+- the group reads as a dataset or result set, not a set of named positions;
+- a specification, data binding, scroll, pagination, or clipped continuation
+  reinforces the collection interpretation.
+
+Pagination and scrolling are not required. A dense run of clearly repeated
+peer records can be enough based on visual judgment. Conversely, item count is
+not a mechanical threshold: even a large group remains fixed slots when each
+position has a distinct function or the exact slot count is part of the UI.
+Equal spacing, matching sizes, or names containing `list` / `item` never decide
+the role alone. When the cues conflict, choose the interpretation that best
+matches the whole component.
+
+For example, these four same-template inventory records read as a collection
+even though no pagination control is visible:
+
+```json
+{
+  "type": "container",
+  "name": "inventory_results",
+  "role": "list",
+  "size": { "width": 450, "height": 264 },
+  "anchor": { "horizontal": "center", "vertical": "bottom" },
+  "layout": { "type": "column", "spacing": 8 },
+  "children": [
+    {
+      "type": "container",
+      "name": "iron_sword",
+      "role": "listItem",
+      "size": { "width": 450, "height": 60 },
+      "anchor": { "horizontal": "left", "vertical": "top" },
+      "color": "#243044"
+    },
+    {
+      "type": "container",
+      "name": "oak_bow",
+      "role": "listItem",
+      "size": { "width": 450, "height": 60 },
+      "anchor": { "horizontal": "left", "vertical": "top" },
+      "color": "#243044"
+    },
+    {
+      "type": "container",
+      "name": "healing_potion",
+      "role": "listItem",
+      "size": { "width": 450, "height": 60 },
+      "anchor": { "horizontal": "left", "vertical": "top" },
+      "color": "#243044"
+    },
+    {
+      "type": "container",
+      "name": "tower_shield",
+      "role": "listItem",
+      "size": { "width": 450, "height": 60 },
+      "anchor": { "horizontal": "left", "vertical": "bottom" },
+      "color": "#243044"
+    }
+  ]
+}
+```
+
+- `role: "list"` is valid only on a `container` with a row or column `layout`
+  and at least one child.
+- Every direct child of a list must use `role: "listItem"`.
+- A `listItem` must be a direct child of a `list`; nested visual children do
+  not inherit the role.
+- `role` carries semantics only. `layout` still controls geometry and spacing.
+- Fixed slot groups, toolbars, resource rows, navigation, layered controls,
+  and decorative groups remain ordinary containers.
+- The validator checks role values and hierarchy, but cannot prove runtime
+  semantics. The author is responsible for the holistic judgment above.
+
+When present, `role` is copied to the corresponding entry in
+`all_elements_legend.json` and targeted `*_legend.json` files.
+
 ## Optional Fields
 
 - `asset`: filename in the assets directory, matched case-insensitively. Nested asset directories are indexed. If duplicate basenames exist, use a relative path such as `icons/coin.png`.
@@ -132,6 +219,8 @@ nearest resolved left/center/right and top/middle/bottom parent reference. Use
 - `nineSlice`: stretchable asset handling.
 - `layout`: declare this container as a row/column group. The object must
   explicitly contain `"type": "row"` or `"type": "column"`.
+- `role`: opt-in semantic collection marker; either `list` or `listItem`,
+  subject to the evidence and hierarchy rules above.
 - `align`, `vAlign`, `offset`: derived positioning relative to parent.
 
 Inside a parent `layout`, child-level alignment only overrides the cross axis:

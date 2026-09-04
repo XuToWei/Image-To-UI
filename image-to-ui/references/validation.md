@@ -46,6 +46,15 @@ covering workflow-generated target. It also rejects changed or stale
 - Position inside layout: remove child `position` and use `offset`, or remove
   the parent layout if the child needs an independent position.
 - Empty layout: add explicit `"type": "row"` or `"type": "column"`.
+- Invalid list role: put `role: "list"` only on a container with a row/column
+  layout and one or more direct children; mark every direct child
+  `role: "listItem"`. A list item cannot appear outside that direct hierarchy.
+- Unsupported list semantics: remove the roles when they were chosen only
+  from equal spacing, repeated visuals, child count, or names. Validation can
+  check role hierarchy but cannot turn geometric evidence into semantic proof.
+  A large run of same-template peer records may still be a list without
+  scrolling or pagination; decide from the whole component rather than a
+  single cue or fixed numeric threshold.
 - Empty foreground: remove placeholder leaves and add at least one actually
   visible image, rect, or text element beyond a full-canvas scrim.
 - Image without asset: add `asset`, change the element to `rect` if it is an

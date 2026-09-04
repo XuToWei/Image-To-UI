@@ -4,6 +4,7 @@ Validate ui_structure.json before bbox annotation and rendering.
 Checks:
   - JSON shape, required fields, positive sizes, and duplicate element paths
   - required anchor alignment metadata on every node
+  - explicit list/listItem semantic-role hierarchy
   - canvas size against the design image
   - asset references against the sliced asset directory
   - layout, alignment, color, opacity, and nine-slice field sanity
@@ -46,6 +47,7 @@ TEXT_VALIGN = {"top", "middle", "bottom", "start", "end", "center"}
 ANCHOR_HORIZONTAL = {"left", "center", "right"}
 ANCHOR_VERTICAL = {"top", "middle", "bottom"}
 ANCHOR_FIELDS = {"horizontal", "vertical"}
+SEMANTIC_ROLES = {"list", "listItem"}
 NINE_SLICE_SIDES = ("left", "top", "right", "bottom")
 COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$")
 
@@ -343,6 +345,7 @@ def validate_tree(
     elem: Any,
     path: str,
     parent_layout_type: str | None,
+    parent_role: str | None,
     reporter: Reporter,
     asset_index: dict[str, Path],
     duplicate_basenames: set[str],
@@ -367,6 +370,21 @@ def validate_tree(
     etype = elem.get("type")
     if etype not in ELEMENT_TYPES:
         reporter.error(path, f"type must be one of {sorted(ELEMENT_TYPES)}")
+    role = elem.get("role")
+    semantic_role: str | None = None
+    if "role" in elem:
+        if not isinstance(role, str) or role not in SEMANTIC_ROLES:
+            reporter.error(path, "role must be list or listItem")
+        else:
+            semantic_role = role
+            if role == "list":
+                stats["lists"] += 1
+            else:
+                stats["list_items"] += 1
+    if semantic_role == "listItem" and parent_role != "list":
+        reporter.error(path, "role listItem requires a direct role list parent")
+    if parent_role == "list" and semantic_role != "listItem":
+        reporter.error(path, "direct children of role list must use role listItem")
     if "size" not in elem:
         reporter.error(path, "size is required")
     else:
@@ -507,6 +525,13 @@ def validate_tree(
     if not isinstance(children, list):
         reporter.error(path, "children must be a list")
         return
+    if semantic_role == "list":
+        if etype != "container":
+            reporter.error(path, "role list is only valid on container elements")
+        if layout_type is None:
+            reporter.error(path, "role list requires a row or column layout")
+        if not children:
+            reporter.error(path, "role list requires at least one listItem child")
     if (
         path != "root"
         and etype in {"container", "button"}
@@ -534,6 +559,7 @@ def validate_tree(
             child,
             f"{path}/{child_name}",
             layout_type,
+            semantic_role,
             reporter,
             asset_index,
             duplicate_basenames,
@@ -545,7 +571,16 @@ def validate_tree(
 
 def validate_structure(structure: dict[str, Any], design_path: Path, assets_dir: Path) -> tuple[Reporter, dict[str, int]]:
     reporter = Reporter()
-    stats = defaultdict(int)
+    stats = {
+        "anchored": 0,
+        "elements": 0,
+        "positioned": 0,
+        "asset_refs": 0,
+        "texts": 0,
+        "layouts": 0,
+        "lists": 0,
+        "list_items": 0,
+    }
 
     canvas = structure.get("canvas")
     if not isinstance(canvas, dict):
@@ -573,6 +608,7 @@ def validate_structure(structure: dict[str, Any], design_path: Path, assets_dir:
     validate_tree(
         structure["root"],
         "root",
+        None,
         None,
         reporter,
         asset_index,
@@ -631,6 +667,8 @@ def main() -> None:
         print(f"  elements: {stats['elements']}")
         print(f"  asset refs: {stats['asset_refs']}")
         print(f"  layouts: {stats['layouts']}")
+        print(f"  lists: {stats['lists']}")
+        print(f"  list items: {stats['list_items']}")
         print(f"  text elements: {stats['texts']}")
         print(f"  errors: {len(reporter.errors)}")
         print(f"  warnings: {len(reporter.warnings)}")

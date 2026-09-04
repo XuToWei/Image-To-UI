@@ -8,7 +8,9 @@
     "positioned": 57,
     "asset_refs": 42,
     "texts": 3,
-    "layouts": 5
+    "layouts": 5,
+    "lists": 1,
+    "list_items": 2
   },
   "errors": [],
   "warnings": []

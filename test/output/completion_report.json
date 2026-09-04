@@ -1,16 +1,16 @@
 {
   "complete": true,
-  "completed_at": "2026-09-04T04:47:47.921965+00:00",
+  "completed_at": "2026-09-04T10:41:40.009640+00:00",
   "structure": {
     "path": "G:\\GitHub\\Image-To-UI\\test\\output\\ui_structure.json",
-    "size": 38456,
-    "mtime_ns": 1788496953654724100,
-    "sha256": "2f29855f9f4efb623196a32623ad07af5ca48c2aa442582a271edfc769e0a57c"
+    "size": 38544,
+    "mtime_ns": 1788518427555422300,
+    "sha256": "963c1217921760b4fdb84577cea7e89018732560e7ae89f0dcbf6b647ebe4ede"
   },
   "iterations": {
-    "check_count": 8,
-    "structure_revision": 6,
-    "target_count": 18
+    "check_count": 11,
+    "structure_revision": 9,
+    "target_count": 27
   },
   "review_coverage": {
     "required": 70,
@@ -42,7 +42,7 @@
     "missing_high_risk_evidence": [],
     "fresh": true,
     "review": "G:\\GitHub\\Image-To-UI\\test\\output\\alignment_review.md",
-    "expected_binding": "<!-- image-to-ui-review-binding: structure=2f29855f9f4efb623196a32623ad07af5ca48c2aa442582a271edfc769e0a57c artifacts=241e966988ace9ff48fb3a82926d6094152d1dfdfcfb2492ec298e9884206c72 -->"
+    "expected_binding": "<!-- image-to-ui-review-binding: structure=963c1217921760b4fdb84577cea7e89018732560e7ae89f0dcbf6b647ebe4ede artifacts=710a9ee8cf5548b32d9aa3abff1026b45a9c9d1e765c487ebec1f6b82e49cd8b -->"
   },
   "validation": {
     "valid": true,
@@ -53,7 +53,7 @@
     "valid": true,
     "error_count": 0,
     "warning_count": 0,
-    "elapsed_ms": 84.14
+    "elapsed_ms": 116.42
   },
   "review_risk": {
     "strategy": "visual-salience-plus-residual",
@@ -157,45 +157,45 @@
   "artifact_snapshots": {
     "validation": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\validate_report.json",
-      "size": 246,
-      "mtime_ns": 1788497244864870700,
-      "sha256": "af6eee89f0b866b605518e143d64313ed92a93bdafe95ec582a36bc07c322524"
+      "size": 285,
+      "mtime_ns": 1788518474846634300,
+      "sha256": "79778d205a2bd98dd13c1e98b2e32c2003f72effdf9df29598337f57e42d7009"
     },
     "bbox": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements.png",
       "size": 2575697,
-      "mtime_ns": 1788497237218076000,
+      "mtime_ns": 1788518442178101900,
       "sha256": "c4331a79a29bdc1d0ef5f1ac6cdb07528732501cad97f091f21a655478fc6417"
     },
     "bbox_legend": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\all_elements_legend.json",
-      "size": 14222,
-      "mtime_ns": 1788497237219076800,
-      "sha256": "6b46aaa2b4771a3f87b32d713557a43a630b95076d094291ba8fe3787b73ec56"
+      "size": 14299,
+      "mtime_ns": 1788518442179099300,
+      "sha256": "93b55677fceec5aa5d1a07f08323e8942f20242d7ee8b952d301c36101bbc06c"
     },
     "comparison": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\comparison.png",
       "size": 5133757,
-      "mtime_ns": 1788497245782187700,
+      "mtime_ns": 1788518476136755200,
       "sha256": "dcd22c8d6762e3d3eb6577d80c8db595552f35b6a7cfc5789f1a646962432cff"
     },
     "reconstruction": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\reconstruction.png",
       "size": 2894950,
-      "mtime_ns": 1788497245410705000,
+      "mtime_ns": 1788518475619188900,
       "sha256": "e5ef8f32bcbe462ba9dddc6cbcf7a0a42ea2f76ea0e76e275aba2d3376e13806"
     },
     "render_trace": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\render_trace.json",
       "size": 53871,
-      "mtime_ns": 1788497245413285200,
+      "mtime_ns": 1788518475621188300,
       "sha256": "a9e4b4d50117f656fd124fca9dc256f519102c8e1a52a0f9d80c856b3be76fd6"
     },
     "visual_audit": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\visual_audit.json",
-      "size": 324,
-      "mtime_ns": 1788497267635214900,
-      "sha256": "bef88f807f626292c135207a815ad240ba02d712c8cc2c02db538218a2ee4258"
+      "size": 325,
+      "mtime_ns": 1788518499642254600,
+      "sha256": "50e99779c2eab8c8022b9e9b9c5c550a0bf1c1bc6983ccf7b634e3e3707c746e"
     },
     "assets_inventory": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\assets\\assets_inventory.json",
@@ -206,32 +206,32 @@
     "review_risk": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\review_risk.json",
       "size": 43322,
-      "mtime_ns": 1788497247844001500,
+      "mtime_ns": 1788518478782263600,
       "sha256": "f8fca04dbd3e8a2d3546b41d6ed17f3899433e9af0a0e0a077143152bb9e4670"
     },
     "risk_review": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review.png",
       "size": 2232202,
-      "mtime_ns": 1788497247840996300,
+      "mtime_ns": 1788518478776264000,
       "sha256": "b9c9fb70de498766bee49222be44ffc398cb675a9724ebadd3570b0eb09f8e4c"
     },
     "risk_review_legend": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\risk_review_legend.json",
       "size": 6857,
-      "mtime_ns": 1788497247840996300,
+      "mtime_ns": 1788518478777263600,
       "sha256": "ef8fc253bdf2ff95d9afc6f6754c6f3cbc82c44777e8987d187ff386cce8ce97"
     },
     "detail_comparison": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\detail_comparison.png",
       "size": 3442,
-      "mtime_ns": 1788497267633217100,
+      "mtime_ns": 1788518499641254300,
       "sha256": "cc21aae22c7255263d21941d9156c27ebc20d2351c7d9d0be16891f19425cf62"
     },
     "alignment_review": {
       "path": "G:\\GitHub\\Image-To-UI\\test\\output\\alignment_review.md",
-      "size": 11101,
-      "mtime_ns": 1788497260869679500,
-      "sha256": "778ab3ccecc691ef31298b163b5ab457e2fcd14f389374934502febb2b2cf1d4"
+      "size": 11137,
+      "mtime_ns": 1788518490101468800,
+      "sha256": "4a2d396b5201b195a2a04d2b6ce847ab5043b28d38bf16ebf87f9bb232f5106d"
     }
   },
   "blockers": []

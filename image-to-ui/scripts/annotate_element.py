@@ -15,6 +15,8 @@ All-elements mode:
     annotated in one overview image. Full-canvas `overlay` and `rect` elements
     are also annotated because they are active UI layers. Bboxes are labeled
     with numeric indexes, and the index/path/bbox legend is written to JSON.
+    Explicit `list` / `listItem` roles are copied into legend entries. Roles
+    are never inferred from layout geometry.
     Use this as the first pass to find large drift cheaply, then inspect only
     suspicious elements separately.
 
@@ -115,7 +117,25 @@ def should_skip_all_elements_target(elem: dict, bbox, design_w: int, design_h: i
     return not bool(elem.get("asset") or elem.get("color") or elem.get("text"))
 
 
-Target = Tuple[str, str, str, Tuple[int, int, int, int]]
+Target = Tuple[str, str, str, Tuple[int, int, int, int], str | None]
+
+
+def semantic_role(elem: dict) -> str | None:
+    role = elem.get("role")
+    return role if isinstance(role, str) else None
+
+
+def legend_entry(target: Target) -> dict:
+    path, name, label, bbox, role = target
+    entry = {
+        "label": label,
+        "path": path,
+        "name": name,
+        "abs_bbox": list(bbox),
+    }
+    if role is not None:
+        entry["role"] = role
+    return entry
 
 
 def gather_targets(structure: dict, path: str) -> List[Target]:
@@ -133,14 +153,20 @@ def gather_targets(structure: dict, path: str) -> List[Target]:
         raise SystemExit(f"element has no resolved _abs (did you call resolve_positions?): {path}")
 
     name = elem.get("name", "?")
-    out = [(path, name, name, tuple(abs_box))]
+    out = [(path, name, name, tuple(abs_box), semantic_role(elem))]
     if elem.get("layout") and elem.get("children"):
         for c in elem.get("children", []):
             cabs = c.get("_abs")
             if cabs is None:
                 continue
             name = c.get("name", "?")
-            out.append((f"{path}/{name}", name, name, tuple(cabs)))
+            out.append((
+                f"{path}/{name}",
+                name,
+                name,
+                tuple(cabs),
+                semantic_role(c),
+            ))
     return out
 
 
@@ -163,7 +189,7 @@ def gather_all_targets(structure: dict, design_w: int, design_h: int) -> List[Ta
             continue
         name = elem.get("name", "?")
         label = str(len(out) + 1)
-        out.append((path, name, label, bbox))
+        out.append((path, name, label, bbox, semantic_role(elem)))
     return out
 
 
@@ -232,7 +258,7 @@ def main():
                            else max(18, min(W, H) // 60))
     line_width = 2 if args.all_elements else 4
 
-    for i, (_path, name, label, bbox) in enumerate(targets):
+    for i, (_path, name, label, bbox, _role) in enumerate(targets):
         if is_full_canvas(bbox, W, H):
             color = (180, 180, 180, 230)
             draw_label = f"{label} (full canvas)"
@@ -252,15 +278,7 @@ def main():
         "element_path": args.element_path,
         "target_count": len(targets),
         "is_group": (not args.all_elements and len(targets) > 1),
-        "targets": [
-            {
-                "label": label,
-                "path": path,
-                "name": name,
-                "abs_bbox": list(bbox),
-            }
-            for path, name, label, bbox in targets
-        ],
+        "targets": [legend_entry(target) for target in targets],
         "design_size": [W, H],
         "output": str(args.output),
     }

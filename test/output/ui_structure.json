@@ -523,6 +523,7 @@
           {
             "type": "container",
             "name": "quest_list",
+            "role": "list",
             "position": {
               "x": 23,
               "y": 110
@@ -545,6 +546,7 @@
               {
                 "type": "container",
                 "name": "fire_quest",
+                "role": "listItem",
                 "size": {
                   "width": 450,
                   "height": 128
@@ -633,6 +635,7 @@
               {
                 "type": "container",
                 "name": "frost_quest",
+                "role": "listItem",
                 "size": {
                   "width": 450,
                   "height": 128

@@ -1,6 +1,6 @@
 # Emberfall UI alignment review
 
-<!-- image-to-ui-review-binding: structure=2f29855f9f4efb623196a32623ad07af5ca48c2aa442582a271edfc769e0a57c artifacts=241e966988ace9ff48fb3a82926d6094152d1dfdfcfb2492ec298e9884206c72 -->
+<!-- image-to-ui-review-binding: structure=963c1217921760b4fdb84577cea7e89018732560e7ae89f0dcbf6b647ebe4ede artifacts=710a9ee8cf5548b32d9aa3abff1026b45a9c9d1e765c487ebec1f6b82e49cd8b -->
 
 | Element path | Status | Review / change | Recheck |
 | --- | --- | --- | --- |
@@ -32,13 +32,13 @@
 | `root/quest_panel/base` | aligned | Nine-sliced panel edges, crest, and lower ornament align with the reference panel. | `comparison.png` |
 | `root/quest_panel/title` | adjusted | Text box moved from (80,53) to (85,59); current ink is centered under the crest. | `comparison.png` |
 | `root/quest_panel/divider` | aligned | Divider spans the header at the reference vertical band. | `all_elements.png` |
-| `root/quest_panel/quest_list` | aligned | Two-row column bounds and repeated center spacing match the reference list. | `all_elements.png` |
-| `root/quest_panel/quest_list/fire_quest` | aligned | First quest row outer control matches the fire-row reference bbox. | `all_elements.png` |
+| `root/quest_panel/quest_list` | aligned | The QUEST records form an explicitly identified semantic list; its two-row column bounds and spacing match the reference. | `all_elements.png` |
+| `root/quest_panel/quest_list/fire_quest` | aligned | First semantic list item matches the fire-row reference bbox. | `all_elements.png` |
 | `root/quest_panel/quest_list/fire_quest/background` | adjusted | Background changed from (13,10), 424×108 to (19,6), 425×108 so its inner edges match the fire card frame. | `target_root_quest_panel_quest_list_fire_quest_background.png` |
 | `root/quest_panel/quest_list/fire_quest/frame` | aligned | Nine-sliced row frame preserves corners and aligns with the row edges. | `all_elements.png` |
 | `root/quest_panel/quest_list/fire_quest/action_base` | aligned | Round action base overlaps the row's left edge at the reference center. | `all_elements.png` |
 | `root/quest_panel/quest_list/fire_quest/icon` | aligned | Fire sigil keeps its source aspect and is centered in the action base. | `comparison.png` |
-| `root/quest_panel/quest_list/frost_quest` | aligned | Second quest row outer control matches the frost-row reference bbox. | `all_elements.png` |
+| `root/quest_panel/quest_list/frost_quest` | aligned | Second semantic list item matches the frost-row reference bbox. | `all_elements.png` |
 | `root/quest_panel/quest_list/frost_quest/background` | adjusted | Background changed from (13,10), 424×108 to (19,6), 425×108 so its inner edges match the frost card frame. | `target_root_quest_panel_quest_list_frost_quest_background.png` |
 | `root/quest_panel/quest_list/frost_quest/frame` | aligned | Nine-sliced row frame preserves corners and aligns with the row edges. | `all_elements.png` |
 | `root/quest_panel/quest_list/frost_quest/action_base` | aligned | Round action base overlaps the row's left edge at the reference center. | `all_elements.png` |

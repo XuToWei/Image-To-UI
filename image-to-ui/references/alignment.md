@@ -14,7 +14,9 @@ as `annotate_grid.py`.
 - Also draws full-canvas `overlay` and `rect` elements because they are active
   UI layers.
 - Uses numeric labels to keep the image readable.
-- Writes a JSON legend with `label`, `path`, `name`, and `abs_bbox`.
+- Writes a JSON legend with `label`, `path`, `name`, and `abs_bbox`; nodes with
+  an explicit, author-supplied list role also include `role`. Annotation never
+  infers roles from geometry.
 - Best first pass for token efficiency.
 
 Targeted `--element-path` mode:
