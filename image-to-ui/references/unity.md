@@ -10,7 +10,9 @@ or exporter-specific resource registry.
 
 1. Locate the target Unity project and read its installed Bridge's `AGENT.md`.
    Discover the command and parameter schema with live `list_commands`.
-2. If unavailable, check installation of the repository's `Unity/package.json`.
+2. If unavailable, check installation from
+   `https://github.com/XuToWei/Image-To-UI.git?path=Unity` through Unity Package
+   Manager. The suffix selects the directory containing `package.json`.
    Installation details are in `Unity/README.md`; the Unity directory is
    optional and is not part of a standalone copy of this analysis skill.
 3. Supply the structure, sliced-asset root, and an `Assets/` Prefab destination.

@@ -24,8 +24,13 @@ flowchart LR
 
 ### 1. 准备环境并安装 Unity 包
 
-在本机准备本仓库、UnityAgentBridge 仓库、Python 3.10+ 和目标 Unity 2022.3+
-工程。下面以两个仓库位于 `G:/GitHub/` 为例；换成自己的路径时，后续示例也一起替换。
+准备 Git、Python 3.10+ 和目标 Unity 2022.3+ 工程。在希望保存仓库的目录执行：
+
+```bash
+git clone https://github.com/XuToWei/Image-To-UI.git
+```
+
+Codex 从克隆后的仓库读取 skill、脚本和示例。Unity 包使用下面的 GitHub 地址安装。
 
 Python 分析脚本依赖 Pillow 和 NumPy，可先安装：
 
@@ -35,19 +40,21 @@ python -m pip install pillow numpy
 
 Windows 上也可使用 `py` 代替 `python`。
 
-在目标 Unity 工程的 Package Manager 中选择 **Add package from disk**，依次添加：
+确保 Unity 能调用 Git。在目标工程的 Package Manager 中选择
+**Add package from git URL**，依次添加：
 
-1. `G:/GitHub/UnityAgentBridge/Unity/package.json`
-2. `G:/GitHub/Image-To-UI/Unity/package.json`
+1. `https://github.com/XuToWei/UnityAgentBridge.git?path=Unity`
+2. `https://github.com/XuToWei/Image-To-UI.git?path=Unity`
 
-已安装 Bridge 时只添加第二个包。也可将下面两项合并到工程的
+两个包的 `package.json` 都位于仓库的 `Unity/` 子目录，因此 UPM 地址需要
+`?path=Unity`。已安装 Bridge 时只添加第二个包。也可将下面两项合并到工程的
 `Packages/manifest.json`，保留其他依赖：
 
 ```json
 {
   "dependencies": {
-    "me.xw.unityagentbridge": "file:G:/GitHub/UnityAgentBridge/Unity",
-    "com.image-to-ui.unity": "file:G:/GitHub/Image-To-UI/Unity"
+    "me.xw.unityagentbridge": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
+    "com.image-to-ui.unity": "https://github.com/XuToWei/Image-To-UI.git?path=Unity"
   }
 }
 ```
@@ -59,14 +66,14 @@ Windows 上也可使用 `py` 代替 `python`。
 ### 2. 确定本次输入和输出
 
 在 Codex 中打开本仓库，明确告诉它使用仓库内的
-[`image-to-ui/SKILL.md`](image-to-ui/SKILL.md)。本次示例使用：
+[`image-to-ui/SKILL.md`](image-to-ui/SKILL.md)。下面的文件路径相对于仓库根目录：
 
 | 项目 | 路径 |
 | --- | --- |
-| 效果图 | `G:/GitHub/Image-To-UI/test/source/design/emberfall-ui-mockup.png` |
-| 切图根目录 | `G:/GitHub/Image-To-UI/test/source/sprites` |
-| 本次分析输出目录 | `G:/GitHub/Image-To-UI/test/output-local` |
-| 将要生成的 JSON | `G:/GitHub/Image-To-UI/test/output-local/ui_structure.json` |
+| 效果图 | `test/source/design/emberfall-ui-mockup.png` |
+| 切图根目录 | `test/source/sprites` |
+| 本次分析输出目录 | `test/output-local` |
+| 将要生成的 JSON | `test/output-local/ui_structure.json` |
 | Unity 工程 | 填写实际工程绝对路径，目录中应有 `Assets/` 和 `Packages/`。 |
 | Prefab 输出 | 该 Unity 工程中的 `Assets/Generated/EmberfallMainUI.prefab` |
 
@@ -84,11 +91,11 @@ Windows 上也可使用 `py` 代替 `python`。
 Codex 会连续执行后面的分析、校验和导入步骤，命令示例用于了解或排查过程。
 
 ```text
-使用 G:/GitHub/Image-To-UI/image-to-ui/SKILL.md，完成从效果图到 Unity Prefab 的完整流程。
+使用本仓库的 image-to-ui/SKILL.md，完成从效果图到 Unity Prefab 的完整流程。
 
-效果图：G:/GitHub/Image-To-UI/test/source/design/emberfall-ui-mockup.png
-切图根目录：G:/GitHub/Image-To-UI/test/source/sprites
-本次全新分析输出目录：G:/GitHub/Image-To-UI/test/output-local
+效果图：test/source/design/emberfall-ui-mockup.png
+切图根目录：test/source/sprites
+本次全新分析输出目录：test/output-local
 目标 Unity 工程：<填写 Unity 工程绝对路径>
 Prefab 输出：Assets/Generated/EmberfallMainUI.prefab
 
@@ -154,14 +161,14 @@ python -B image-to-ui/scripts/workflow.py finalize --output test/output-local
 ### 6. Codex 通过 Bridge 生成 Prefab
 
 Codex 按已发现的 Bridge schema 调用 `build_ui_prefab`。这里接收的 JSON
-正是上一步生成并复核的文件：
+正是上一步生成并复核的文件。`<repo>` 在调用前由 Codex 替换为仓库的绝对路径：
 
 ```json
 {
   "command": "build_ui_prefab",
   "params": {
-    "structurePath": "G:/GitHub/Image-To-UI/test/output-local/ui_structure.json",
-    "assetsPath": "G:/GitHub/Image-To-UI/test/source/sprites",
+    "structurePath": "<repo>/test/output-local/ui_structure.json",
+    "assetsPath": "<repo>/test/source/sprites",
     "prefabPath": "Assets/Generated/EmberfallMainUI.prefab"
   }
 }

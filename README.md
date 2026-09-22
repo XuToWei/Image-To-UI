@@ -27,9 +27,15 @@ flowchart LR
 
 ### 1. Prepare the environment and install the Unity packages
 
-Prepare this repository, the UnityAgentBridge checkout, Python 3.10+, and a
-target Unity 2022.3+ project. Examples place both checkouts under `G:/GitHub/`;
-replace those paths consistently for your machine.
+Prepare Git, Python 3.10+, and a target Unity 2022.3+ project. Clone the
+repository into your preferred working directory:
+
+```bash
+git clone https://github.com/XuToWei/Image-To-UI.git
+```
+
+Codex reads the skill, scripts, and examples from this checkout.
+Install the Unity packages from GitHub as below.
 
 The analysis scripts need Pillow and NumPy:
 
@@ -39,20 +45,23 @@ python -m pip install pillow numpy
 
 On Windows, `py` can replace `python`.
 
-In the target project's Package Manager, use **Add package from disk**, in order:
+Ensure Git is available to Unity. In the target project's Package Manager,
+use **Add package from git URL**, in order:
 
-1. `G:/GitHub/UnityAgentBridge/Unity/package.json`
-2. `G:/GitHub/Image-To-UI/Unity/package.json`
+1. `https://github.com/XuToWei/UnityAgentBridge.git?path=Unity`
+2. `https://github.com/XuToWei/Image-To-UI.git?path=Unity`
 
-If Bridge is already installed, add only the second package. Alternatively,
+Both packages place `package.json` in the `Unity/` subdirectory, so the UPM
+URLs need `?path=Unity`. If Bridge is already installed, add only the second
+package. Alternatively,
 merge these entries into the project's `Packages/manifest.json`, retaining
 its other dependencies:
 
 ```json
 {
   "dependencies": {
-    "me.xw.unityagentbridge": "file:G:/GitHub/UnityAgentBridge/Unity",
-    "com.image-to-ui.unity": "file:G:/GitHub/Image-To-UI/Unity"
+    "me.xw.unityagentbridge": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
+    "com.image-to-ui.unity": "https://github.com/XuToWei/Image-To-UI.git?path=Unity"
   }
 }
 ```
@@ -64,15 +73,15 @@ is enabled in the `Prefab` group. Keep the target project open.
 ### 2. Identify this run's inputs and outputs
 
 Open this repository in Codex and explicitly use its
-[`image-to-ui/SKILL.md`](image-to-ui/SKILL.md). The following paths describe
-one continuous example:
+[`image-to-ui/SKILL.md`](image-to-ui/SKILL.md). The following file paths are
+relative to the repository root:
 
 | Item | Path |
 | --- | --- |
-| Design | `G:/GitHub/Image-To-UI/test/source/design/emberfall-ui-mockup.png` |
-| Sprite root | `G:/GitHub/Image-To-UI/test/source/sprites` |
-| Fresh analysis output | `G:/GitHub/Image-To-UI/test/output-local` |
-| JSON to be generated | `G:/GitHub/Image-To-UI/test/output-local/ui_structure.json` |
+| Design | `test/source/design/emberfall-ui-mockup.png` |
+| Sprite root | `test/source/sprites` |
+| Fresh analysis output | `test/output-local` |
+| JSON to be generated | `test/output-local/ui_structure.json` |
 | Unity project | Supply its absolute path, containing `Assets/` and `Packages/`. |
 | Prefab output | `Assets/Generated/EmberfallMainUI.prefab` inside that Unity project. |
 
@@ -94,12 +103,12 @@ path. Codex runs the subsequent analysis, validation, and export stages; the
 commands below explain the process and help with troubleshooting.
 
 ```text
-Use G:/GitHub/Image-To-UI/image-to-ui/SKILL.md to complete the workflow
+Use this repository's image-to-ui/SKILL.md to complete the workflow
 from the design image to a Unity Prefab.
 
-Design: G:/GitHub/Image-To-UI/test/source/design/emberfall-ui-mockup.png
-Sprite root: G:/GitHub/Image-To-UI/test/source/sprites
-Fresh analysis output: G:/GitHub/Image-To-UI/test/output-local
+Design: test/source/design/emberfall-ui-mockup.png
+Sprite root: test/source/sprites
+Fresh analysis output: test/output-local
 Target Unity project: <absolute Unity project path>
 Prefab output: Assets/Generated/EmberfallMainUI.prefab
 
@@ -171,14 +180,15 @@ that a Unity asset has been generated or inspected.
 ### 6. Codex generates the Prefab through Bridge
 
 Call `build_ui_prefab` using the installed command schema. Its input is the
-JSON just generated and reviewed in this run:
+JSON just generated and reviewed in this run. Codex replaces `<repo>` with
+the absolute repository path before calling Unity:
 
 ```json
 {
   "command": "build_ui_prefab",
   "params": {
-    "structurePath": "G:/GitHub/Image-To-UI/test/output-local/ui_structure.json",
-    "assetsPath": "G:/GitHub/Image-To-UI/test/source/sprites",
+    "structurePath": "<repo>/test/output-local/ui_structure.json",
+    "assetsPath": "<repo>/test/source/sprites",
     "prefabPath": "Assets/Generated/EmberfallMainUI.prefab"
   }
 }

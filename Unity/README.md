@@ -26,16 +26,20 @@
 
 ## 安装
 
-两个仓库的本地路径以 `G:/GitHub/UnityAgentBridge` 和
-`G:/GitHub/Image-To-UI` 为例。请按实际位置替换；Unity 安装的是各仓库的
-`Unity/package.json`。
+通过 GitHub 安装，确保本机已安装 Git 且 Unity 能调用它。
+本仓库地址为 `https://github.com/XuToWei/Image-To-UI.git`，Unity 包位于
+`Unity/` 子目录，因此 Package Manager 使用的完整地址为：
+
+```text
+https://github.com/XuToWei/Image-To-UI.git?path=Unity
+```
 
 ### Package Manager 安装
 
-1. 打开目标 Unity 工程的 Package Manager，选择 **Add package from disk**。
-2. 选择 `G:/GitHub/UnityAgentBridge/Unity/package.json`，等待依赖解析与编译。
+1. 打开目标 Unity 工程的 Package Manager，选择 **Add package from git URL**。
+2. 输入 `https://github.com/XuToWei/UnityAgentBridge.git?path=Unity`，等待依赖解析与编译。
    已安装 Bridge 时跳过这一步。
-3. 再选择 `G:/GitHub/Image-To-UI/Unity/package.json`。
+3. 再添加 `https://github.com/XuToWei/Image-To-UI.git?path=Unity`。
 4. 等待编译结束，确认 Console 无编译错误。uGUI 和 Newtonsoft.Json 由包依赖解析。
 
 ### manifest 安装
@@ -46,8 +50,8 @@
 ```json
 {
   "dependencies": {
-    "me.xw.unityagentbridge": "file:G:/GitHub/UnityAgentBridge/Unity",
-    "com.image-to-ui.unity": "file:G:/GitHub/Image-To-UI/Unity"
+    "me.xw.unityagentbridge": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
+    "com.image-to-ui.unity": "https://github.com/XuToWei/Image-To-UI.git?path=Unity"
   }
 }
 ```
@@ -64,14 +68,15 @@ Prefab 只依赖标准 UGUI 和生成目录中的素材；生成后即使卸载�
 ## 生成 Prefab
 
 这是[完整运行流程](../README.zh-CN.md#完整运行流程)的第 6 步。
-Codex 完成本次 JSON 的分析与复核后，直接继续发出下面的 command/params：
+Codex 完成本次 JSON 的分析与复核后，直接继续发出下面的 command/params。
+`<repo>` 在调用前替换为仓库的绝对路径：
 
 ```json
 {
   "command": "build_ui_prefab",
   "params": {
-    "structurePath": "G:/GitHub/Image-To-UI/test/output-local/ui_structure.json",
-    "assetsPath": "G:/GitHub/Image-To-UI/test/source/sprites",
+    "structurePath": "<repo>/test/output-local/ui_structure.json",
+    "assetsPath": "<repo>/test/source/sprites",
     "prefabPath": "Assets/Generated/EmberfallMainUI.prefab"
   }
 }
@@ -200,6 +205,7 @@ states.Find("selected").gameObject.SetActive(true);
 
 | 现象 | 处理 |
 | --- | --- |
+| Git 安装提示仓库根目录找不到 `package.json` | 使用带 `?path=Unity` 的完整 UPM 地址。 |
 | `AgentBridge.Editor` 程序集缺失或接口编译失败 | 先安装兼容的 UnityAgentBridge，确认 Console 编译通过，再发现命令。 |
 | `list_commands` 没有 `build_ui_prefab` | 检查是否安装了本包、Unity 是否完成编译、Bridge 是否启用，以及命令是否被禁用。 |
 | 返回 `UI_EDIT_MODE_REQUIRED` | 退出 Play Mode 后调用。 |
