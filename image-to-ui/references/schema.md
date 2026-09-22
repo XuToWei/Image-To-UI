@@ -116,6 +116,15 @@ The tool preserves complete valid anchors. For missing axes, it prefers current
 nearest resolved left/center/right and top/middle/bottom parent reference. Use
 `--overwrite` to deliberately recompute existing values.
 
+## Component Behavior
+
+Optional `responsive`, `state`, `scroll`, and `progress` blocks add size
+constraints, appearance variants, rectangular scrolling, and linear progress
+fills to the existing node types. `visible` is an optional boolean (default
+true). Read [components.md](components.md) for validated fields, complete
+examples, inference boundaries, and scenario preview commands. These blocks
+are interpreted by the verifier; the nine-position `anchor` remains metadata.
+
 ## List Semantics
 
 `layout` describes geometry; `role` describes meaning. Roles are opt-in and
@@ -205,6 +214,10 @@ When present, `role` is copied to the corresponding entry in
 
 ## Optional Fields
 
+- `responsive`, `state`, `scroll`, `progress`: component descriptions documented
+  in [components.md](components.md).
+- `visible`: hide the node and descendants when false, while keeping its layout slot.
+
 - `asset`: filename in the assets directory, matched case-insensitively. Nested asset directories are indexed. If duplicate basenames exist, use a relative path such as `icons/coin.png`.
 - `color`: `"#RRGGBB"`; fill color on `rect` / `overlay`, multiplicative tint
   on images, text color on text.
@@ -276,9 +289,15 @@ model only the UI-owned scrim and its children.
 
 ## Stretchable Assets
 
-Background panels, frames, buttons, bars, popup bodies, bubbles, and slot
-backgrounds should declare `nineSlice` so the renderer preserves corner detail.
-Atomic icons, portraits, and character sprites should not.
+Use `nineSlice` for panels, frames, buttons, bars, and similar surfaces when
+the design stretches their centers while preserving corner/border detail.
+An asset's name or category alone does not establish that behavior. Uniformly
+scaled artwork and atomic icons normally keep their source aspect.
+
+An image node's `size` includes the source texture's transparent padding.
+Inventory alpha bounds describe only visible artwork; see
+[measurement.md](measurement.md) before converting visible bounds into node
+position and size.
 
 ```json
 "nineSlice": true

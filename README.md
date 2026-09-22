@@ -1,30 +1,245 @@
 # Image to UI
 
-[中文说明](README.zh-CN.md)
+[中文说明](README.zh-CN.md) · [Complete workflow](#complete-workflow) · [Unity command reference](Unity/README.md)
 
-Turn a UI mockup and its sliced sprites into a validated, reviewable
-`ui_structure.json` for Unity/Cocos-style game UI.
+Use Codex to turn a UI design and sliced assets into reviewed `ui_structure.json`,
+then assemble a Unity UGUI Prefab through UnityAgentBridge. Analysis, validation,
+and export run as one continuous task.
 
-Image to UI does more than extract approximate coordinates. The bundled Codex
-skill inventories assets, measures the design on a grid, builds a parent-relative
-UI hierarchy, renders a reconstruction, audits the result, and requires an
-evidence-backed review before marking a task complete.
+The Prefab uses native UGUI components and generated assets. All declared states
+are preserved as visibility branches, with only the current state active.
+Developers own application control; no custom runtime scripts are generated.
 
-## Highlights
+## Complete workflow
 
-- Grid-based measurement at the design's native resolution.
-- Recursive PNG/JPG sprite inventory with duplicate-name detection and optional
-  Unity `.png.meta` border support.
-- Structured containers, rows, columns, images, text, generated rectangles, and
-  overlays.
-- Required nine-position anchor alignment metadata on every structure node,
-  with a migration tool for older JSON.
-- Opt-in `list` / `listItem` roles chosen from explicit context or holistic
-  visual semantics, then carried into element annotation legends.
-- Nine-slice rendering, font tracing, tint, opacity, and hue-shift support.
-- Strict structure validation plus visual-audit reports.
-- Side-by-side comparison, element bounding boxes, and focused recheck images.
-- Resumable workflow state and a final `completion_report.json`.
+Give Codex the complete task: analyze the design, generate and review the
+structure, then use UnityAgentBridge to assemble a Prefab. Finish by inspecting
+the Unity result and wiring application behavior.
+
+```mermaid
+flowchart LR
+    A["Design, sprites, fonts"] --> B["Codex: measure and author UI JSON"]
+    B --> C["Render, review, finalize"]
+    C --> D["UnityAgentBridge: build_ui_prefab"]
+    D --> E["UGUI Prefab and assets"]
+    E --> F["Unity inspection and application wiring"]
+```
+
+### 1. Prepare the environment and install the Unity packages
+
+Prepare this repository, the UnityAgentBridge checkout, Python 3.10+, and a
+target Unity 2022.3+ project. Examples place both checkouts under `G:/GitHub/`;
+replace those paths consistently for your machine.
+
+The analysis scripts need Pillow and NumPy:
+
+```bash
+python -m pip install pillow numpy
+```
+
+On Windows, `py` can replace `python`.
+
+In the target project's Package Manager, use **Add package from disk**, in order:
+
+1. `G:/GitHub/UnityAgentBridge/Unity/package.json`
+2. `G:/GitHub/Image-To-UI/Unity/package.json`
+
+If Bridge is already installed, add only the second package. Alternatively,
+merge these entries into the project's `Packages/manifest.json`, retaining
+its other dependencies:
+
+```json
+{
+  "dependencies": {
+    "me.xw.unityagentbridge": "file:G:/GitHub/UnityAgentBridge/Unity",
+    "com.image-to-ui.unity": "file:G:/GitHub/Image-To-UI/Unity"
+  }
+}
+```
+
+Wait for compilation with no Console errors. Stay in Edit Mode, open
+**Window > Agent Bridge**, enable the host, and ensure `build_ui_prefab`
+is enabled in the `Prefab` group. Keep the target project open.
+
+### 2. Identify this run's inputs and outputs
+
+Open this repository in Codex and explicitly use its
+[`image-to-ui/SKILL.md`](image-to-ui/SKILL.md). The following paths describe
+one continuous example:
+
+| Item | Path |
+| --- | --- |
+| Design | `G:/GitHub/Image-To-UI/test/source/design/emberfall-ui-mockup.png` |
+| Sprite root | `G:/GitHub/Image-To-UI/test/source/sprites` |
+| Fresh analysis output | `G:/GitHub/Image-To-UI/test/output-local` |
+| JSON to be generated | `G:/GitHub/Image-To-UI/test/output-local/ui_structure.json` |
+| Unity project | Supply its absolute path, containing `Assets/` and `Packages/`. |
+| Prefab output | `Assets/Generated/EmberfallMainUI.prefab` inside that Unity project. |
+
+Use a separate fresh output directory for each new design. The checked-in
+`test/output` is an existing example; this workflow consistently uses
+`test/output-local`, including the JSON passed to Unity.
+
+Provide intended fonts, alternate-state designs, scroll extents, and adaptation
+requirements when available. Document inferred behavior and unavailable artwork
+or fonts as uncertainties or approximations.
+Use a native-resolution PNG/JPG design and preserve sprite-relative paths.
+Optional Unity `.png.meta` borders and TTF/OTF fonts help preserve the intended
+appearance in the exported Prefab.
+
+### 3. Give Codex the complete task
+
+After installing the packages, copy this request and fill in the Unity project
+path. Codex runs the subsequent analysis, validation, and export stages; the
+commands below explain the process and help with troubleshooting.
+
+```text
+Use G:/GitHub/Image-To-UI/image-to-ui/SKILL.md to complete the workflow
+from the design image to a Unity Prefab.
+
+Design: G:/GitHub/Image-To-UI/test/source/design/emberfall-ui-mockup.png
+Sprite root: G:/GitHub/Image-To-UI/test/source/sprites
+Fresh analysis output: G:/GitHub/Image-To-UI/test/output-local
+Target Unity project: <absolute Unity project path>
+Prefab output: Assets/Generated/EmberfallMainUI.prefab
+
+Read the installed UnityAgentBridge AGENT.md and discover build_ui_prefab
+with list_commands before starting the reconstruction.
+
+Run prepare, measure the design, and author ui_structure.json.
+Represent hierarchy, anchors/responsive constraints, states, progress bars,
+and scroll regions. Iterate with check and inspect the reconstruction.
+Use measure, target, and component preview where needed.
+Complete element and applicable component reviews, run finalize, and verify
+that this run's completion_report.json has complete: true.
+
+Then call build_ui_prefab through UnityAgentBridge using the new
+ui_structure.json from this run and the sprite root above.
+Assemble native UGUI objects and resources. Generate all declared states as
+visibility branches, with only the current state initially active.
+Leave application control to developers and add no custom runtime scripts.
+If the destination already exists, preserve it and report the conflict unless
+I have explicitly requested overwrite.
+
+Confirm that the Prefab loads in Unity, inspect resource references and state
+branches, and report the JSON, comparison, Prefab, and resource directory paths,
+including warnings, approximations, and verification results.
+```
+
+### 4. Codex measures the design and authors JSON
+
+From the repository directory, Codex starts with:
+
+```bash
+python -B image-to-ui/scripts/workflow.py prepare --design test/source/design/emberfall-ui-mockup.png --assets test/source/sprites --output test/output-local
+```
+
+This generates the grid, asset inventory, and contact sheets. Codex uses them
+to identify layers, measure parent-relative geometry, select sprites/fonts,
+and write `test/output-local/ui_structure.json`. Small details can be
+inspected with pixel-preserving `measure` crops.
+
+Every node carries an anchor; `responsive` describes actual size constraints.
+Use `state`, `progress`, and `scroll` for the corresponding components.
+See the [schema](image-to-ui/references/schema.md) and
+[component guide](image-to-ui/references/components.md) for their contracts.
+
+### 5. Codex validates, reviews, and finalizes the analysis
+
+After authoring or editing JSON:
+
+```bash
+python -B image-to-ui/scripts/workflow.py check --output test/output-local
+```
+
+Codex inspects `comparison.png`, element boxes, and audit reports, then
+corrects geometry, assets, text, and layers. Use `target` for ambiguous areas
+and `preview` for declared states, progress, scroll positions, and size
+constraints. Record component findings in `component_review.md`.
+
+After the latest successful check, write `alignment_review.md` with the
+current review binding and run:
+
+```bash
+python -B image-to-ui/scripts/workflow.py finalize --output test/output-local
+```
+
+`"complete": true` in `completion_report.json` completes the native-design
+analysis stage. Continue with the Unity export; that flag does not certify
+that a Unity asset has been generated or inspected.
+
+### 6. Codex generates the Prefab through Bridge
+
+Call `build_ui_prefab` using the installed command schema. Its input is the
+JSON just generated and reviewed in this run:
+
+```json
+{
+  "command": "build_ui_prefab",
+  "params": {
+    "structurePath": "G:/GitHub/Image-To-UI/test/output-local/ui_structure.json",
+    "assetsPath": "G:/GitHub/Image-To-UI/test/source/sprites",
+    "prefabPath": "Assets/Generated/EmberfallMainUI.prefab"
+  }
+}
+```
+
+This is the command/params portion. Codex follows the installed Bridge's
+`AGENT.md` for the envelope version, fresh id, publication, and response ack.
+Use explicit `overwrite: true` when replacing an existing asset; use `fontMap`
+for differing font paths. See the [Unity command reference](Unity/README.md#生成-prefab).
+
+Unity assembles native UGUI objects, copies referenced sprites and fonts into
+generated assets, and saves the Prefab. Declared states become
+`States/<state>/Content` branches; only the current state starts active.
+No custom runtime scripts are added.
+
+Codex reads the returned `prefabPath`, `guid`, `resourceFolder`,
+`stateObjects`, and `warnings`, confirms the asset loads, and reports any
+remaining issues.
+
+### 7. Inspect and use the Prefab in Unity
+
+Open the generated asset in the Project window. Inspect layout, text, images,
+and clipping at the design resolution and intended Game View sizes. Unity
+font metrics can differ from Python previews. For corrections, update JSON
+and repeat `check → review → finalize → build_ui_prefab`.
+
+Drag the Prefab into the scene. It includes Canvas, CanvasScaler, and
+GraphicRaycaster and is normally used as a scene root. Keep the returned
+resource directory because the Prefab references those assets.
+
+Developers switch state GameObjects with their active checkbox or `SetActive`
+and wire button actions, progress updates, and application data. Pointer and
+scroll input require an EventSystem with the project's appropriate input module.
+
+Deliver the current JSON, comparison/review artifacts, Unity Prefab, generated
+resources, and warnings/approximations. The complete Prefab task includes both
+the analysis stage and Unity generation/inspection.
+
+For an existing usable JSON, start at step 6. Installation details, font
+mapping, and troubleshooting remain in the [Unity exporter reference](Unity/README.md).
+
+## Output artifacts
+
+| Artifact | Purpose |
+| --- | --- |
+| `ui_structure.json` | Engine-oriented UI hierarchy, anchors, geometry, text, and asset references. |
+| `reconstruction.png` | Rendered result from the current structure. |
+| `comparison.png` | Gridded design and reconstruction shown side by side. |
+| `all_elements.png` / `all_elements_legend.json` | Overview of resolved element bounds, paths, and explicit list roles. |
+| `target_*.png` / `target_*_legend.json` | Optional focused evidence for crowded regions. |
+| `render_trace.json` | Resolved bboxes, visible pixels, fonts, layers, and render details. |
+| `validate_report.json` / `visual_audit.json` | Structural and rendered-output diagnostics. |
+| `alignment_review.md` | Human/AI review record for every foreground element. |
+| `completion_report.json` | Native-design analysis completion, coverage, warnings, and approximations. |
+| `workflow_state.json` | Input snapshots, revisions, checks, and resumable workflow state. |
+| `previews/` / `component_review.md` | Alternate size/state/progress/scroll scenarios and their review, separate from native completion. |
+| `measurements/` | Optional local design crops, pixel rulers, and crop/zoom mappings. |
+| `assets/` and `design_grid.*` | Asset inventories, contact sheets, and grid measurements. |
+| Target `.prefab` inside the Unity project | The final editable UGUI Prefab. |
+| Bridge result: `resourceFolder` | Copied images/fonts and native Sprite assets referenced by the Prefab. |
+| Bridge result: `stateObjects` / `warnings` | Actual state hierarchy paths, initial visibility, and import warnings. |
 
 ## Example: Emberfall HUD
 
@@ -56,113 +271,26 @@ The final review used focused evidence to correct the lower-right
 backgrounds ([fire](test/output/target_root_quest_panel_quest_list_fire_quest_background.png),
 [frost](test/output/target_root_quest_panel_quest_list_frost_quest_background.png)).
 
-## Quick start with Codex
+## Highlights
 
-Clone or open this repository in Codex, then ask it to use the skill under
-`image-to-ui/`.
-
-The checked-in example already uses `test/output`. For a new run, always choose
-a fresh output directory:
-
-```text
-Use the image-to-ui skill in this repository.
-The design is test/source/design/emberfall-ui-mockup.png and the sliced assets
-are under test/source/sprites. Reconstruct the UI into test/output-local,
-validate it, review every element, and finalize the task.
-```
-
-Codex follows [`image-to-ui/SKILL.md`](image-to-ui/SKILL.md) and drives the
-workflow from preparation through final review.
-
-## Workflow commands
-
-Normal runs should be driven by the skill. The commands below are useful when
-debugging or inspecting one stage manually. Replace `python` with `py` on
-Windows if needed.
-
-### 1. Prepare a fresh task
-
-```bash
-python -B image-to-ui/scripts/workflow.py prepare --design test/source/design/emberfall-ui-mockup.png --assets test/source/sprites --output test/output-local
-```
-
-This creates the measurement grid, asset inventory, grouped contact sheets,
-and `workflow_state.json`.
-
-### 2. Write the structure
-
-Create `test/output-local/ui_structure.json` using the grid and asset inventory.
-The Codex skill performs this hierarchy and layout work. Every node must include
-`anchor.horizontal` and `anchor.vertical`.
-
-For an older structure, fill missing anchors without changing its bboxes:
-
-```bash
-python -B image-to-ui/scripts/backfill_anchors.py --structure old.json --output upgraded.json
-```
-
-The accepted combinations use horizontal `left` / `center` / `right` and
-vertical `top` / `middle` / `bottom`. See the
-[schema reference](image-to-ui/references/schema.md#anchor-alignment) for the
-selection rules and atomic in-place upgrade form.
-
-### 3. Validate and render
-
-```bash
-python -B image-to-ui/scripts/workflow.py check --output test/output-local
-```
-
-`check` validates the JSON and regenerates the reconstruction, render trace,
-element boxes, visual audit, and side-by-side comparison.
-
-For an ambiguous region, create focused evidence after a successful check:
-
-```bash
-python -B image-to-ui/scripts/workflow.py target --output test/output-local --element-path "root/quest_panel/quest_list"
-```
-
-### 4. Review and finalize
-
-After reviewing every path from `all_elements_legend.json`, write
-`alignment_review.md` with the review binding printed by the latest `check` or
-`target`, then run:
-
-```bash
-python -B image-to-ui/scripts/workflow.py finalize --output test/output-local
-```
-
-The task is complete only when `completion_report.json` contains
-`"complete": true`.
-
-## Output artifacts
-
-| Artifact | Purpose |
-| --- | --- |
-| `ui_structure.json` | Engine-oriented UI hierarchy, anchors, geometry, text, and asset references. |
-| `reconstruction.png` | Rendered result from the current structure. |
-| `comparison.png` | Gridded design and reconstruction shown side by side. |
-| `all_elements.png` / `all_elements_legend.json` | Overview of resolved element bounds, paths, and explicit list roles. |
-| `target_*.png` / `target_*_legend.json` | Optional focused evidence for crowded regions. |
-| `render_trace.json` | Resolved bboxes, visible pixels, fonts, layers, and render details. |
-| `validate_report.json` / `visual_audit.json` | Structural and rendered-output diagnostics. |
-| `alignment_review.md` | Human/AI review record for every foreground element. |
-| `completion_report.json` | Final completion, coverage, warning, and approximation summary. |
-| `workflow_state.json` | Input snapshots, revisions, checks, and resumable workflow state. |
-| `assets/` and `design_grid.*` | Asset inventories, contact sheets, and grid measurements. |
-
-## Input requirements
-
-Each task needs:
-
-1. one native-resolution PNG or JPG design;
-2. one directory of sliced PNG/JPG assets, optionally with Unity metadata and
-   font files;
-3. one fresh output directory dedicated to that design.
-
-For best results, provide every foreground visual as a slice, keep atomic icons
-at their natural aspect ratio, and bundle the intended fonts with the task.
-Intentional substitutions and accepted audit exceptions must be recorded in
-the structure metadata.
+- Grid-based measurement at the design's native resolution, with optional
+  pixel-preserving local crops and absolute-pixel rulers.
+- Transparent sprite padding and alpha-core bounds for more accurate placement.
+- Recursive PNG/JPG sprite inventory with duplicate-name detection and optional
+  Unity `.png.meta` border support.
+- Structured containers, rows, columns, images, text, generated rectangles, and
+  overlays.
+- Linear progress bars with numeric ranges, four fill directions, and label binding.
+- State variants, clipped scroll viewports, responsive edge constraints, and safe areas.
+- Separate previews for canvas size, state, progress value, and scroll offset.
+- Required nine-position anchor alignment metadata on every structure node,
+  with a migration tool for older JSON.
+- Opt-in `list` / `listItem` roles chosen from explicit context or holistic
+  visual semantics, then carried into element annotation legends.
+- Nine-slice rendering, font tracing, tint, opacity, and hue-shift support.
+- Strict structure validation plus visual-audit reports.
+- Side-by-side comparison, element bounding boxes, and focused recheck images.
+- Resumable workflow state and a final `completion_report.json`.
 
 ## Repository layout
 
@@ -172,6 +300,10 @@ image-to-ui/
   agents/openai.yaml
   references/
   scripts/
+Unity/
+  package.json
+  Editor/
+  Tests/
 test/
   source/
     design/

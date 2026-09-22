@@ -87,6 +87,26 @@ def alpha_bbox(img: Image.Image) -> list[int]:
     return [int(v) for v in bbox]
 
 
+def alpha_geometry(img: Image.Image) -> dict[str, Any]:
+    """Separate texture bounds, faint effects, and the more opaque artwork."""
+    alpha = img.convert("RGBA").getchannel("A")
+    bounds = alpha.getbbox()
+    bbox = list(bounds) if bounds else [0, 0, 0, 0]
+    left, top, right, bottom = bbox
+    core = alpha.point([0] * 128 + [255] * 128).getbbox()
+    return {
+        "alpha_bbox": bbox,
+        "alpha_size": [right - left, bottom - top],
+        "alpha_padding": (
+            {"left": left, "top": top, "right": img.width - right,
+             "bottom": img.height - bottom} if bounds else None
+        ),
+        "alpha_core_bbox": list(core) if core else None,
+        "alpha_core_threshold": 128,
+        "fully_transparent": bounds is None,
+    }
+
+
 def collect_assets(assets_dir: Path) -> dict[str, Any]:
     paths = sorted(
         (p for p in assets_dir.rglob("*")
@@ -102,7 +122,7 @@ def collect_assets(assets_dir: Path) -> dict[str, Any]:
         try:
             with Image.open(path) as img:
                 width, height = img.size
-                bbox = alpha_bbox(img)
+                geometry = alpha_geometry(img)
         except Exception as exc:
             print(f"  [warn] failed to read {rel}: {exc}", file=sys.stderr)
             continue
@@ -112,7 +132,7 @@ def collect_assets(assets_dir: Path) -> dict[str, Any]:
             "basename": path.name,
             "width": width,
             "height": height,
-            "alpha_bbox": bbox,
+            **geometry,
             "has_meta_border": border is not None,
             "spriteBorder": border,
             "likely_usage": likely_usage(rel, border),

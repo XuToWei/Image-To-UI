@@ -93,6 +93,15 @@ def _inferred_anchor(
             VERTICAL_ANCHORS,
         ),
     }
+    responsive = node.get("responsive")
+    if responsive:
+        for field, axis, names in (
+            ("horizontal", "x", HORIZONTAL_ANCHORS),
+            ("vertical", "y", VERTICAL_ANCHORS),
+        ):
+            center = (responsive["min"][axis] + responsive["max"][axis]) / 2
+            inferred[field] = min(zip(names, (0, 0.5, 1)), key=lambda item: abs(item[1]-center))[0]
+        return inferred
     layout_type = parent_layout.get("type") if parent_layout else None
     if layout_type == "row":
         vertical = _vertical_hint(

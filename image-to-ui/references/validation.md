@@ -31,6 +31,16 @@ row that cites only overview evidence; cite current `risk_review.png` or a
 covering workflow-generated target. It also rejects changed or stale
 `review_risk.json`, `risk_review.png`, and `risk_review_legend.json`.
 
+Component validation also rejects unresolved variant/child paths, missing
+inactive-state assets, invalid progress ranges, competing responsive/layout
+constraints, non-positive resolved sizes, and invalid scroll offsets. A scroll
+content box may exceed its viewport intentionally; this does not need a
+parent-overflow waiver. Its rendered pixels must remain clipped to the viewport.
+
+`workflow.py preview` validates and audits the selected scenario separately.
+Inspect `previews/<name>/preview_report.json`; these reports do not replace
+native `check`/`finalize` evidence.
+
 ## Common Issues
 
 - Canvas mismatch: set `canvas.width` / `canvas.height` to the design's native

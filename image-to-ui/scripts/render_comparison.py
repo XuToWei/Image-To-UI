@@ -26,6 +26,7 @@ from PIL import Image, ImageDraw, ImageFont, __version__ as PILLOW_VERSION
 
 # Make sibling layout.py importable when run from anywhere
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ui_components as components
 import layout as layout_mod  # noqa: E402
 from annotate_grid import draw_grid, select_grid_palette  # noqa: E402
 
@@ -772,7 +773,8 @@ def append_trace_entry(trace: list[dict] | None, entry: dict) -> None:
 
 def render_element(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int,
                    assets: AssetCache, trace: list[dict] | None = None,
-                   path: str = "root", parent_bbox: list[int] | None = None):
+                   path: str = "root", parent_bbox: list[int] | None = None,
+                   clip_bbox: list[int] | None = None):
     """Recursively render an element and its children onto the canvas.
 
     Position source priority:
@@ -780,6 +782,13 @@ def render_element(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int
          layout/align/offset)
       2. `position` field (legacy / unresolved)
     """
+    output_canvas = canvas
+    own_clip = elem.get("_clip_bbox")
+    if own_clip is not None:
+        clip_bbox = own_clip if clip_bbox is None else components.intersection(clip_bbox, own_clip)
+    if clip_bbox is not None:
+        canvas = Image.new("RGBA", output_canvas.size, (0, 0, 0, 0))
+
     etype = elem.get("type", "container")
     rel = elem.get("_rel")
     if rel is not None:
@@ -808,6 +817,18 @@ def render_element(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int
     }
     if asset_name or (color and etype != "text") or etype == "text":
         entry["visible_bbox"] = None
+    if elem.get("_scroll_content"):
+        entry["scroll_content"] = True
+    if "_scroll_metrics" in elem:
+        entry["scroll"] = elem["_scroll_metrics"]
+    if "_progress_ratio" in elem:
+        entry["progress_ratio"] = elem["_progress_ratio"]
+    if "state" in elem:
+        entry["state"] = elem["state"]["current"]
+    if elem.get("visible", True) is False:
+        entry.update(visible_bbox=None, hidden=True)
+        append_trace_entry(trace, entry)
+        return
     if elem.get("layout"):
         entry["layout"] = elem["layout"]
 
@@ -898,6 +919,22 @@ def render_element(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int
         if entry["text"] is not None:
             entry["visible_bbox"] = entry["text"]["visible_bbox"]
 
+    if clip_bbox is not None:
+        entry["clip_bbox"] = list(clip_bbox)
+        clipped = components.intersection(clip_bbox, [0, 0, *output_canvas.size])
+        left, top, width, height = clipped
+        if width > 0 and height > 0:
+            layer = canvas.crop((left, top, left+width, top+height))
+            visible_bbox, fully_opaque = alpha_layer_metrics(layer, left, top, output_canvas.size)
+            output_canvas.alpha_composite(layer, (left, top))
+        else:
+            visible_bbox, fully_opaque = None, False
+        if "visible_bbox" in entry:
+            entry["visible_bbox"] = visible_bbox
+            entry["fully_opaque"] = fully_opaque
+        if entry.get("text") is not None:
+            entry["text"]["visible_bbox"] = visible_bbox
+        canvas = output_canvas
     append_trace_entry(trace, entry)
 
     # Recurse into children
@@ -912,6 +949,7 @@ def render_element(canvas: Image.Image, elem: dict, origin_x: int, origin_y: int
             trace,
             f"{path}/{child_name}",
             [ax, ay, w, h],
+            clip_bbox,
         )
 
 
@@ -948,6 +986,7 @@ def build_side_by_side(design_img: Image.Image, reconstruction: Image.Image,
 def render_from_structure(structure: dict, assets: AssetCache,
                           background: tuple[int, int, int, int],
                           trace: list[dict] | None = None) -> Image.Image:
+    structure = components.snapshot(structure)
     canvas_info = structure.get("canvas", {})
     cw = int(canvas_info.get("width", 720))
     ch = int(canvas_info.get("height", 1560))

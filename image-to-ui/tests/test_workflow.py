@@ -143,6 +143,115 @@ class WorkflowIntegrationTests(unittest.TestCase):
             evidence,
         )])
 
+    def test_measure_before_authoring_preserves_prepared_state(self) -> None:
+        self.prepare()
+        before = (self.output / "workflow_state.json").read_bytes()
+        self.run_workflow(
+            "measure", "--output", str(self.output),
+            "--region", "13", "17", "21", "19", "--zoom", "3",
+        )
+        region = self.output / "measurements" / "region_13_17_21_19"
+        metrics = json.loads((region / "metrics.json").read_text(encoding="utf-8"))
+        with Image.open(region / "design.png") as crop:
+            self.assertEqual(crop.size, (63, 57))
+        self.assertEqual(metrics["region"], {"x": 13, "y": 17, "width": 21, "height": 19})
+        self.assertEqual(metrics["design_sha256"], self.read_state()["inputs"]["design"]["sha256"])
+        self.assertEqual((self.output / "workflow_state.json").read_bytes(), before)
+        self.assertFalse((self.output / "ui_structure.json").exists())
+
+    def test_measure_rejects_inputs_changed_after_prepare(self) -> None:
+        self.prepare()
+        Image.new("RGB", (64, 64), "red").save(self.design)
+        result = self.run_workflow(
+            "measure", "--output", str(self.output),
+            "--region", "0", "0", "10", "10", expect_success=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Rerun prepare", result.stderr)
+        self.assertFalse((self.output / "measurements").exists())
+
+    def test_measure_preserves_checked_render_and_review_binding(self) -> None:
+        self.prepare()
+        self.write_structure([{
+            "type": "rect", "name": "probe",
+            "position": {"x": 10, "y": 10},
+            "size": {"width": 20, "height": 20}, "color": "#FFFFFF",
+        }])
+        self.run_workflow("check", "--output", str(self.output))
+        self.write_valid_review()
+        before = self.review_binding_comment()
+        self.run_workflow(
+            "measure", "--output", str(self.output),
+            "--region", "5", "5", "30", "30",
+        )
+        self.assertEqual(self.review_binding_comment(), before)
+        self.run_workflow("finalize", "--output", str(self.output))
+        self.assertEqual(self.read_state()["status"], "completed")
+
+    def test_component_preview_preserves_native_evidence_and_rejects_bad_states(self) -> None:
+        self.prepare()
+        self.write_structure([{
+            "type": "container", "name": "meter",
+            "position": {"x": 10, "y": 10}, "size": {"width": 44, "height": 10},
+            "responsive": {
+                "min": {"x": 0, "y": 0}, "max": {"x": 1, "y": 0},
+                "offsetMin": {"x": 10, "y": 10}, "offsetMax": {"x": -10, "y": 20},
+            },
+            "progress": {"fill": "fill", "value": 1, "direction": "left-to-right"},
+            "state": {"current": "normal", "variants": {
+                "normal": {}, "selected": {"track": {"color": "#FF0000"}},
+            }},
+            "children": [
+                {
+                    "type": "rect", "name": name, "color": color,
+                    "size": {"width": 44, "height": 10},
+                    "responsive": {
+                        "min": {"x": 0, "y": 0}, "max": {"x": 1, "y": 1},
+                        "offsetMin": {"x": 0, "y": 0}, "offsetMax": {"x": 0, "y": 0},
+                    },
+                }
+                for name, color in (("track", "#303030"), ("fill", "#00FF00"))
+            ],
+        }])
+        self.run_workflow("check", "--output", str(self.output))
+        original = (self.output / "ui_structure.json").read_bytes()
+        baseline = (self.output / "reconstruction.png").read_bytes()
+        binding = self.review_binding_comment()
+        self.run_workflow(
+            "preview", "--output", str(self.output), "--name", "wide-half",
+            "--size", "100", "80", "--progress", "root/meter=0.5",
+            "--state", "root/meter=selected",
+        )
+        preview = self.output / "previews" / "wide-half"
+        with Image.open(preview / "reconstruction.png") as image:
+            self.assertEqual(image.size, (100, 80))
+            self.assertEqual(image.getpixel((49, 15)), (0, 255, 0, 255))
+            self.assertEqual(image.getpixel((50, 15)), (255, 0, 0, 255))
+        report = json.loads((preview / "preview_report.json").read_text(encoding="utf-8"))
+        self.assertTrue(report["valid"])
+        self.assertEqual((self.output / "ui_structure.json").read_bytes(), original)
+        self.assertEqual((self.output / "reconstruction.png").read_bytes(), baseline)
+        self.assertEqual(self.review_binding_comment(), binding)
+        result = self.run_workflow(
+            "preview", "--output", str(self.output), "--name", "wide-half",
+            "--state", "root/meter=missing", expect_success=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse((preview / "reconstruction.png").exists())
+        self.assertFalse((preview / "preview_report.json").exists())
+        self.assertEqual(self.read_state()["status"], "checked")
+        self.run_workflow("preview", "--output", str(self.output), "--name", "wide-half")
+        invalid_number = self.run_workflow(
+            "preview", "--output", str(self.output), "--name", "wide-half",
+            "--progress", "root/meter=not-a-number", expect_success=False,
+        )
+        self.assertNotEqual(invalid_number.returncode, 0)
+        self.assertFalse((preview / "preview_report.json").exists())
+        self.assertFalse((preview / "reconstruction.png").exists())
+        self.run_workflow("preview", "--output", str(self.output), "--name", "wide-half")
+        self.run_workflow("check", "--output", str(self.output))
+        self.assertFalse((preview / "preview_report.json").exists())
+
     def test_check_and_finalize_record_hashes_and_review_coverage(self) -> None:
         self.prepare()
         structure = {

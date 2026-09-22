@@ -20,10 +20,10 @@ All-elements mode:
     Use this as the first pass to find large drift cheaply, then inspect only
     suspicious elements separately.
 
-No zoom crop is produced - a zoom centered on the current bbox can't find the
-element when the initial position is far off (chicken-and-egg). When you need
-more pixel detail for fine alignment, iterate on the full annotated image and
-trust the bbox-vs-element comparison there.
+This overview stays on the full canvas so an incorrect draft bbox cannot hide
+the actual element. For fine alignment, use workflow.py measure on a region
+selected from the design overview, including neighboring landmarks. Its clean
+crop and absolute-pixel rulers preserve detail that a scaled overview loses.
 
 Usage:
     py -B annotate_element.py \
@@ -53,6 +53,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 # Make the sibling layout.py importable when this script is run from anywhere
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ui_components as components
 import layout as layout_mod  # noqa: E402
 from annotate_grid import draw_grid, select_grid_palette  # noqa: E402
 
@@ -218,7 +219,7 @@ def main():
     if not struct_path.exists():
         print(f"Structure not found: {struct_path}", file=sys.stderr); sys.exit(1)
 
-    structure = json.loads(struct_path.read_text(encoding="utf-8"))
+    structure = components.snapshot(json.loads(struct_path.read_text(encoding="utf-8")))
     layout_mod.resolve_positions(structure)
 
     if args.all_elements and args.element_path:

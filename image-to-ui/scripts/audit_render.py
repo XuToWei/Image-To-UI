@@ -292,7 +292,8 @@ def audit_trace(
         ):
             overflow = bbox_overflow(bbox, parent_bbox)
             max_overflow = max(overflow.values())
-            if max_overflow > PARENT_OVERFLOW_WARNING_PX:
+            if (max_overflow > PARENT_OVERFLOW_WARNING_PX
+                    and not item.get("scroll_content") and not item.get("hidden")):
                 issues.append(issue(
                     "warning",
                     "parent_overflow",

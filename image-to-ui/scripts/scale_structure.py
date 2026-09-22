@@ -27,7 +27,7 @@ from typing import Any
 from PIL import Image
 
 
-XY_FIELDS = {"position", "offset", "padding"}
+XY_FIELDS = {"position", "offset", "padding", "offsetMin", "offsetMax"}
 SIZE_FIELDS = {"size"}
 TEXT_FIELDS = {"fontSize", "lineHeight", "strokeWidth"}
 
@@ -62,6 +62,9 @@ def scale_structure(obj: Any, sx: float, sy: float,
         if context in XY_FIELDS | SIZE_FIELDS:
             return _scale_axis_dict(obj, sx, sy)
 
+        if context == "safeArea":
+            return {key: _scale_number(value, sx if key in {"left", "right"} else sy)
+                    for key, value in obj.items()}
         out = {}
         layout_type = obj.get("type", "row") if context == "layout" else None
         for key, value in obj.items():

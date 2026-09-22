@@ -1,0 +1,10 @@
+{
+  "name": "ImageToUI.Tests",
+  "rootNamespace": "ImageToUI.Tests",
+  "references": ["ImageToUI.Editor", "AgentBridge.Editor", "Unity.ugui"],
+  "includePlatforms": ["Editor"],
+  "overrideReferences": true,
+  "precompiledReferences": ["Newtonsoft.Json.dll"],
+  "autoReferenced": false,
+  "optionalUnityReferences": ["TestAssemblies"]
+}

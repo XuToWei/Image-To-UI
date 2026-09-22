@@ -1,6 +1,7 @@
 """Run the reliable image-to-ui workflow.
 
-Use ``prepare`` before writing ui_structure.json, then ``check`` for every
+Use ``prepare`` before writing ui_structure.json and optional ``measure`` for
+pixel-preserving local crops, then ``check`` for every
 review iteration. ``target`` creates focused bbox images when the overview is
 too crowded. Both validation paths refresh comparison.png and its same-pass
 diagnostics. ``finalize`` verifies review coverage and accepted approximations.
@@ -37,6 +38,8 @@ CRITICAL_SCRIPT_NAMES = (
     "validate_structure.py",
     "backfill_anchors.py",
     "layout.py",
+    "ui_components.py",
+    "preview_components.py",
     "render_comparison.py",
     "annotate_element.py",
     "audit_render.py",
@@ -240,6 +243,10 @@ def unlink_if_exists(path: Path) -> None:
 def clean_prepare_artifacts(output: Path) -> None:
     unlink_if_exists(output / "design_grid.png")
     unlink_if_exists(output / "design_grid_metrics.json")
+    for directory in (output / "measurements").glob("region_*"):
+        if directory.is_dir():
+            for name in ("design.png", "design_grid.png", "metrics.json"):
+                unlink_if_exists(directory / name)
     assets_output = output / "assets"
     if assets_output.is_dir():
         unlink_if_exists(assets_output / "assets_inventory.json")
@@ -248,6 +255,10 @@ def clean_prepare_artifacts(output: Path) -> None:
 
 
 def clean_check_artifacts(output: Path) -> None:
+    for directory in (output / "previews").glob("*"):
+        if directory.is_dir():
+            for name in ("reconstruction.png", "render_trace.json", "preview_report.json"):
+                unlink_if_exists(directory / name)
     for name in (
         "validate_report.json",
         "all_elements.png",
@@ -366,6 +377,37 @@ def prepare(args: argparse.Namespace) -> None:
     write_json_atomic(state_path, state)
     print(f"\nPrepared task: {output}")
     print(f"Write structure: {output / 'ui_structure.json'}")
+
+
+def measure(args: argparse.Namespace) -> None:
+    """Measure prepared design pixels without requiring or changing a draft."""
+    check_dependencies()
+    output = resolved(args.output)
+    state = read_state(output)
+    if state.get("status") in {"preparing", "prepare_failed"}:
+        raise WorkflowError("Prepare must succeed before measuring the design.")
+    design_value = state.get("inputs", {}).get("design", {}).get("path")
+    assets_value = state.get("inputs", {}).get("assets", {}).get("path")
+    if not isinstance(design_value, str) or not isinstance(assets_value, str):
+        raise WorkflowError("Prepared input paths are missing. Rerun prepare.")
+    design, assets = resolved(design_value), resolved(assets_value)
+    require_file(design, "Design image")
+    require_dir(assets, "Assets directory")
+    ensure_inputs_current(state, design, assets)
+    region_name = "region_" + "_".join(str(value) for value in args.region)
+    destination = output / "measurements" / region_name
+    run_script(
+        "measure_region.py", "--design", str(design), "--output", str(destination),
+        "--region", *(str(value) for value in args.region),
+        "--zoom", str(args.zoom), "--cell-size", str(args.cell_size),
+    )
+    ensure_inputs_current(state, design, assets)
+    metrics_path = destination / "metrics.json"
+    metrics = read_json_file(metrics_path, "measurement metrics")
+    metrics["design_sha256"] = state["inputs"]["design"]["sha256"]
+    write_json_atomic(metrics_path, metrics)
+    print("Rulers use absolute design pixels. Read metrics.json for crop/zoom offsets.")
+    print("Measurement does not change workflow status or replace check/target evidence.")
 
 
 def checked_context(
@@ -790,6 +832,29 @@ def check(args: argparse.Namespace) -> None:
 def safe_slug(value: str) -> str:
     slug = re.sub(r"[^A-Za-z0-9._-]+", "_", value).strip("._-")
     return (slug or "element")[-120:]
+
+
+def preview(args: argparse.Namespace) -> None:
+    output, design, assets, structure, state = checked_context(args.output, args.structure)
+    if state.get("status") not in {"checked", "completed"}:
+        raise WorkflowError("Run a successful full check before component previews.")
+    verify_check_artifacts(output, state)
+    verify_render_dependencies(output, state)
+    arguments = [
+        "--structure", str(structure), "--design", str(design), "--assets", str(assets),
+        "--inventory", str(output / "assets" / "assets_inventory.json"),
+        "--output", str(output / "previews" / safe_slug(args.name)),
+    ]
+    if args.size:
+        arguments.extend(["--size", *(str(value) for value in args.size)])
+    for option, values in (("--state", args.state), ("--progress", args.progress), ("--scroll", args.scroll)):
+        for value in values or []:
+            arguments.extend([option, value])
+    if state.get("check", {}).get("transparent_bg"):
+        arguments.append("--transparent-bg")
+    run_script("preview_components.py", *arguments)
+    ensure_inputs_current(state, design, assets)
+    print("Native comparison and review binding are unchanged; inspect this scenario separately.")
 
 
 def target(args: argparse.Namespace) -> None:
@@ -1642,6 +1707,16 @@ def build_parser() -> argparse.ArgumentParser:
     prepare_parser.add_argument("--output", required=True)
     prepare_parser.set_defaults(handler=prepare)
 
+    measure_parser = commands.add_parser(
+        "measure", help="Crop a selected design region with absolute pixel rulers"
+    )
+    measure_parser.add_argument("--output", required=True)
+    measure_parser.add_argument("--region", type=int, nargs=4, required=True,
+                                metavar=("X", "Y", "WIDTH", "HEIGHT"))
+    measure_parser.add_argument("--zoom", type=int, default=3)
+    measure_parser.add_argument("--cell-size", type=int, default=10)
+    measure_parser.set_defaults(handler=measure)
+
     check_parser = commands.add_parser(
         "check", help="Validate, annotate all bboxes, and render a comparison"
     )
@@ -1656,6 +1731,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="Accept validation warnings after they have been reviewed",
     )
     check_parser.set_defaults(handler=check)
+
+    preview_parser = commands.add_parser(
+        "preview", help="Render a checked structure at another size/state/progress/scroll position"
+    )
+    preview_parser.add_argument("--output", required=True)
+    preview_parser.add_argument("--structure")
+    preview_parser.add_argument("--name", required=True, help="Scenario output folder name")
+    preview_parser.add_argument("--size", nargs=2, type=int, metavar=("WIDTH", "HEIGHT"))
+    preview_parser.add_argument("--state", action="append", help="PATH=VARIANT, repeatable")
+    preview_parser.add_argument("--progress", action="append", help="PATH=VALUE, repeatable")
+    preview_parser.add_argument("--scroll", action="append", help="PATH=X,Y, repeatable")
+    preview_parser.set_defaults(handler=preview)
 
     target_parser = commands.add_parser(
         "target", help="Validate, refresh comparison, and annotate focused bboxes"

@@ -26,6 +26,8 @@ from typing import Any
 
 from PIL import Image
 
+import ui_components as components
+
 
 IMAGE_EXTS = {".png", ".jpg", ".jpeg"}
 ELEMENT_TYPES = {"container", "image", "text", "button", "overlay", "rect"}
@@ -406,7 +408,7 @@ def validate_tree(
     if "position" in elem:
         stats["positioned"] += 1
         check_xy_dict(elem["position"], path, "position", reporter)
-    elif parent_layout_type is None and path != "root" and not (elem.get("align") or elem.get("vAlign")):
+    elif parent_layout_type is None and path != "root" and not (elem.get("align") or elem.get("vAlign") or "responsive" in elem):
         reporter.warn(path, "missing position outside layout/alignment derivation")
 
     if parent_layout_type == "row" and "align" in elem:
@@ -569,7 +571,7 @@ def validate_tree(
         )
 
 
-def validate_structure(structure: dict[str, Any], design_path: Path, assets_dir: Path) -> tuple[Reporter, dict[str, int]]:
+def validate_structure(structure: dict[str, Any], design_path: Path | None, assets_dir: Path) -> tuple[Reporter, dict[str, int]]:
     reporter = Reporter()
     stats = {
         "anchored": 0,
@@ -589,7 +591,7 @@ def validate_structure(structure: dict[str, Any], design_path: Path, assets_dir:
         for key in ("width", "height"):
             if key not in canvas or not positive_number(canvas[key]):
                 reporter.error("canvas", f"{key} must be a positive number")
-        if design_path.exists() and positive_number(canvas.get("width")) and positive_number(canvas.get("height")):
+        if design_path is not None and design_path.exists() and positive_number(canvas.get("width")) and positive_number(canvas.get("height")):
             with Image.open(design_path) as img:
                 if (int(canvas["width"]), int(canvas["height"])) != img.size:
                     reporter.error(
@@ -617,6 +619,19 @@ def validate_structure(structure: dict[str, Any], design_path: Path, assets_dir:
         set(),
         stats,
     )
+    if not reporter.errors:
+        try:
+            components.validate_components(structure)
+            for variant_path, merged, parent_layout, parent_role in components.state_patch_nodes(structure):
+                validate_tree(
+                    merged, variant_path, parent_layout, parent_role, reporter,
+                    asset_index, duplicate_basenames, asset_borders, set(),
+                    {key: 0 for key in stats},
+                )
+            import layout
+            layout.resolve_positions(components.snapshot(structure))
+        except (components.ComponentError, ValueError) as exc:
+            reporter.error("components", str(exc))
     return reporter, stats
 
 

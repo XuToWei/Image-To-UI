@@ -37,7 +37,10 @@ child needs a fully independent position.
 Backwards compatibility:
   - Required `anchor` metadata describes attachment intent but does not alter
     bbox resolution; `position` remains parent-relative top-left coordinates.
-  - Elements without layout/align use their explicit `position` field as before.
+  - Optional `responsive` normalized edges and pixel offsets drive actual size
+    adaptation. They cannot compete with a parent layout or child alignment.
+  - Scroll content is translated and annotated with its viewport clip.
+  - Elements without layout/align/responsive use explicit `position` as before.
   - This module never deletes or overwrites authored fields; it only annotates
     the tree with `_abs` for downstream consumers.
 """
@@ -45,6 +48,9 @@ Backwards compatibility:
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional, Tuple
+
+
+import ui_components as components
 
 
 LAYOUT_TYPES = {"row", "column"}
@@ -157,7 +163,7 @@ def _resolve_alignment(elem: dict, parent_w: int, parent_h: int
 # Layout group resolution (row / column).
 # ---------------------------------------------------------------------------
 
-def _layout_group(parent: dict, layout: dict) -> List[Tuple[int, int]]:
+def _layout_group(parent: dict, layout: dict, parent_size=None) -> List[Tuple[int, int]]:
     """Compute (x, y) for each child of `parent` according to `layout`.
     Returns a list aligned with `_children(parent)`.
 
@@ -168,7 +174,7 @@ def _layout_group(parent: dict, layout: dict) -> List[Tuple[int, int]]:
     if not children:
         return []
 
-    pw, ph = _get_size(parent)
+    pw, ph = parent_size or _get_size(parent)
     pad_x, pad_y = _get_padding(layout)
     inner_w = max(0, pw - 2 * pad_x)
     inner_h = max(0, ph - 2 * pad_y)
@@ -261,53 +267,58 @@ def _layout_group(parent: dict, layout: dict) -> List[Tuple[int, int]]:
 # ---------------------------------------------------------------------------
 
 def resolve_positions(structure: dict) -> dict:
-    """Annotate every element in the tree with `_abs` = [x, y, w, h] in
-    canvas coordinates. Returns the same dict (mutated). Safe to call
-    multiple times; later calls recompute from current authored fields.
-
-    For each element we attach:
-        elem["_abs"] = [abs_x, abs_y, w, h]
-        elem["_rel"] = [rel_x, rel_y, w, h]   # relative to parent
-    """
+    """Resolve authored geometry and optional responsive/scroll constraints."""
     root = structure.get("root", {})
-
-    def walk(elem: dict, parent_abs_x: int, parent_abs_y: int,
-             parent_w: int, parent_h: int):
-        has_layout = "layout" in elem
-        layout = elem.get("layout")
-        children = _children(elem)
-
-        # Precompute child positions when this element drives a layout.
-        layout_positions: Optional[List[Tuple[int, int]]] = None
-        if has_layout:
-            _layout_type(layout)
-            if children:
-                layout_positions = _layout_group(elem, layout)
-
-        for i, child in enumerate(children):
-            cw, ch = _get_size(child)
-            if has_layout and layout_positions is not None:
-                rx, ry = layout_positions[i]
-            else:
-                rx, ry = _resolve_alignment(child, _get_size(elem)[0], _get_size(elem)[1])
-
-            ax = parent_abs_x + rx
-            ay = parent_abs_y + ry
-            child["_rel"] = [rx, ry, cw, ch]
-            child["_abs"] = [ax, ay, cw, ch]
-            walk(child, ax, ay, cw, ch)
-
-    # Root: use authored position/size; default to canvas size.
     canvas = structure.get("canvas") or {}
-    cw = _to_int(canvas.get("width"))
-    ch = _to_int(canvas.get("height"))
+    for _, node in components.nodes(root):
+        for field in components.RUNTIME_FIELDS:
+            node.pop(field, None)
+
+    def walk(elem, ax, ay, pw, ph):
+        children = _children(elem)
+        has_layout = "layout" in elem
+        positions = None
+        if has_layout:
+            _layout_type(elem["layout"])
+            positions = _layout_group(elem, elem["layout"], (pw, ph))
+        for index, child in enumerate(children):
+            cw, ch = _get_size(child)
+            if "responsive" in child:
+                rx, ry, cw, ch = components.responsive_box(
+                    child["responsive"], pw, ph, canvas.get("safeArea", {}),
+                )
+            elif positions is not None:
+                rx, ry = positions[index]
+            else:
+                rx, ry = _resolve_alignment(child, pw, ph)
+            scroll = elem.get("scroll")
+            if scroll and child.get("name") == scroll["content"]:
+                if rx != 0 or ry != 0:
+                    raise components.ComponentError("scroll content must start at viewport (0, 0)")
+                extent_x, extent_y = max(0, cw-pw), max(0, ch-ph)
+                desired = scroll.get("offset", {})
+                sx = min(extent_x, max(0, _to_int(desired.get("x"))))
+                sy = min(extent_y, max(0, _to_int(desired.get("y"))))
+                rx -= sx
+                ry -= sy
+                child["_scroll_content"] = True
+                child["_clip_bbox"] = [ax, ay, pw, ph]
+                elem["_scroll_metrics"] = {
+                    "offset": {"x": sx, "y": sy},
+                    "extent": {"x": extent_x, "y": extent_y},
+                }
+            child["_rel"] = [rx, ry, cw, ch]
+            child["_abs"] = [ax+rx, ay+ry, cw, ch]
+            walk(child, ax+rx, ay+ry, cw, ch)
+
     rw, rh = _get_size(root)
-    if rw == 0: rw = cw
-    if rh == 0: rh = ch
+    rw = rw or _to_int(canvas.get("width"))
+    rh = rh or _to_int(canvas.get("height"))
     rx, ry = _get_position(root)
     root["_rel"] = [rx, ry, rw, rh]
     root["_abs"] = [rx, ry, rw, rh]
     walk(root, rx, ry, rw, rh)
+    components.apply_progress_clips(structure)
     return structure
 
 

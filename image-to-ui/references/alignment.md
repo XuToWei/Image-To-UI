@@ -107,9 +107,10 @@ Compare bbox edges to the actual element using grid lines.
   directly to the element's parent-relative position.
 - **Skip**: element is hidden, occluded, or not judgeable.
 
-Regenerate `out/all_elements.png` when a parent/container or several elements
-changed. Regenerate only the targeted image for one leaf edit. Cap targeted
-rechecks at 3 iterations per element.
+Cap targeted rechecks at 3 iterations per element. When the full-canvas view
+cannot resolve an edge, use `workflow.py measure` on a design-selected region;
+see [measurement.md](measurement.md). Keep the clean crop beside the ruler
+image so annotations do not hide the actual feature.
 
 After each JSON edit, rerun `workflow.py check`; this refreshes validation,
 bboxes, comparison, reconstruction, trace, and audit as one consistent set. If
@@ -125,13 +126,20 @@ Use group-level fixes first:
 - Bbox aligned but rendered pixels look wrong later: inspect render fields and
   assets before changing coordinates.
 
+For progress fills and scroll descendants, the node bbox describes full
+geometry while trace `visible_bbox` reflects clipping. Verify the clip boundary
+and effective value/offset as well as the outer box. Hidden state children and
+fully clipped content still appear in the bbox legend; use an explained skipped
+row for the native state and inspect their visible alternate scenario separately.
+
 ## Derived Positioning
 
 Prefer derived positioning where the design intent supports it:
 
 - Give every node an `anchor` describing the parent edge or center it should
   remain attached to. This metadata is required but does not itself move the
-  bbox in the verifier.
+  bbox in the verifier. Use `responsive` constraints when attachment must
+  affect geometry; see [components.md](components.md).
 - Use `layout` for similar siblings in a row or column.
 - Use `align` / `vAlign` for centered or edge-aligned elements.
 - Use explicit `position` only for free placements.
@@ -182,15 +190,15 @@ coordinates automatically.
 
 ## Precision Expectations
 
-Large images may be downscaled by the image inspection tool. With the grid
-overlay, expect roughly:
+Large images and tall evidence sheets may be downscaled by the inspection
+tool. Treat the global grid as a first placement pass, not proof of pixel-level
+alignment. Use local measurement crops when a feature is too small to judge;
+a 15 px error on a 30 px icon is not an acceptable final tolerance.
 
-- Large elements over 150 px: about +/-5 px.
-- Medium elements 60-150 px: about +/-10 px.
-- Small elements under 60 px: about +/-15 px.
-
-For final native-size review, also require large-element edges within 5 px,
-major color-band boundaries within 3 px, repeated sibling center spacing within
+Aim for final native-size edge errors within 5 px for large elements, 3 px for
+medium elements, and 2 px for small icons when the supplied artwork matches.
+Compare the corresponding visible alpha/core edges, not the padded texture
+rectangle. Also check major color-band boundaries within 3 px, repeated sibling center spacing within
 2 px, and flat-color RGB channels within 3 where the same material is expected.
 Text review uses trace ink rather than its box: line ink edges should normally
 be within 3 px and the vertical center/baseline within 2 px. When the supplied
