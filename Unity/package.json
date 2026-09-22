@@ -1,7 +1,7 @@
 {
-  "name": "com.image-to-ui.unity",
+  "name": "me.xw.imagetoui",
   "version": "0.1.0",
-  "displayName": "Image to UI Prefab Builder",
+  "displayName": "Image to UI",
   "description": "Build UGUI prefabs from ui_structure.json through Unity Agent Bridge.",
   "unity": "2022.3",
   "dependencies": {

@@ -82,7 +82,7 @@ namespace ImageToUI.Tests
                 Assert.IsFalse(component.GetType().Assembly.GetName().Name.StartsWith("ImageToUI", StringComparison.Ordinal), component.GetType().FullName);
             }
             var dependencies = AssetDatabase.GetDependencies(path, true);
-            Assert.IsFalse(dependencies.Any(p => p.StartsWith("Packages/com.image-to-ui.unity/", StringComparison.Ordinal)), string.Join("\n", dependencies));
+            Assert.IsFalse(dependencies.Any(p => p.StartsWith("Packages/me.xw.imagetoui/", StringComparison.Ordinal)), string.Join("\n", dependencies));
             Assert.IsFalse(File.ReadAllText(path).Contains("m_StructureJson"));
         }
 

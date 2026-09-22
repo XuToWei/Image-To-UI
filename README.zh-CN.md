@@ -54,7 +54,7 @@ Windows 上也可使用 `py` 代替 `python`。
 {
   "dependencies": {
     "me.xw.unityagentbridge": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
-    "com.image-to-ui.unity": "https://github.com/XuToWei/Image-To-UI.git?path=Unity"
+    "me.xw.imagetoui": "https://github.com/XuToWei/Image-To-UI.git?path=Unity"
   }
 }
 ```

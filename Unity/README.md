@@ -51,7 +51,7 @@ https://github.com/XuToWei/Image-To-UI.git?path=Unity
 {
   "dependencies": {
     "me.xw.unityagentbridge": "https://github.com/XuToWei/UnityAgentBridge.git?path=Unity",
-    "com.image-to-ui.unity": "https://github.com/XuToWei/Image-To-UI.git?path=Unity"
+    "me.xw.imagetoui": "https://github.com/XuToWei/Image-To-UI.git?path=Unity"
   }
 }
 ```
@@ -217,7 +217,7 @@ states.Find("selected").gameObject.SetActive(true);
 
 ## 测试
 
-在工程 manifest 的 `testables` 中加入 `com.image-to-ui.unity`，
+在工程 manifest 的 `testables` 中加入 `me.xw.imagetoui`，
 运行 EditMode 的 `ImageToUI.Tests`。测试实际保存、重新加载 Prefab，并检查状态分支、
 显隐、嵌套覆盖、进度裁剪、滚动、原生锚点、资源持久化和场景隔离，还会断言生成物
 没有本导入器的脚本或资源依赖。完整仓库可用时会导入 71 节点 Emberfall 案例。
