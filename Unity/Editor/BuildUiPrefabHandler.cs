@@ -32,7 +32,13 @@ namespace ImageToUI.Editor
             ["properties"] = new JObject
             {
                 ["structurePath"] = new JObject { ["type"] = "string", ["description"] = "ui_structure.json 的绝对路径或 Unity 工程相对路径" },
-                ["assetsPath"] = new JObject { ["type"] = "string", ["description"] = "切图根目录；支持工程内或外部目录，只复制被引用的资源" },
+                ["assetsPath"] = new JObject
+                {
+                    ["oneOf"] = new JArray(
+                        new JObject { ["type"] = "string", ["minLength"] = 1 },
+                        new JObject { ["type"] = "array", ["minItems"] = 1, ["items"] = new JObject { ["type"] = "string", ["minLength"] = 1 } }),
+                    ["description"] = "一个切图目录字符串或非空目录字符串数组；重叠目录去重，同名歧义须用唯一相对路径消歧。优先引用 Assets/Packages 资源，复用导入和派生资源。"
+                },
                 ["prefabPath"] = new JObject { ["type"] = "string", ["description"] = "目标 Prefab，必须是 Assets/ 下的 .prefab 路径" },
                 ["fontMap"] = new JObject { ["type"] = "object", ["description"] = "可选：fontFamily 字符串到字体文件路径的映射" },
                 ["defaultFontPath"] = new JObject { ["type"] = "string", ["description"] = "可选：找不到指定字体时使用的字体文件" },

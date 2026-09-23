@@ -369,7 +369,7 @@ class StructureValidationTests(unittest.TestCase):
                 )
 
     def test_layout_rejects_invalid_explicit_types(self) -> None:
-        for layout_type in (None, "grid", [], True):
+        for layout_type in (None, "diagonal", [], True):
             with self.subTest(layout_type=layout_type):
                 reporter = self.validate_layout({"type": layout_type})
 
@@ -388,7 +388,7 @@ class StructureValidationTests(unittest.TestCase):
             None,
             False,
             {"type": None},
-            {"type": "grid"},
+            {"type": "diagonal"},
             {"type": []},
             {"type": True},
         )
@@ -518,7 +518,7 @@ class StructureValidationTests(unittest.TestCase):
                     "color": "#FFFFFF",
                     "children": [],
                 },
-                "role list requires a row or column layout",
+                "role list requires a row or column or grid layout",
             ),
             (
                 {

@@ -25,6 +25,36 @@ clipped list without proving all states, the numeric range, or total item count.
 - Record unavailable state artwork, unreadable values, and unsupported
   behavior as an approximation or uncertainty on the owning component.
 
+## Decide stretching from the overall composition
+
+Use one criterion for every region: after the interface resolution or aspect
+ratio changes, does filling the available space improve the overall visual
+balance and interaction layout, or does keeping the current extent do so?
+Apply this to ordinary containers, non-scrolling lists, scroll viewports,
+navigation groups, panels, and backgrounds. Scrolling describes how content
+moves; list roles describe repetition. Neither decides whether a region stretches.
+
+Evaluate horizontal and vertical axes separately in relation to neighboring
+regions. Look for awkward empty strips, broken edge alignment, crowded or
+excessive gaps, imbalance, clipped labels, and cramped or displaced interaction
+areas. Choose fixed size, one-axis stretch, or two-axis stretch from those
+observations. Intentional whitespace and fixed-size artwork can be essential
+to the composition; filling every free pixel is not the goal.
+
+A non-scrolling list may need its container to fill the space between a header
+and footer and distribute its items evenly. A scrolling list in a compact
+fixed-size popup may keep a fixed viewport. These are layout decisions, not
+rules attached to the presence or absence of `scroll`. Resizing a container
+does not imply deforming its icons, text, or item artwork: use suitable anchors,
+spacing, and stretchable backgrounds within it.
+
+Compare the full interface at smaller/larger intended resolutions and at a
+changed aspect ratio. Record each significant region's chosen axes and the
+visual/interaction reason in `component_review.md`, including regions kept
+fixed. Express the decision with `responsive` and layout fields below; do not
+add scrolling merely to obtain stretching. If the desired reflow cannot be
+represented by these fields, record that engine behavior explicitly.
+
 ## Responsive rectangles
 
 Keep the required nine-position `anchor` metadata for attachment intent.
@@ -65,8 +95,8 @@ min=max=(0.5,0.5), offsetMin=(-60,-20), offsetMax=(60,20). The node's required
 `responsive` controls the resolved preview rectangle.
 
 A responsive node cannot also have `align`, `vAlign`, or `offset`, or be a
-direct child of a row/column layout: two systems would own its position. A
-responsive container **can contain** a row/column layout; the children then
+direct child of a row/column/grid layout: two systems would own its position. A
+responsive container **can contain** a row/column/grid layout; the children then
 use its resolved size. A child that should stretch with that container also
 needs responsive constraints; attachment is not inherited automatically.
 
@@ -81,7 +111,45 @@ These fields are not a direct copy of Unity RectTransform: adapters must
 convert the y-axis convention and choose the engine pivot. The verifier uses
 edge constraints and does not expose an implicit pivot.
 
+### Examples after choosing the size-adaptation behavior
+
+When the composition calls for a centered, fixed-size illustration, keep its
+native rectangle as the parent changes. For the 1672 x 941 background in this
+example, use
+`anchor={"horizontal":"center","vertical":"middle"}` and keep that `size`.
+For explicit preview constraints use `responsive.min=max=(0.5,0.5)`,
+`offsetMin=(-836,-470.5)`, `offsetMax=(836,470.5)`. This centers without stretching.
+Do not substitute min=(0,0), max=(1,1): that distorts the artwork as the parent
+aspect changes. Cropping/cover scaling is a separate requirement; do not infer
+it just from a full-screen image. The structural root still follows the canvas.
+
+When a region should fill the available rectangle with left/top/right/bottom
+margins L/T/R/B, use `responsive.min=(0,0)`, `max=(1,1)`,
+`offsetMin=(L,T)`, `offsetMax=(-R,-B)`. This applies equally to a non-scrolling
+list container or a scroll viewport. Stretch only the chosen axes; for example,
+a fixed-width side panel can attach to the right while stretching vertically.
+Nested regions need their own constraints to realize the intended composition.
+
+For a vertical scroll region whose content should fill the viewport width,
+use content `min=(0,0)`, `max=(1,0)`, `offsetMin=(0,0)`,
+`offsetMax=(0,contentHeight)`, retaining the authored content height. Swap axes
+for horizontal scrolling when the same decision applies. Preserve the content
+extent needed for scrolling instead of shrinking it to the viewport and erasing
+the overflow. Verify the overall composition, chosen margins and spacing after
+resizing, and scroll start/end where scrolling is present.
+
 ## State variants
+
+Before authoring a `state` block, compare equivalent controls and inspect all
+supplied family artwork. Selected/unselected tabs, enabled/disabled buttons,
+and checked/unchecked toggles need every evidenced variant on each equivalent
+control even when only one instance currently displays it. Share the behavior,
+not instance content: preserve each control's own label and icon. Different
+quest records, currencies, or item illustrations alone are data variations,
+not evidence of switchable states. Missing alternate artwork or uncertain
+semantics must be recorded explicitly; do not invent unseen pressed/hover art.
+For state-only layers, include their nodes in the base tree with `visible:false`
+and reveal them in the variant. Inspect inactive variants as well as current.
 
 A `state` block belongs to a component node. Variant names are explicit and
 each variant maps relative paths to property overrides:
@@ -106,6 +174,35 @@ each variant maps relative paths to property overrides:
   }
 }
 ```
+
+For example, if a three-tab group shows only its middle tab selected, all
+three tab nodes declare both variants. Each keeps its own icon and label; only
+`current` differs (`normal`, `selected`, `normal`). A shared frame/checkmark
+appearance can be written on **each** tab as:
+
+```json
+"state": {
+  "current": "normal",
+  "variants": {
+    "normal": {
+      "background": {"asset": "tabs/normal.png"},
+      "selection": {"visible": false}
+    },
+    "selected": {
+      "background": {"asset": "tabs/selected.png"},
+      "selection": {"visible": true}
+    }
+  },
+  "evidence": "These sibling tabs show both appearances of the same control."
+}
+```
+
+Use actual supplied assets and include the named nodes in each tab. Set the
+middle tab's `current` to `selected`. Export must return six state branches,
+with exactly one selected branch per tab; inactive branches must still contain
+their complete visuals. A group is not a reason to give only the selected tab
+a state block. If the group's states need different layers, author the union
+of those layers in each tab and control visibility in the variants.
 
 The base tree includes those named children. Use `".": {...}` to override the
 component itself. Unspecified properties come from the authored base tree,
@@ -147,7 +244,7 @@ Only the named content subtree is translated and rectangularly clipped:
   pixels; a positive offset moves content left/up. Disabled axes must be zero.
 - The content's unscrolled top-left must resolve to viewport (0,0). Its size
   describes the authored content extent; use padding on its inner list.
-- Put row/column layout and optional `role: "list"` on the content container,
+- Put row/column/grid layout and optional `role: "list"` on the content container,
   not on the viewport. Existing `list` roles alone do not imply scrolling.
 - Offsets clamp to [0, content size - viewport size], also after resizing.
 - Nested viewport and progress clips intersect. The render trace records
@@ -238,8 +335,11 @@ rerun removes the old same-name preview before reporting the failure.
 
 For the implemented components, inspect progress at min/current/max, each
 declared state, scroll at start/end, and at least one smaller and one larger
-intended viewport. Check edge margins, text clipping, repeated spacing, fill
-direction, and visible content boundaries. Record findings and any limitations
+intended viewport plus a changed aspect ratio. Review the full composition,
+including non-scrolling lists and fixed-size regions: check whether filled or
+unfilled space preserves visual balance, edge alignment, repeated spacing, and
+usable interaction areas. Also check text clipping, fill direction, and visible
+content boundaries. Record findings and any limitations
 in `component_review.md` with paths to the relevant preview reports/images.
 
 Native `finalize` still certifies the screenshot state and its bound evidence;

@@ -48,6 +48,8 @@ namespace ImageToUI.Editor
             scaler.matchWidthOrHeight = .5f;
             ((RectTransform)m_Root.transform).sizeDelta = m_Document.ReferenceSize;
             BuildNode(m_Document, m_Document.Snapshot(), "root", m_Root.transform);
+            foreach (var layout in m_Root.GetComponentsInChildren<LayoutGroup>(true))
+                LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)layout.transform);
             foreach (var state in StateObjects)
             {
                 state.objectPath = RelativePath(state.target);
@@ -100,20 +102,26 @@ namespace ImageToUI.Editor
             var color = node["color"] == null ? Color.white : UiStructureData.ParseColor(UiStructureData.Text(node, "color"));
             color.a *= (float)UiStructureData.Number(node, "opacity", 1);
             var asset = UiStructureData.Text(node, "asset");
+            // Fill graphics must remain below the clipping transform. Ordinary visuals
+            // use the authored object so their actual anchors stay directly editable.
+            var parentNode = path == "root" ? null : snapshot.Nodes[UiStructureData.ParentPath(path)];
+            var separateVisual = parentNode?["progress"] is JObject ownerProgress &&
+                UiStructureData.Text(ownerProgress, "fill") == UiStructureData.Text(node, "name");
             if (asset.Length > 0 || (node["color"] != null && type != "text"))
             {
-                var visual = NewRect(HelperName(node, "__ImageToUI_Image"), rect); Stretch(visual);
+                var visual = separateVisual || type == "text" ? NewRect(HelperName(node, "Image"), rect) : rect;
+                if (visual != rect) Stretch(visual);
                 var image = visual.gameObject.AddComponent<Image>();
                 image.color = color; image.raycastTarget = type == "overlay";
                 if (asset.Length > 0)
                 {
                     image.sprite = m_Assets.GetSprite(asset, node["nineSlice"], (float)UiStructureData.Number(node, "hueShift"));
                     image.type = UiStructureData.HasSlice(node["nineSlice"]) ? Image.Type.Sliced : Image.Type.Simple;
-                    image.pixelsPerUnitMultiplier = 1;
+                    image.pixelsPerUnitMultiplier = 100f / image.sprite.pixelsPerUnit;
                 }
                 ImageCount++;
             }
-            if (type == "text") AddText(rect, node, color);
+            if (type == "text") AddText(rect, node, color, separateVisual);
 
             var children = new Dictionary<string, RectTransform>(StringComparer.Ordinal);
             foreach (var child in UiStructureData.Children(node))
@@ -132,17 +140,27 @@ namespace ImageToUI.Editor
             if (type == "button")
             {
                 var button = rect.gameObject.AddComponent<Button>(); button.transition = Selectable.Transition.None;
-                var hit = NewRect(GameObjectUtility.GetUniqueNameForSibling(rect, "__ImageToUI_HitArea"), rect);
-                Stretch(hit); hit.SetAsFirstSibling();
-                var image = hit.gameObject.AddComponent<Image>(); image.color = Color.clear; image.raycastTarget = true;
-                button.targetGraphic = image;
+                var graphic = rect.GetComponent<Graphic>();
+                if (graphic == null && separateVisual)
+                    graphic = rect.GetComponentsInChildren<Graphic>(true).FirstOrDefault();
+                if (graphic == null)
+                {
+                    var hit = separateVisual ? NewRect(HelperName(node, "HitArea"), rect) : rect;
+                    if (hit != rect) { Stretch(hit); hit.SetAsFirstSibling(); }
+                    graphic = hit.gameObject.AddComponent<Image>(); graphic.color = Color.clear;
+                }
+                graphic.raycastTarget = true;
+                button.targetGraphic = graphic;
             }
+            UiPrefabLayout.Apply(rect, node, children);
             rect.gameObject.SetActive(UiStructureData.Bool(node, "visible", true));
         }
 
-        private void AddText(RectTransform parent, JObject node, Color color)
+        private void AddText(RectTransform parent, JObject node, Color color, bool separateVisual)
         {
-            var visual = NewRect(HelperName(node, "__ImageToUI_Text"), parent);
+            var scale = (float)UiStructureData.Number(node, "textScaleX", 1);
+            var visual = separateVisual || UiStructureData.Text(node, "asset").Length > 0 || !Mathf.Approximately(scale, 1)
+                ? NewRect(HelperName(node, "Text"), parent) : parent;
             var text = visual.gameObject.AddComponent<Text>();
             text.raycastTarget = false; text.supportRichText = false;
             text.horizontalOverflow = HorizontalWrapMode.Overflow; text.verticalOverflow = VerticalWrapMode.Overflow;
@@ -157,13 +175,15 @@ namespace ImageToUI.Editor
             text.lineSpacing = 1;
             if (node["lineHeight"] != null && text.font != null && text.font.lineHeight > 0 && text.font.fontSize > 0)
                 text.lineSpacing = (float)UiStructureData.Number(node, "lineHeight") / (text.font.lineHeight * (float)text.fontSize / text.font.fontSize);
-            var scale = (float)UiStructureData.Number(node, "textScaleX", 1);
-            var pivot = x * .5f;
-            visual.pivot = new Vector2(pivot, 1 - y * .5f);
-            visual.anchorMin = new Vector2(pivot * (1 - 1 / scale), 0);
-            visual.anchorMax = new Vector2(pivot + (1 - pivot) / scale, 1);
-            visual.offsetMin = visual.offsetMax = Vector2.zero;
-            visual.localScale = new Vector3(scale, 1, 1);
+            if (visual != parent)
+            {
+                var pivot = x * .5f;
+                visual.pivot = new Vector2(pivot, 1 - y * .5f);
+                visual.anchorMin = new Vector2(pivot * (1 - 1 / scale), 0);
+                visual.anchorMax = new Vector2(pivot + (1 - pivot) / scale, 1);
+                visual.offsetMin = visual.offsetMax = Vector2.zero;
+                visual.localScale = new Vector3(scale, 1, 1);
+            }
             var stroke = (float)UiStructureData.Number(node, "strokeWidth");
             if (stroke > 0)
             {
@@ -179,7 +199,7 @@ namespace ImageToUI.Editor
         private void AddScroll(RectTransform owner, RectTransform content, JObject spec, string path)
         {
             var index = content.GetSiblingIndex();
-            var viewport = NewRect(GameObjectUtility.GetUniqueNameForSibling(owner, "__ImageToUI_Viewport"), owner);
+            var viewport = NewRect(GameObjectUtility.GetUniqueNameForSibling(owner, "Viewport"), owner);
             Stretch(viewport); viewport.SetSiblingIndex(index);
             viewport.gameObject.AddComponent<RectMask2D>();
             var hit = viewport.gameObject.AddComponent<Image>(); hit.color = Color.clear; hit.raycastTarget = true;
@@ -203,7 +223,7 @@ namespace ImageToUI.Editor
         {
             var originalChildren = new List<Transform>();
             foreach (Transform child in fill) originalChildren.Add(child);
-            var clip = NewRect(GameObjectUtility.GetUniqueNameForSibling(fill, "__ImageToUI_ProgressClip"), fill);
+            var clip = NewRect(GameObjectUtility.GetUniqueNameForSibling(fill, "ProgressClip"), fill);
             Stretch(clip); clip.gameObject.AddComponent<RectMask2D>();
             var low = Vector2.zero; var high = Vector2.one;
             switch (direction)

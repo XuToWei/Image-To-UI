@@ -75,10 +75,23 @@ Apply these rules:
    to. `anchor` records engine-facing alignment intent; it does not change the
    existing top-left `position` coordinates. Add `responsive` edge constraints
    for actual fixed-margin, centered, or stretched size adaptation; do not claim
-   that the nine-position `anchor` alone implements it.
+   that the nine-position `anchor` alone implements it. Choose from intended
+   resize behavior and the overall composition at changed resolutions. For
+   every region, including non-scrolling lists and scroll viewports, decide
+   separately per axis whether filling the available space preserves visual
+   balance, spacing, alignment, and usable interaction areas. Stretch when
+   leaving that space unfilled would harm the layout; keep a fixed extent when
+   filling it would distort artwork or weaken the composition. List roles,
+   scrolling, and a full-parent bbox do not determine this choice. Read the
+   size-adaptation decision guide in `references/components.md`.
 4. Use `layout`, `align`, and `vAlign` for derived positions; use explicit
    `position` only for free placement. Every `layout` object must declare
-   `"type": "row"` or `"type": "column"`.
+   `"type": "row"`, `"type": "column"`, or `"type": "grid"`. Use grid for
+   repeated equal-size cells with explicit `cellSize`, `columns`, and x/y
+   spacing; see `references/schema.md`. Unity exports these as native
+   HorizontalLayoutGroup, VerticalLayoutGroup, and GridLayoutGroup without
+   LayoutElement. Distributed gaps are baked to reference-size spacing on
+   export; read `references/unity.md` before claiming runtime redistribution.
 5. Model composite controls as layered children and flat generated shapes as
    `rect` or `overlay`. Give the frame/base the control's outer bbox; keep an
    icon glyph at its own visible aspect ratio and center it inside the frame.
@@ -92,7 +105,7 @@ Apply these rules:
 8. Treat a text element's bbox as its text box. Use `alignment` and
    `textVAlign` for visible-glyph alignment inside that box; use `align` and
    `vAlign` only to position the box inside its parent.
-9. For repeated siblings, measure their centers and use one row/column layout.
+9. For repeated siblings, measure their centers and use one row/column/grid layout.
    Tune the parent position, spacing, and cross-axis alignment before adding
    child offsets. A layout describes geometry only; decide list roles from the
    overall UI meaning. Mark a group as `"role": "list"` with direct-child
@@ -105,6 +118,8 @@ Apply these rules:
    required. Use no hard item-count threshold, and never use equal spacing or
    a `list`-like name alone. Fixed-purpose slots, layered composites, toolbars,
    resource bars, navigation, and button groups remain ordinary layouts.
+   Assess size adaptation for all these groups using rule 3; a non-scrolling
+   list can stretch, and a scrolling list can retain a fixed-size viewport.
 10. When choosing a family asset, inspect its sibling layers. A `Bg` commonly
    needs the matching `Shadow`, `BgLight`, `Glow`, `Border`, or `FocusLine`;
    include only layers visible in the design, in back-to-front child order.
@@ -117,7 +132,13 @@ Apply these rules:
 13. Identify progress bars, stateful controls, and scroll viewports from the
     design and supplied context. Read [references/components.md](references/components.md)
     for `progress`, `state`, `scroll`, and `responsive`. Preserve their component
-    children and observed values; record inference evidence and missing states.
+    children and observed values. Inspect the asset family and repeated controls
+    together: the screenshot shows the current state, not the complete set of
+    supported appearances. Write every evidenced alternate into `state.variants`,
+    including inactive layers in the base tree; apply that state model to each
+    equivalent control, keeping instance-specific icons/text. Do not turn
+    different record content into states. Record missing artwork or uncertain
+    state semantics on the owning component rather than silently dropping them.
     Do not reduce a progress bar to a permanently shortened fill image or treat
     every list as scrollable.
 
@@ -144,7 +165,10 @@ py -B <skill>/scripts/backfill_anchors.py --structure <task-dir>/ui_structure.js
 
 The backfill preserves complete valid anchors. It first uses explicit
 element/layout alignment intent, then chooses the nearest resolved parent edge
-or center for missing axes. Use `--overwrite` only when every existing anchor
+or center for missing axes (center wins geometric ties except at the root).
+This is a fallback, not a semantic layout decision: review each region's
+fixed-size or stretching behavior in the overall composition explicitly. It never creates stretch rules.
+Use `--overwrite` only when every existing anchor
 must be recomputed.
 
 ## 3. Check and iterate
@@ -217,7 +241,12 @@ Cap focused rechecks at three per element. Read
 For components with behavior or responsive geometry, use `workflow.py preview`
 after a successful native check to inspect alternate sizes, states, progress
 values, and scroll positions. Follow [references/components.md](references/components.md)
-and record scenario findings in `component_review.md`; preview evidence does
+and record scenario findings in `component_review.md`, including each stateful
+control's current state, all evidenced states, and any unavailable states.
+For size adaptation, also review non-scrolling regions and record the chosen
+axes and why filling or leaving space best preserves composition and usability
+at smaller/larger resolutions and changed aspect ratios.
+Compare that inventory with `state.variants` before export; preview evidence does
 not replace the native comparison or the alignment review below.
 
 ## 4. Review and finalize

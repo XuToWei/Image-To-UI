@@ -113,8 +113,12 @@ py -B <skill>/scripts/backfill_anchors.py --structure <old.json> --output <new.j
 Passing the same file as input and output performs an atomic in-place upgrade.
 The tool preserves complete valid anchors. For missing axes, it prefers current
 `align` / `vAlign` or effective layout cross-axis intent, then selects the
-nearest resolved left/center/right and top/middle/bottom parent reference. Use
-`--overwrite` to deliberately recompute existing values.
+nearest resolved left/center/right and top/middle/bottom parent reference.
+Geometric ties prefer the center except at the root; explicit alignment still
+wins. This fallback cannot infer semantic stretching or state groups. Review
+each region's space usage in the resized composition using
+[components.md](components.md), including non-scrolling lists and scroll viewports.
+Use `--overwrite` to deliberately recompute existing values.
 
 ## Component Behavior
 
@@ -128,7 +132,7 @@ are interpreted by the verifier; the nine-position `anchor` remains metadata.
 ## List Semantics
 
 `layout` describes geometry; `role` describes meaning. Roles are opt-in and
-must not be inferred from a row/column layout. The `rewards_row` in the full
+must not be inferred from a row/column/grid layout. The `rewards_row` in the full
 example is therefore an ordinary layout: its three evenly spaced children are
 fixed slots.
 
@@ -198,7 +202,7 @@ even though no pagination control is visible:
 }
 ```
 
-- `role: "list"` is valid only on a `container` with a row or column `layout`
+- `role: "list"` is valid only on a `container` with a row, column, or grid `layout`
   and at least one child.
 - Every direct child of a list must use `role: "listItem"`.
 - A `listItem` must be a direct child of a `list`; nested visual children do
@@ -230,8 +234,8 @@ When present, `role` is copied to the corresponding entry in
   it at `1` unless the exact supplied font still has the wrong width after
   font, size, stroke, and alignment are correct.
 - `nineSlice`: stretchable asset handling.
-- `layout`: declare this container as a row/column group. The object must
-  explicitly contain `"type": "row"` or `"type": "column"`.
+- `layout`: declare this container as a row/column/grid group. The object must
+  explicitly contain `"type": "row"`, `"type": "column"`, or `"type": "grid"`.
 - `role`: opt-in semantic collection marker; either `list` or `listItem`,
   subject to the evidence and hierarchy rules above.
 - `align`, `vAlign`, `offset`: derived positioning relative to parent.
@@ -239,6 +243,40 @@ When present, `role` is copied to the corresponding entry in
 Inside a parent `layout`, child-level alignment only overrides the cross axis:
 `vAlign` in a row layout and `align` in a column layout. The layout keeps
 ownership of the main axis. Use `offset` for small per-child nudges.
+
+## Grid Layout
+
+Use equal-size row-major cells when the design shows a grid. The grid owns cell
+positions and sizes; item artwork can be a child inside each cell.
+
+```json
+"layout": {
+  "type": "grid",
+  "columns": 3,
+  "cellSize": {"width": 96, "height": 96},
+  "spacing": {"x": 12, "y": 16},
+  "padding": {"x": 20, "y": 20},
+  "align": "center",
+  "vAlign": "top"
+}
+```
+
+`columns` is a required positive integer; `cellSize` requires positive width
+and height. Every direct child declares that same `size`. `spacing` is an
+optional finite `{x,y}` object, defaulting to zero on both axes; `padding` keeps
+the number or `{x,y}` syntax used by linear layouts. `align` positions the
+whole grid horizontally (start/left, center, end/right); `vAlign` positions it
+vertically (start/top, center/middle, end/bottom). Distributed alignment and
+`spacing:"even"` are linear-layout features, not grid fields. Rows fill left
+to right, then top to bottom; the last row may be incomplete. No child `align`
+or `vAlign` is allowed because grid cells have one owner. Use `offset` only for
+intentional visual nudges, or align artwork inside a cell.
+
+Unity creates `GridLayoutGroup` with FixedColumnCount. Changing the column
+count, cell size, or spacing there triggers native reflow. Resolution changes
+do not automatically select a different column count. `responsive` belongs on
+the grid container, not its layout-driven direct children. List/listItem roles
+are available when the grid is a data collection, independent of scrolling.
 
 ## Generated Rectangles
 

@@ -199,8 +199,14 @@ This is the command/params portion. Codex follows the installed Bridge's
 Use explicit `overwrite: true` when replacing an existing asset; use `fontMap`
 for differing font paths. See the [Unity command reference](Unity/README.md#生成-prefab).
 
-Unity assembles native UGUI objects, copies referenced sprites and fonts into
-generated assets, and saves the Prefab. Declared states become
+`assetsPath` also accepts multiple directories, such as
+`["Assets/UI/Common", "Assets/UI/Feature"]`; the existing string form remains
+valid. Ambiguous filenames/relative paths are rejected instead of silently
+choosing the first directory.
+
+Unity assembles native UGUI objects and references existing project sprites and
+fonts directly. Only external imports and necessary derived assets use the
+stable, reusable `<PrefabName>_Resources` directory before saving the Prefab. Declared states become
 `States/<state>/Content` branches; only the current state starts active.
 No custom runtime scripts are added.
 
@@ -248,8 +254,14 @@ mapping, and troubleshooting remain in the [Unity exporter reference](Unity/READ
 | `measurements/` | Optional local design crops, pixel rulers, and crop/zoom mappings. |
 | `assets/` and `design_grid.*` | Asset inventories, contact sheets, and grid measurements. |
 | Target `.prefab` inside the Unity project | The final editable UGUI Prefab. |
-| Bridge result: `resourceFolder` | Copied images/fonts and native Sprite assets referenced by the Prefab. |
+| Bridge result: `resourceFolder` / `resourceUsage` | Optional generated-resource folder (null for direct references only) and reference/copy/reuse counts. |
 | Bridge result: `stateObjects` / `warnings` | Actual state hierarchy paths, initial visibility, and import warnings. |
+
+The checked-in `test/output` is a compact example: structure JSON, comparison,
+reconstruction, state/resolution overview images, and `component_review.md`.
+Intermediate grids, inventories, traces, per-scenario outputs, and machine-local
+workflow records are generated in local runs such as `test/output-local` and
+are not committed. Start a fresh local workflow to regenerate full evidence.
 
 ## Example: Emberfall HUD
 

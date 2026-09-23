@@ -178,7 +178,12 @@ Codex 按已发现的 Bridge schema 调用 `build_ui_prefab`。这里接收的 J
 Bridge 的 `AGENT.md` 处理。需要覆盖已有目标时显式传 `overwrite: true`；
 字体路径不同可使用 `fontMap`，详见 [Unity 参数参考](Unity/README.md#生成-prefab)。
 
-Unity 在编辑器中创建原生 UGUI 层级，将引用的图片和字体复制到生成资源目录，
+`assetsPath` 同时兼容单目录字符串和目录字符串数组，例如
+`["Assets/UI/Common", "Assets/UI/Feature"]`。重叠目录会去重，同名或相对路径
+歧义会明确报错，不会静默选择第一个目录。
+
+Unity 在编辑器中创建原生 UGUI 层级，优先引用工程内已有 Sprite 和字体，
+仅将外部导入与必要派生资源放入可复用的固定资源目录，
 保存 Prefab。各状态生成 `States/<状态>/Content` 分支，当前状态激活，其余关闭。
 生成物不附加自定义运行时脚本。
 
@@ -222,8 +227,13 @@ Codex 读取返回的 `prefabPath`、`guid`、`resourceFolder`、
 | `measurements/` | 可选的局部放大图、像素标尺与裁剪/缩放坐标映射。 |
 | `assets/` 与 `design_grid.*` | 资源清单、联系表和网格测量数据。 |
 | Unity 工程中的目标 `.prefab` | 最终生成的可编辑 UGUI Prefab。 |
-| Bridge 返回的 `resourceFolder` | Prefab 引用的图片、字体和原生 Sprite 资源目录。 |
+| Bridge 返回的 `resourceFolder` / `resourceUsage` | 可选的派生资源目录（全部直接引用时为 null），以及引用、复制和复用数量。 |
 | Bridge 返回的 `stateObjects` / `warnings` | 实际状态分组路径、初始显隐和导入警告。 |
+
+仓库中的 `test/output` 只保留精简示例：结构 JSON、对比图、重建图、状态／尺寸
+总览和 `component_review.md`。网格、素材清单、trace、逐场景预览及本机工作流
+记录由 `test/output-local` 等本地运行目录生成，不提交到 Git。需要完整验证证据时，
+请在新目录按 skill 重新运行。
 
 ## Emberfall HUD 完整案例
 

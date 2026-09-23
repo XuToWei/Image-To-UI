@@ -136,6 +136,17 @@ class AnchorValidationTests(unittest.TestCase):
 
 
 class AnchorBackfillTests(unittest.TestCase):
+    def test_full_size_artwork_tie_defaults_to_center_without_stretch(self):
+        source = {"canvas": {"width": 100, "height": 100}, "root": {
+            "type": "container", "name": "root", "size": {"width": 100, "height": 100},
+            "children": [{**rect("artwork", (0, 0)), "size": {"width": 100, "height": 100}}]}}
+        result, _ = backfill_anchors.backfill_anchors(source)
+        artwork = result["root"]["children"][0]
+        self.assertEqual(artwork["anchor"], {"horizontal": "center", "vertical": "middle"})
+        self.assertNotIn("responsive", artwork)
+        self.assertEqual(artwork["size"], {"width": 100, "height": 100})
+        self.assertEqual(result["root"]["anchor"], LEFT_TOP)
+
     def test_backfill_prefers_explicit_alignment_intent(self) -> None:
         source = {
             "canvas": {"width": 100, "height": 100},

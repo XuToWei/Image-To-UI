@@ -28,7 +28,7 @@ from PIL import Image
 
 
 XY_FIELDS = {"position", "offset", "padding", "offsetMin", "offsetMax"}
-SIZE_FIELDS = {"size"}
+SIZE_FIELDS = {"size", "cellSize"}
 TEXT_FIELDS = {"fontSize", "lineHeight", "strokeWidth"}
 
 
@@ -71,7 +71,9 @@ def scale_structure(obj: Any, sx: float, sy: float,
             if key == "nineSlice":
                 out[key] = value
             elif context == "layout" and key == "spacing":
-                if layout_type == "column":
+                if layout_type == "grid" and isinstance(value, dict):
+                    out[key] = _scale_axis_dict(value, sx, sy)
+                elif layout_type == "column":
                     out[key] = _scale_number(value, sy)
                 elif layout_type == "row":
                     out[key] = _scale_number(value, sx)

@@ -32,10 +32,28 @@
           "height": 941
         },
         "anchor": {
-          "horizontal": "left",
-          "vertical": "top"
+          "horizontal": "center",
+          "vertical": "middle"
         },
-        "asset": "backgrounds/bg_citadel.png"
+        "asset": "backgrounds/bg_citadel.png",
+        "responsive": {
+          "min": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "max": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "offsetMin": {
+            "x": -836.0,
+            "y": -470.5
+          },
+          "offsetMax": {
+            "x": 836.0,
+            "y": 470.5
+          }
+        }
       },
       {
         "type": "container",
@@ -164,7 +182,25 @@
               }
             ]
           }
-        ]
+        ],
+        "responsive": {
+          "min": {
+            "x": 0,
+            "y": 0
+          },
+          "max": {
+            "x": 0,
+            "y": 0
+          },
+          "offsetMin": {
+            "x": 8,
+            "y": 2
+          },
+          "offsetMax": {
+            "x": 578,
+            "y": 207
+          }
+        }
       },
       {
         "type": "container",
@@ -318,7 +354,25 @@
               }
             ]
           }
-        ]
+        ],
+        "responsive": {
+          "min": {
+            "x": 0.5,
+            "y": 0
+          },
+          "max": {
+            "x": 0.5,
+            "y": 0
+          },
+          "offsetMin": {
+            "x": -187.0,
+            "y": 17
+          },
+          "offsetMax": {
+            "x": 276.0,
+            "y": 79
+          }
+        }
       },
       {
         "type": "container",
@@ -343,7 +397,7 @@
         },
         "children": [
           {
-            "type": "container",
+            "type": "button",
             "name": "settings",
             "size": {
               "width": 96,
@@ -391,7 +445,7 @@
             ]
           },
           {
-            "type": "container",
+            "type": "button",
             "name": "mail",
             "size": {
               "width": 96,
@@ -438,7 +492,25 @@
               }
             ]
           }
-        ]
+        ],
+        "responsive": {
+          "min": {
+            "x": 1,
+            "y": 0
+          },
+          "max": {
+            "x": 1,
+            "y": 0
+          },
+          "offsetMin": {
+            "x": -222,
+            "y": 12
+          },
+          "offsetMax": {
+            "x": -21,
+            "y": 108
+          }
+        }
       },
       {
         "type": "container",
@@ -723,7 +795,25 @@
               }
             ]
           }
-        ]
+        ],
+        "responsive": {
+          "min": {
+            "x": 0,
+            "y": 0.5
+          },
+          "max": {
+            "x": 0,
+            "y": 0.5
+          },
+          "offsetMin": {
+            "x": 8,
+            "y": -202.5
+          },
+          "offsetMax": {
+            "x": 501,
+            "y": 197.5
+          }
+        }
       },
       {
         "type": "container",
@@ -740,15 +830,9 @@
           "horizontal": "right",
           "vertical": "middle"
         },
-        "layout": {
-          "type": "column",
-          "spacing": -37,
-          "align": "start",
-          "vAlign": "start"
-        },
         "children": [
           {
-            "type": "container",
+            "type": "button",
             "name": "sword",
             "size": {
               "width": 211,
@@ -793,10 +877,32 @@
                 },
                 "asset": "icons/icon_sword.png"
               }
-            ]
+            ],
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "responsive": {
+              "min": {
+                "x": 0,
+                "y": 0.0
+              },
+              "max": {
+                "x": 0,
+                "y": 0.0
+              },
+              "offsetMin": {
+                "x": 0,
+                "y": 0.0
+              },
+              "offsetMax": {
+                "x": 211,
+                "y": 214.0
+              }
+            }
           },
           {
-            "type": "container",
+            "type": "button",
             "name": "helmet",
             "size": {
               "width": 211,
@@ -841,10 +947,32 @@
                 },
                 "asset": "icons/icon_helmet.png"
               }
-            ]
+            ],
+            "position": {
+              "x": 0,
+              "y": 177
+            },
+            "responsive": {
+              "min": {
+                "x": 0,
+                "y": 0.5
+              },
+              "max": {
+                "x": 0,
+                "y": 0.5
+              },
+              "offsetMin": {
+                "x": 0,
+                "y": -107.0
+              },
+              "offsetMax": {
+                "x": 211,
+                "y": 107.0
+              }
+            }
           },
           {
-            "type": "container",
+            "type": "button",
             "name": "spectral_flame",
             "size": {
               "width": 211,
@@ -889,9 +1017,49 @@
                 },
                 "asset": "icons/icon_spectral_flame.png"
               }
-            ]
+            ],
+            "position": {
+              "x": 0,
+              "y": 354
+            },
+            "responsive": {
+              "min": {
+                "x": 0,
+                "y": 1.0
+              },
+              "max": {
+                "x": 0,
+                "y": 1.0
+              },
+              "offsetMin": {
+                "x": 0,
+                "y": -214.0
+              },
+              "offsetMax": {
+                "x": 211,
+                "y": 0.0
+              }
+            }
           }
-        ]
+        ],
+        "responsive": {
+          "min": {
+            "x": 1,
+            "y": 0
+          },
+          "max": {
+            "x": 1,
+            "y": 1
+          },
+          "offsetMin": {
+            "x": -261,
+            "y": 119
+          },
+          "offsetMax": {
+            "x": -50,
+            "y": -254
+          }
+        }
       },
       {
         "type": "container",
@@ -949,7 +1117,7 @@
             },
             "children": [
               {
-                "type": "container",
+                "type": "button",
                 "name": "equipment",
                 "offset": {
                   "x": 3,
@@ -965,8 +1133,8 @@
                 },
                 "children": [
                   {
-                    "type": "image",
-                    "name": "base",
+                    "type": "container",
+                    "name": "normal_visual",
                     "position": {
                       "x": 0,
                       "y": 0
@@ -976,32 +1144,126 @@
                       "height": 128
                     },
                     "anchor": {
-                      "horizontal": "left",
-                      "vertical": "top"
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
-                    "asset": "components/button_action_round.png"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0,
+                          "y": 0
+                        },
+                        "size": {
+                          "width": 126,
+                          "height": 128
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 33,
+                          "y": 14
+                        },
+                        "size": {
+                          "width": 61,
+                          "height": 87
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_shield_crest.png"
+                      }
+                    ],
+                    "visible": true
                   },
                   {
-                    "type": "image",
-                    "name": "icon",
+                    "type": "container",
+                    "name": "selected_visual",
                     "position": {
-                      "x": 33,
-                      "y": 14
+                      "x": -22.0,
+                      "y": -22.5
                     },
                     "size": {
-                      "width": 61,
-                      "height": 87
+                      "width": 170,
+                      "height": 173
                     },
                     "anchor": {
                       "horizontal": "center",
                       "vertical": "middle"
                     },
-                    "asset": "icons/icon_shield_crest.png"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0.0,
+                          "y": 0.0
+                        },
+                        "size": {
+                          "width": 170.0,
+                          "height": 172.698
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 44.524,
+                          "y": 18.889
+                        },
+                        "size": {
+                          "width": 82.302,
+                          "height": 117.381
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_shield_crest.png"
+                      }
+                    ],
+                    "visible": false
                   }
-                ]
+                ],
+                "state": {
+                  "current": "normal",
+                  "variants": {
+                    "normal": {
+                      "normal_visual": {
+                        "visible": true
+                      },
+                      "selected_visual": {
+                        "visible": false
+                      }
+                    },
+                    "selected": {
+                      "normal_visual": {
+                        "visible": false
+                      },
+                      "selected_visual": {
+                        "visible": true
+                      }
+                    }
+                  },
+                  "evidence": "Five adjacent navigation controls share the round red/gold base. The central talents control is visibly enlarged; infer the same normal/selected appearance family for every control while preserving each icon. No gameplay event inferred."
+                }
               },
               {
-                "type": "container",
+                "type": "button",
                 "name": "armor",
                 "offset": {
                   "x": -4,
@@ -1017,8 +1279,8 @@
                 },
                 "children": [
                   {
-                    "type": "image",
-                    "name": "base",
+                    "type": "container",
+                    "name": "normal_visual",
                     "position": {
                       "x": 0,
                       "y": 0
@@ -1028,32 +1290,126 @@
                       "height": 128
                     },
                     "anchor": {
-                      "horizontal": "left",
-                      "vertical": "top"
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
-                    "asset": "components/button_action_round.png"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0,
+                          "y": 0
+                        },
+                        "size": {
+                          "width": 126,
+                          "height": 128
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 41,
+                          "y": 24
+                        },
+                        "size": {
+                          "width": 58,
+                          "height": 68
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_helmet.png"
+                      }
+                    ],
+                    "visible": true
                   },
                   {
-                    "type": "image",
-                    "name": "icon",
+                    "type": "container",
+                    "name": "selected_visual",
                     "position": {
-                      "x": 41,
-                      "y": 24
+                      "x": -22.0,
+                      "y": -22.5
                     },
                     "size": {
-                      "width": 58,
-                      "height": 68
+                      "width": 170,
+                      "height": 173
                     },
                     "anchor": {
                       "horizontal": "center",
                       "vertical": "middle"
                     },
-                    "asset": "icons/icon_helmet.png"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0.0,
+                          "y": 0.0
+                        },
+                        "size": {
+                          "width": 170.0,
+                          "height": 172.698
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 55.317,
+                          "y": 32.381
+                        },
+                        "size": {
+                          "width": 78.254,
+                          "height": 91.746
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_helmet.png"
+                      }
+                    ],
+                    "visible": false
                   }
-                ]
+                ],
+                "state": {
+                  "current": "normal",
+                  "variants": {
+                    "normal": {
+                      "normal_visual": {
+                        "visible": true
+                      },
+                      "selected_visual": {
+                        "visible": false
+                      }
+                    },
+                    "selected": {
+                      "normal_visual": {
+                        "visible": false
+                      },
+                      "selected_visual": {
+                        "visible": true
+                      }
+                    }
+                  },
+                  "evidence": "Five adjacent navigation controls share the round red/gold base. The central talents control is visibly enlarged; infer the same normal/selected appearance family for every control while preserving each icon. No gameplay event inferred."
+                }
               },
               {
-                "type": "container",
+                "type": "button",
                 "name": "talents",
                 "offset": {
                   "x": 7,
@@ -1069,8 +1425,63 @@
                 },
                 "children": [
                   {
-                    "type": "image",
-                    "name": "base",
+                    "type": "container",
+                    "name": "normal_visual",
+                    "position": {
+                      "x": 22.0,
+                      "y": 22.5
+                    },
+                    "size": {
+                      "width": 126,
+                      "height": 128
+                    },
+                    "anchor": {
+                      "horizontal": "center",
+                      "vertical": "middle"
+                    },
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0.0,
+                          "y": 0.0
+                        },
+                        "size": {
+                          "width": 126.0,
+                          "height": 128.224
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 30.388,
+                          "y": 22.976
+                        },
+                        "size": {
+                          "width": 65.224,
+                          "height": 81.529
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_fire_sigil.png",
+                        "hueShift": 42,
+                        "color": "#FFE4A0"
+                      }
+                    ],
+                    "visible": false
+                  },
+                  {
+                    "type": "container",
+                    "name": "selected_visual",
                     "position": {
                       "x": 0,
                       "y": 0
@@ -1080,34 +1491,75 @@
                       "height": 173
                     },
                     "anchor": {
-                      "horizontal": "left",
-                      "vertical": "top"
-                    },
-                    "asset": "components/button_action_round.png"
-                  },
-                  {
-                    "type": "image",
-                    "name": "icon",
-                    "position": {
-                      "x": 41,
-                      "y": 31
-                    },
-                    "size": {
-                      "width": 88,
-                      "height": 110
-                    },
-                    "anchor": {
                       "horizontal": "center",
                       "vertical": "middle"
                     },
-                    "asset": "icons/icon_fire_sigil.png",
-                    "hueShift": 42,
-                    "color": "#FFE4A0"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0,
+                          "y": 0
+                        },
+                        "size": {
+                          "width": 170,
+                          "height": 173
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 41,
+                          "y": 31
+                        },
+                        "size": {
+                          "width": 88,
+                          "height": 110
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_fire_sigil.png",
+                        "hueShift": 42,
+                        "color": "#FFE4A0"
+                      }
+                    ],
+                    "visible": true
                   }
-                ]
+                ],
+                "state": {
+                  "current": "selected",
+                  "variants": {
+                    "normal": {
+                      "normal_visual": {
+                        "visible": true
+                      },
+                      "selected_visual": {
+                        "visible": false
+                      }
+                    },
+                    "selected": {
+                      "normal_visual": {
+                        "visible": false
+                      },
+                      "selected_visual": {
+                        "visible": true
+                      }
+                    }
+                  },
+                  "evidence": "Five adjacent navigation controls share the round red/gold base. The central talents control is visibly enlarged; infer the same normal/selected appearance family for every control while preserving each icon. No gameplay event inferred."
+                }
               },
               {
-                "type": "container",
+                "type": "button",
                 "name": "spellbook",
                 "offset": {
                   "x": 4,
@@ -1123,8 +1575,8 @@
                 },
                 "children": [
                   {
-                    "type": "image",
-                    "name": "base",
+                    "type": "container",
+                    "name": "normal_visual",
                     "position": {
                       "x": 0,
                       "y": 0
@@ -1134,32 +1586,126 @@
                       "height": 128
                     },
                     "anchor": {
-                      "horizontal": "left",
-                      "vertical": "top"
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
-                    "asset": "components/button_action_round.png"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0,
+                          "y": 0
+                        },
+                        "size": {
+                          "width": 126,
+                          "height": 128
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 18,
+                          "y": 26
+                        },
+                        "size": {
+                          "width": 77,
+                          "height": 65
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_spellbook.png"
+                      }
+                    ],
+                    "visible": true
                   },
                   {
-                    "type": "image",
-                    "name": "icon",
+                    "type": "container",
+                    "name": "selected_visual",
                     "position": {
-                      "x": 18,
-                      "y": 26
+                      "x": -22.0,
+                      "y": -22.5
                     },
                     "size": {
-                      "width": 77,
-                      "height": 65
+                      "width": 170,
+                      "height": 173
                     },
                     "anchor": {
                       "horizontal": "center",
                       "vertical": "middle"
                     },
-                    "asset": "icons/icon_spellbook.png"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0.0,
+                          "y": 0.0
+                        },
+                        "size": {
+                          "width": 170.0,
+                          "height": 172.698
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 24.286,
+                          "y": 35.079
+                        },
+                        "size": {
+                          "width": 103.889,
+                          "height": 87.698
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_spellbook.png"
+                      }
+                    ],
+                    "visible": false
                   }
-                ]
+                ],
+                "state": {
+                  "current": "normal",
+                  "variants": {
+                    "normal": {
+                      "normal_visual": {
+                        "visible": true
+                      },
+                      "selected_visual": {
+                        "visible": false
+                      }
+                    },
+                    "selected": {
+                      "normal_visual": {
+                        "visible": false
+                      },
+                      "selected_visual": {
+                        "visible": true
+                      }
+                    }
+                  },
+                  "evidence": "Five adjacent navigation controls share the round red/gold base. The central talents control is visibly enlarged; infer the same normal/selected appearance family for every control while preserving each icon. No gameplay event inferred."
+                }
               },
               {
-                "type": "container",
+                "type": "button",
                 "name": "map",
                 "offset": {
                   "x": -2,
@@ -1175,8 +1721,8 @@
                 },
                 "children": [
                   {
-                    "type": "image",
-                    "name": "base",
+                    "type": "container",
+                    "name": "normal_visual",
                     "position": {
                       "x": 0,
                       "y": 0
@@ -1186,36 +1732,148 @@
                       "height": 128
                     },
                     "anchor": {
-                      "horizontal": "left",
-                      "vertical": "top"
+                      "horizontal": "center",
+                      "vertical": "middle"
                     },
-                    "asset": "components/button_action_round.png"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0,
+                          "y": 0
+                        },
+                        "size": {
+                          "width": 126,
+                          "height": 128
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 27,
+                          "y": 23
+                        },
+                        "size": {
+                          "width": 70,
+                          "height": 70
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_compass.png"
+                      }
+                    ],
+                    "visible": true
                   },
                   {
-                    "type": "image",
-                    "name": "icon",
+                    "type": "container",
+                    "name": "selected_visual",
                     "position": {
-                      "x": 27,
-                      "y": 23
+                      "x": -22.0,
+                      "y": -22.5
                     },
                     "size": {
-                      "width": 70,
-                      "height": 70
+                      "width": 170,
+                      "height": 173
                     },
                     "anchor": {
                       "horizontal": "center",
                       "vertical": "middle"
                     },
-                    "asset": "icons/icon_compass.png"
+                    "children": [
+                      {
+                        "type": "image",
+                        "name": "base",
+                        "position": {
+                          "x": 0.0,
+                          "y": 0.0
+                        },
+                        "size": {
+                          "width": 170.0,
+                          "height": 172.698
+                        },
+                        "anchor": {
+                          "horizontal": "left",
+                          "vertical": "top"
+                        },
+                        "asset": "components/button_action_round.png"
+                      },
+                      {
+                        "type": "image",
+                        "name": "icon",
+                        "position": {
+                          "x": 36.429,
+                          "y": 31.032
+                        },
+                        "size": {
+                          "width": 94.444,
+                          "height": 94.444
+                        },
+                        "anchor": {
+                          "horizontal": "center",
+                          "vertical": "middle"
+                        },
+                        "asset": "icons/icon_compass.png"
+                      }
+                    ],
+                    "visible": false
                   }
-                ]
+                ],
+                "state": {
+                  "current": "normal",
+                  "variants": {
+                    "normal": {
+                      "normal_visual": {
+                        "visible": true
+                      },
+                      "selected_visual": {
+                        "visible": false
+                      }
+                    },
+                    "selected": {
+                      "normal_visual": {
+                        "visible": false
+                      },
+                      "selected_visual": {
+                        "visible": true
+                      }
+                    }
+                  },
+                  "evidence": "Five adjacent navigation controls share the round red/gold base. The central talents control is visibly enlarged; infer the same normal/selected appearance family for every control while preserving each icon. No gameplay event inferred."
+                }
               }
             ]
           }
-        ]
+        ],
+        "responsive": {
+          "min": {
+            "x": 0.5,
+            "y": 1
+          },
+          "max": {
+            "x": 0.5,
+            "y": 1
+          },
+          "offsetMin": {
+            "x": -426.0,
+            "y": -176
+          },
+          "offsetMax": {
+            "x": 386.0,
+            "y": -3
+          }
+        }
       },
       {
-        "type": "container",
+        "type": "button",
         "name": "enter_button",
         "position": {
           "x": 1199,
@@ -1272,12 +1930,30 @@
             "alignment": "center",
             "textVAlign": "middle"
           }
-        ]
+        ],
+        "responsive": {
+          "min": {
+            "x": 1,
+            "y": 1
+          },
+          "max": {
+            "x": 1,
+            "y": 1
+          },
+          "offsetMin": {
+            "x": -473,
+            "y": -273
+          },
+          "offsetMax": {
+            "x": -8,
+            "y": -20
+          }
+        }
       }
     ]
   },
   "metadata": {
-    "notes": "The supplied sliced assets model the HUD and background. The unsliced hero character is treated as scene content and is intentionally omitted.",
+    "notes": "The supplied sliced assets model the HUD and background. The unsliced hero character is treated as scene content and is intentionally omitted. New skill run: five navigation controls each declare normal/selected states; state geometry is represented by separately sized visual groups, with inactive branches retained. Two quest records remain a non-scrolling fixed-size collection to protect central scene space. Right actions distribute fixed-size controls along a height-adaptive group. Background stays centered at 1672x941; viewports larger than the art expose margins. Accepted substitutions from the draft were visually rechecked. Right-action artwork intentionally overlaps by 37px at native size; the row/column resolver clamps distributed negative gaps, so explicit top/middle/bottom constraints preserve that artwork arrangement while adapting group height.",
     "approximations": [
       {
         "path": "root/background",
@@ -1310,7 +1986,7 @@
         "accepted": true
       },
       {
-        "path": "root/bottom_navigation/nav_buttons/talents/icon",
+        "path": "root/bottom_navigation/nav_buttons/talents/selected_visual/icon",
         "kind": "asset_color",
         "reason": "No gold central crest sprite was supplied; the fire sigil is recolored to approximate the highlighted navigation emblem.",
         "accepted": true
@@ -1319,6 +1995,36 @@
         "path": "root/enter_button/label",
         "kind": "font_substitution",
         "reason": "No UI font was supplied; Georgia is used as the closest available serif substitute.",
+        "accepted": true
+      },
+      {
+        "path": "root/bottom_navigation/nav_buttons/armor/normal_visual/icon",
+        "kind": "missing_asset",
+        "reason": "Reference shows a leather armor/backpack silhouette, but no matching sprite is supplied; the supplied helmet is the retained approximate equipment icon.",
+        "accepted": true
+      },
+      {
+        "path": "root/top_left_hud/status_bars",
+        "kind": "baked_progress",
+        "reason": "The supplied dual-bar sprite bakes both fills at full width; the screenshot has a shorter blue fill. No independent fill/track artwork or numeric range was supplied, so this run preserves the composite approximation rather than claiming functional progress bars.",
+        "accepted": true
+      },
+      {
+        "path": "root/bottom_navigation/dock",
+        "kind": "asset_substitution",
+        "reason": "The supplied dock includes circular slots with different ornament geometry from the reference; the existing scaled dock is retained. Its baked circles cannot independently reflow.",
+        "accepted": true
+      },
+      {
+        "path": "root/bottom_navigation/nav_buttons/spellbook/normal_visual/icon",
+        "kind": "asset_substitution",
+        "reason": "The supplied spellbook has a brighter, differently detailed cover than the reference. Placement is retained without distorting the glyph to mimic that artwork.",
+        "accepted": true
+      },
+      {
+        "path": "root/quest_panel/base",
+        "kind": "asset_substitution",
+        "reason": "The provided quest panel and divider have different top crest and edge details from the screenshot. Nine-sliced supplied artwork approximates the same outer region.",
         "accepted": true
       }
     ],

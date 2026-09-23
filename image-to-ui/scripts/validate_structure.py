@@ -31,7 +31,7 @@ import ui_components as components
 
 IMAGE_EXTS = {".png", ".jpg", ".jpeg"}
 ELEMENT_TYPES = {"container", "image", "text", "button", "overlay", "rect"}
-LAYOUT_TYPES = {"row", "column"}
+LAYOUT_TYPES = {"row", "column", "grid"}
 LAYOUT_SPACING = {"even"}
 LAYOUT_AXES = {
     "row": ("x", "y"),
@@ -321,11 +321,23 @@ def check_layout(layout: Any, path: str, reporter: Reporter) -> None:
     else:
         ltype = layout["type"]
         if not isinstance(ltype, str) or ltype not in LAYOUT_TYPES:
-            reporter.error(path, "layout.type must be row or column")
+            reporter.error(path, "layout.type must be row or column or grid")
     spacing = layout.get("spacing", 0)
-    if isinstance(spacing, str) and spacing not in LAYOUT_SPACING:
+    if ltype == "grid":
+        columns = layout.get("columns")
+        if isinstance(columns, bool) or not isinstance(columns, int) or columns < 1 or columns > 2147483647:
+            reporter.error(path, "layout.columns must be a positive integer")
+        cell = layout.get("cellSize")
+        if not isinstance(cell, dict) or any(not is_number(cell.get(k)) or not math.isfinite(cell[k]) or cell[k] <= 0 for k in ("width", "height")):
+            reporter.error(path, "layout.cellSize must have positive width and height")
+        grid_spacing = layout.get("spacing", {})
+        if not isinstance(grid_spacing, dict) or any(not is_number(grid_spacing.get(k, 0)) or not math.isfinite(grid_spacing.get(k, 0)) for k in ("x", "y")):
+            reporter.error(path, "grid layout.spacing must be a finite {x,y} object")
+        check_axis_alignment(layout, path, "align", "x", False, reporter)
+        check_axis_alignment(layout, path, "vAlign", "y", False, reporter)
+    elif isinstance(spacing, str) and spacing not in LAYOUT_SPACING:
         reporter.error(path, "layout.spacing string must be even")
-    elif not isinstance(spacing, str) and not is_number(spacing):
+    elif ltype != "grid" and not isinstance(spacing, str) and not is_number(spacing):
         reporter.error(path, "layout.spacing must be a number or even")
     if "padding" in layout:
         padding = layout["padding"]
@@ -531,7 +543,7 @@ def validate_tree(
         if etype != "container":
             reporter.error(path, "role list is only valid on container elements")
         if layout_type is None:
-            reporter.error(path, "role list requires a row or column layout")
+            reporter.error(path, "role list requires a row or column or grid layout")
         if not children:
             reporter.error(path, "role list requires at least one listItem child")
     if (
@@ -557,6 +569,12 @@ def validate_tree(
 
     for child in children:
         child_name = child.get("name", "?") if isinstance(child, dict) else "?"
+        if layout_type == "grid" and isinstance(child, dict):
+            cell = elem["layout"].get("cellSize")
+            if isinstance(cell, dict) and child.get("size") != cell:
+                reporter.error(path + "/" + child_name, "grid child size must match layout.cellSize; put differently sized artwork inside the cell")
+            if "align" in child or "vAlign" in child:
+                reporter.error(path + "/" + child_name, "grid owns cell alignment; align artwork inside the cell")
         validate_tree(
             child,
             f"{path}/{child_name}",

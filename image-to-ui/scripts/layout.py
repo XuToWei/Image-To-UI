@@ -53,7 +53,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import ui_components as components
 
 
-LAYOUT_TYPES = {"row", "column"}
+LAYOUT_TYPES = {"row", "column", "grid"}
 
 
 def _to_int(x: Any, default: int = 0) -> int:
@@ -97,7 +97,7 @@ def _layout_type(layout: Any) -> str:
         raise ValueError("layout must be an object with an explicit layout.type")
     layout_type = layout.get("type")
     if not isinstance(layout_type, str) or layout_type not in LAYOUT_TYPES:
-        raise ValueError("layout.type must be explicitly set to row or column")
+        raise ValueError("layout.type must be explicitly set to row or column or grid")
     return layout_type
 
 
@@ -191,6 +191,27 @@ def _layout_group(parent: dict, layout: dict, parent_size=None) -> List[Tuple[in
             sizes_main.append(cw); sizes_cross.append(ch)
         else:
             sizes_main.append(ch); sizes_cross.append(cw)
+
+    if ltype == "grid":
+        columns = layout.get("columns")
+        cell = layout.get("cellSize") or {}
+        if isinstance(columns, bool) or not isinstance(columns, int) or columns <= 0:
+            raise ValueError("grid columns must be a positive integer")
+        cw, ch = _to_int(cell.get("width")), _to_int(cell.get("height"))
+        if cw <= 0 or ch <= 0:
+            raise ValueError("grid cellSize must be positive")
+        spacing = layout.get("spacing", {})
+        if not isinstance(spacing, dict):
+            raise ValueError("grid spacing must be {x,y}")
+        gx, gy = _to_int(spacing.get("x")), _to_int(spacing.get("y"))
+        used_columns = min(columns, len(children))
+        rows = (len(children) + columns - 1) // columns
+        width = used_columns*cw + max(0, used_columns-1)*gx
+        height = rows*ch + max(0, rows-1)*gy
+        x = pad_x + _align_axis(inner_w, width, layout.get("align", "start"), 0)
+        y = pad_y + _align_axis(inner_h, height, layout.get("vAlign", "start"), 0)
+        return [(x+(i%columns)*(cw+gx)+_get_offset(c)[0],
+                 y+(i//columns)*(ch+gy)+_get_offset(c)[1]) for i,c in enumerate(children)]
 
     n = len(children)
     total_main = sum(sizes_main)

@@ -149,8 +149,20 @@ namespace ImageToUI.Editor
                 if (node["layout"] != null)
                 {
                     layout = Object(node["layout"], path + ".layout");
-                    EnumValue(Text(layout, "type"), new[] { "row", "column" }, path + ".layout.type");
-                    if (layout["spacing"]?.Type == JTokenType.String) EnumValue(Text(layout, "spacing"), new[] { "even" }, path + ".layout.spacing");
+                    EnumValue(Text(layout, "type"), new[] { "row", "column", "grid" }, path + ".layout.type");
+                    if (Text(layout, "type") == "grid")
+                    {
+                        var columns = Number(layout, "columns", double.NaN);
+                        if (columns < 1 || columns > int.MaxValue || columns != Math.Floor(columns)) throw new ArgumentException(path + ": grid columns must be a positive integer");
+                        var cell = Size(Object(layout["cellSize"], path + ".layout.cellSize"), path);
+                        if (layout["spacing"] != null) Pair(Object(layout["spacing"], path + ".layout.spacing"));
+                        EnumValue(Text(layout, "align", "start"), new[] { "start", "left", "center", "right", "end" }, path + ".layout.align");
+                        EnumValue(Text(layout, "vAlign", "start"), new[] { "start", "top", "middle", "center", "bottom", "end" }, path + ".layout.vAlign");
+                        foreach (var child in Children(node))
+                            if (Size((JObject)child["size"], path) != cell || child["align"] != null || child["vAlign"] != null)
+                                throw new ArgumentException(path + ": grid children must match cellSize and have no independent alignment");
+                    }
+                    else if (layout["spacing"]?.Type == JTokenType.String) EnumValue(Text(layout, "spacing"), new[] { "even" }, path + ".layout.spacing");
                     else Number(layout, "spacing");
                     if (layout["padding"] is JObject padding) Pair(padding); else Number(layout, "padding");
                 }
@@ -314,6 +326,18 @@ namespace ImageToUI.Editor
             var pad = layout["padding"] is JObject p ? Pair(p) : Vector2.one * (float)Number(layout, "padding");
             var inner = Vector2.Max(Vector2.zero, parent - pad * 2);
             var sizes = children.Select(c => Size((JObject)c["size"], "layout child")).ToArray();
+            if (Text(layout, "type") == "grid")
+            {
+                var cell = Size((JObject)layout["cellSize"], "grid cell");
+                var spacing = Pair(layout["spacing"] as JObject);
+                var columns = (int)Number(layout, "columns");
+                var usedColumns = Math.Min(columns, children.Count);
+                var rows = (children.Count + columns - 1L) / columns;
+                var extent = new Vector2(usedColumns * cell.x + Math.Max(0, usedColumns - 1) * spacing.x,
+                    rows * cell.y + Math.Max(0, rows - 1) * spacing.y);
+                var start = pad + new Vector2(Align(inner.x, extent.x, Text(layout, "align", "start"), 0), Align(inner.y, extent.y, Text(layout, "vAlign", "start"), 0));
+                return children.Select((c, i) => start + new Vector2((i % columns) * (cell.x + spacing.x), (i / columns) * (cell.y + spacing.y)) + Pair(c["offset"] as JObject)).ToList();
+            }
             var main = row ? inner.x : inner.y;
             var total = sizes.Sum(s => row ? s.x : s.y);
             var leftover = Math.Max(0, main - total);

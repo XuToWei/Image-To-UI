@@ -1,0 +1,16 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local workflow runs
+/test/output-*/
+
+# Keep only the compact, reviewable example in Git
+/test/output/*
+!/test/output/ui_structure.json
+!/test/output/comparison.png
+!/test/output/reconstruction.png
+!/test/output/state-review.png
+!/test/output/resolution-review.png
+!/test/output/component_review.md

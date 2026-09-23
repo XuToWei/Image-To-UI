@@ -40,13 +40,18 @@ def _nearest_anchor(
     extent: float,
     parent_extent: float,
     names: tuple[str, str, str],
+    prefer_center: bool = True,
 ) -> str:
     candidates = (
         (names[0], 0.0),
         (names[1], (parent_extent - extent) / 2.0),
         (names[2], parent_extent - extent),
     )
-    return min(candidates, key=lambda candidate: abs(position - candidate[1]))[0]
+    # A full-parent image has identical distances to all three references.
+    # Prefer the center on ties; attachment does not imply stretching.
+    return min(candidates, key=lambda candidate: (
+        abs(position - candidate[1]), prefer_center and candidate[0] != names[1]
+    ))[0]
 
 
 def _horizontal_hint(value: Any) -> str | None:
@@ -73,6 +78,7 @@ def _inferred_anchor(
     node: dict[str, Any],
     parent_size: tuple[float, float],
     parent_layout: dict[str, Any] | None,
+    prefer_center: bool = True,
 ) -> dict[str, str]:
     relative = node.get("_rel")
     if not isinstance(relative, list) or len(relative) != 4:
@@ -85,12 +91,14 @@ def _inferred_anchor(
             width,
             parent_width,
             HORIZONTAL_ANCHORS,
+            prefer_center,
         ),
         "vertical": _nearest_anchor(
             y,
             height,
             parent_height,
             VERTICAL_ANCHORS,
+            prefer_center,
         ),
     }
     responsive = node.get("responsive")
@@ -202,6 +210,7 @@ def backfill_anchors(
             resolved_node,
             parent_size,
             parent_layout,
+            prefer_center=path != "root",
         )
 
         if overwrite:

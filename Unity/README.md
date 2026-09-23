@@ -88,7 +88,7 @@ Codex 完成本次 JSON 的分析与复核后，直接继续发出下面的 comm
 | 参数 | 含义 |
 | --- | --- |
 | `structurePath` | 必填。JSON 的绝对路径或 Unity 工程相对路径。 |
-| `assetsPath` | 必填。切图根目录，可位于工程外。递归查找 PNG/JPG。 |
+| `assetsPath` | 必填。单个目录字符串或非空目录字符串数组；递归查找 PNG/JPG，支持工程内外目录。 |
 | `prefabPath` | 必填。`Assets/` 下的 `.prefab` 路径，缺失的父目录会创建。 |
 | `fontMap` | 可选。JSON 的 `fontFamily` 字符串到字体文件路径的映射。 |
 | `defaultFontPath` | 可选。指定字体缺失时使用的 TTF/OTF 文件。 |
@@ -100,6 +100,25 @@ Codex 完成本次 JSON 的分析与复核后，直接继续发出下面的 comm
 
 错误码包括 `UI_INVALID_STRUCTURE`、`UI_PREFAB_EXISTS`、
 `UI_EDIT_MODE_REQUIRED`、`UI_PREFAB_BUILD_FAILED`。
+
+### 多个切图目录
+
+原来的单目录字符串仍然有效，也可直接传目录数组：
+
+```json
+{
+  "structurePath": "<repo>/test/output/ui_structure.json",
+  "assetsPath": ["Assets/UI/Common", "Assets/UI/Feature"],
+  "prefabPath": "Assets/Generated/View.prefab"
+}
+```
+
+重复或相互包含的目录会按实际文件路径去重。素材只写文件名时，必须在全部目录
+中唯一；重名时写相对各根目录的完整路径，如 `buttons/confirm.png`。若两个根目录
+都有相同的 `buttons/confirm.png`，命令报歧义错误，不按目录顺序静默覆盖；请调整
+目录范围或使用共同上级目录加更完整的相对路径。空数组、非字符串项和不存在的
+目录会在创建输出前报错。字体查找也遍历所提供的目录；同名字体可用 `fontMap`
+指定确切文件。此数组能力属于 Unity 导出命令，Python 分析工作流仍使用其独立参数。
 
 ### 字体映射与重新生成
 
@@ -124,9 +143,9 @@ Codex 完成本次 JSON 的分析与复核后，直接继续发出下面的 comm
 1. 在 Project 窗口找到返回的 `prefabPath`，双击进入 Prefab Mode 检查层级。
 2. 将 Prefab 拖入 Hierarchy。它自带 Canvas、CanvasScaler 和 GraphicRaycaster，
    通常作为场景根对象使用。检查目标 Game View 尺寸下的锚点、文字和裁剪。
-3. 保留返回的 `resourceFolder` 目录。示例首次导出通常会生成
-   `Assets/Generated/EmberfallMainUI_Resources`；若目录已存在会使用唯一名称，
-   以实际返回路径为准。
+3. `resourceFolder` 非空时保留该目录。需要导入或派生资源时使用固定的
+   `Assets/Generated/EmberfallMainUI_Resources` 并复用已有条目；全部直接引用
+   工程资源时返回 `null`，不创建空目录。
 4. 对 JSON 已声明的状态，在 Inspector 中切换相应 GameObject 的激活复选框，
    或在项目脚本中使用 `SetActive`。下一节说明具体层级。
 5. 为按钮配置 `onClick`，由项目更新进度和业务数据。需要点击、拖拽或滚轮时，
@@ -165,6 +184,10 @@ states.Find("selected").gameObject.SetActive(true);
 状态名中的路径分隔符会转义，冲突名称会唯一化。不会生成控制显隐、切换状态、
 更新进度或驱动业务的脚本，也不会为 Button 接入事件。
 
+普通 Image、Text、Outline、Button 直接挂在 JSON 对应节点上，不再为每个组件
+额外创建子对象。进度裁剪、滚动视口、文字横向缩放或同节点图文等需要独立变换时，
+才保留 `ProgressClip`、`Viewport`、`Text`、`Image` 等辅助节点。
+
 ## 组装内容
 
 | JSON | 生成结果 |
@@ -172,7 +195,8 @@ states.Find("selected").gameObject.SetActive(true);
 | `canvas` | Canvas、CanvasScaler、GraphicRaycaster，以设计尺寸为参考分辨率。 |
 | 层级、坐标、尺寸 | RectTransform，转换左上原点和 y 轴方向。 |
 | `anchor`、`responsive` | 原生锚点、拉伸范围与偏移；可跟随父尺寸。 |
-| `layout`、`align`、`vAlign` | 烘焙参考布局，并将能表达的跟随关系写入原生锚点。 |
+| `layout` | row/column/grid 分别生成 HorizontalLayoutGroup、VerticalLayoutGroup、GridLayoutGroup。 |
+| `align`、`vAlign` | 布局组对齐或独立节点锚点；布局内的微调用必要的槽位保留。 |
 | `image`、`rect`、`overlay` | Image、Sprite、颜色、局部透明度和九宫格。 |
 | `hueShift` | 生成时烘焙为 PNG，保留 alpha，使用标准 UI 材质。 |
 | `text` | UGUI Text、字体、字号、对齐、行距、横向缩放和 Outline。 |
@@ -182,7 +206,7 @@ states.Find("selected").gameObject.SetActive(true);
 | `scroll` | ScrollRect、视口、RectMask2D、内容引用和初始滚动位置。 |
 | `visible` | GameObject 初始显隐；参考布局保留其位置。 |
 
-进度条的裁剪范围写入 `__ImageToUI_ProgressClip` 的锚点，完整素材保留在其
+进度条的裁剪范围写入 `ProgressClip` 的锚点，完整素材保留在其
 `Content` 中；零进度时关闭裁剪分组。运行时进度、数值文字、状态切换、按钮行为
 及动态增删列表项由开发者接线。拖拽与点击需要场景中的 EventSystem。
 
@@ -192,12 +216,20 @@ states.Find("selected").gameObject.SetActive(true);
 
 ## 资源与保存
 
-- 复制被引用的素材到新的 `<PrefabName>_Resources` 目录，不修改源图片及 importer。
-- basename 不唯一时要求使用相对切图根目录的完整路径。
-- TTF/OTF 按 `fontMap` 和 JSON 路径查找并复制；字体替代会返回警告。
-- 显式九宫格边距保存为原生 Sprite 资源。色相变体保存为 PNG。
+- `Assets/` 或已注册 `Packages/` 内已有的整图 Sprite 和 TTF/OTF 直接引用，不复制、不修改源 importer。
+- 项目内图片若没有整图 Sprite（例如 Default 纹理或空的 Multiple 模式），只生成
+  引用原纹理的 `.asset` Sprite；不会随意选用图集里的第一个局部 Sprite。
+- 仅工程外图片和字体需要导入。basename 不唯一时仍须使用相对素材根目录的完整路径。
+- 九宫格参数已匹配时复用原 Sprite；需要其他边距时生成引用同一纹理的 Sprite。
+  色相变体才烘焙 PNG。保留源 Sprite 的 PPU，并调整 Image 的倍率以维持边框尺寸。
+- 导入和派生资源使用内容／来源版本与处理参数确定的文件名，保存在固定的
+  `<PrefabName>_Resources`。相同输入再次导出复用路径和 GUID，不增加编号目录。
+  源内容或参数变化时生成新条目，保留旧条目，避免破坏已有引用。
+- 没有资源需要生成时不创建资源目录，`resourceFolder` 为 `null`。
+  `resourceUsage` 返回直接引用、复制、派生和缓存复用数量，可用于核对实际行为。
+- 生成失败只清理本轮新建的资源及空目录，保留旧缓存、源资源和原 Prefab。
 - 在临时预览场景中组装，保存后清理临时对象，不改变当前场景或保存无关脏资源。
-- 覆盖保留 Prefab GUID，旧资源目录保留以避免破坏其他引用。
+- 覆盖保留 Prefab GUID；不会自动删除历史版本工具留下的编号资源目录。
 
 此前导出的带 `UiPrefabController` 的 Prefab 需要重新生成。
 
@@ -220,4 +252,25 @@ states.Find("selected").gameObject.SetActive(true);
 在工程 manifest 的 `testables` 中加入 `me.xw.imagetoui`，
 运行 EditMode 的 `ImageToUI.Tests`。测试实际保存、重新加载 Prefab，并检查状态分支、
 显隐、嵌套覆盖、进度裁剪、滚动、原生锚点、资源持久化和场景隔离，还会断言生成物
-没有本导入器的脚本或资源依赖。完整仓库可用时会导入 71 节点 Emberfall 案例。
+没有本导入器的脚本或资源依赖。完整仓库可用时会导入 91 节点、5 组双状态的 Emberfall 案例。
+
+### 原生排列与网格
+
+`layout.type` 支持 `row`、`column`、`grid`，对应三种标准 LayoutGroup。
+不生成 LayoutElement，也不生成 LayoutGap。横排和竖排关闭子项尺寸控制、
+强制扩展和缩放控制，由 RectTransform 保留元素尺寸，增删直接子项后自动重排。
+网格需要 `columns`、`cellSize: {width,height}`，可选 `spacing: {x,y}`；
+直接子项尺寸必须等于 cellSize，生成 FixedColumnCount 的 GridLayoutGroup。
+改变父尺寸不会自动更换网格列数。
+
+`space-between/around/evenly` 按参考尺寸折算为固定 spacing 和端部 padding，
+后续父尺寸或项数变化时不会自动重新计算均匀间隔。between 靠起点排列，
+around/evenly 整组居中。Python 的其他尺寸预览仍按原始分布规则计算，
+因此此类布局应在 Unity 中另行检查。
+
+仅有偏移、单项跨轴对齐或隐藏占位需求的元素增加 `<name>_LayoutSlot`，
+槽位同样只用 RectTransform。单项跨轴覆盖按参考尺寸保留；后续由整组统一对齐。
+删除项目时删除整个槽位，切换槽位内元素显隐则保留位置。状态路径以
+`stateObjects` 返回值为准。带独立文字等视觉辅助节点时，用 `LayoutContent`
+承载排列项，避免视觉节点参与布局；普通容器直接挂 LayoutGroup。
+不自动添加 ContentSizeFitter 或自定义运行时脚本。

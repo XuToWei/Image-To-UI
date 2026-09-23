@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using AgentBridge;
@@ -23,10 +22,11 @@ namespace ImageToUI.Editor
         {
             if (parameters == null) throw new ArgumentException("Command parameters are required");
             var structurePath = InputPath(Required(parameters, "structurePath"));
-            var assetsPath = InputPath(Required(parameters, "assetsPath"));
+            var assetsPaths = AssetRoots(parameters["assetsPath"]);
             var prefabPath = PrefabPath(Required(parameters, "prefabPath"));
             if (!File.Exists(structurePath)) throw new ArgumentException("Structure file not found: " + structurePath);
-            if (!Directory.Exists(assetsPath)) throw new ArgumentException("Asset directory not found: " + assetsPath);
+            foreach (var path in assetsPaths)
+                if (!Directory.Exists(path)) throw new ArgumentException("Asset directory not found: " + path);
             var overwrite = UiStructureData.Bool(parameters, "overwrite");
             if (UiStructureData.Bool(parameters, "useDeviceSafeArea"))
                 throw new ArgumentException("Device safe-area updates belong to application code; the exporter bakes canvas.safeArea.");
@@ -38,20 +38,20 @@ namespace ImageToUI.Editor
             var document = new UiStructureData(json);
             var warnings = new HashSet<string>(StringComparer.Ordinal);
             var candidates = document.AppearanceCandidates().ToList();
-            var imageSources = ResolveImages(candidates, assetsPath);
-            var fontSources = ResolveFonts(candidates, parameters, structurePath, assetsPath, warnings);
+            var imageSources = ResolveImages(candidates, assetsPaths);
+            var fontSources = ResolveFonts(candidates, parameters, structurePath, assetsPaths, warnings);
             var folder = Path.GetDirectoryName(prefabPath).Replace('\\', '/');
             EnsureFolder(folder);
-            var resourceFolder = AssetDatabase.GenerateUniqueAssetPath(folder + "/" + Path.GetFileNameWithoutExtension(prefabPath) + "_Resources");
-            // Unique generated ownership boundary: failure cleanup never touches input files or old resources.
-            EnsureFolder(resourceFolder);
+            var resourceFolder = folder + "/" + Path.GetFileNameWithoutExtension(prefabPath) + "_Resources";
+            // Lazy, immutable generated entries share a stable folder; rollback owns only new files.
+            var resources = new UiPrefabAssets(resourceFolder) { DefaultFont = UnityEngine.Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf") };
             var before = File.Exists(prefabFull) ? File.ReadAllBytes(prefabFull) : null;
             GameObject root = null;
             Scene preview = default;
             var saved = false;
             try
             {
-                var resources = BakeResources(resourceFolder, imageSources, fontSources, candidates, warnings);
+                BakeResources(resources, imageSources, fontSources, candidates, warnings);
                 preview = EditorSceneManager.NewPreviewScene();
                 var assembler = new UiPrefabAssembler(document, resources, preview);
                 root = assembler.Build(Path.GetFileNameWithoutExtension(prefabPath));
@@ -59,12 +59,12 @@ namespace ImageToUI.Editor
                 if (!success || prefab == null) throw new InvalidOperationException("Unity did not save the prefab");
                 AssetDatabase.SaveAssetIfDirty(prefab);
                 saved = true;
-                if (before != null) warnings.Add("Overwrite preserves the Prefab GUID; resources from earlier exports are retained for any other assets referencing them.");
                 return new
                 {
                     prefabPath,
                     guid = AssetDatabase.AssetPathToGUID(prefabPath),
-                    resourceFolder,
+                    resourceFolder = resources.ResourceFolder,
+                    resourceUsage = resources.Usage,
                     elements = document.Order.Count,
                     images = assembler.ImageCount,
                     texts = assembler.TextCount,
@@ -91,34 +91,54 @@ namespace ImageToUI.Editor
             {
                 if (root != null) Object.DestroyImmediate(root);
                 if (preview.IsValid()) EditorSceneManager.ClosePreviewScene(preview);
-                if (!saved) AssetDatabase.DeleteAsset(resourceFolder);
+                if (!saved) resources.Rollback();
             }
         }
 
-        private static Dictionary<string, string> ResolveImages(List<KeyValuePair<string, JObject>> candidates, string root)
+        private static string[] AssetRoots(JToken token)
         {
-            var files = Directory.GetFiles(root, "*", SearchOption.AllDirectories).Where(p => new[] { ".png", ".jpg", ".jpeg" }.Contains(Path.GetExtension(p).ToLowerInvariant())).ToList();
-            var relative = files.ToDictionary(p => p.Substring(root.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length + 1).Replace('\\', '/'), p => p, StringComparer.OrdinalIgnoreCase);
+            var values = token is JArray array ? array.ToArray() : new[] { token };
+            if (values.Length == 0 || values.Any(v => v == null || v.Type != JTokenType.String || string.IsNullOrWhiteSpace((string)v)))
+                throw new ArgumentException("assetsPath must be a directory string or a non-empty array of directory strings");
+            return values.Select(v => {
+                var full = InputPath((string)v);
+                return full.Length > Path.GetPathRoot(full).Length ? full.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) : full;
+            }).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        }
+
+        private static Dictionary<string, string> ResolveImages(List<KeyValuePair<string, JObject>> candidates, IEnumerable<string> roots)
+        {
+            var files = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var relative = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+            foreach (var root in roots)
+            {
+                var prefixLength = root.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Length + 1;
+                foreach (var file in Directory.GetFiles(root, "*", SearchOption.AllDirectories).Where(p => new[] { ".png", ".jpg", ".jpeg" }.Contains(Path.GetExtension(p).ToLowerInvariant())))
+                {
+                    var full = Path.GetFullPath(file);
+                    files.Add(full);
+                    var key = full.Substring(prefixLength).Replace('\\', '/');
+                    if (!relative.TryGetValue(key, out var matches)) relative[key] = matches = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    matches.Add(full);
+                }
+            }
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var candidate in candidates)
             {
                 var key = UiStructureData.Text(candidate.Value, "asset");
                 if (key.Length == 0 || result.ContainsKey(key)) continue;
                 var normalized = key.Replace('\\', '/');
-                string source;
-                if (!normalized.Contains("/"))
-                {
-                    var matches = files.Where(p => string.Equals(Path.GetFileName(p), normalized, StringComparison.OrdinalIgnoreCase)).ToList();
-                    if (matches.Count != 1) throw new ArgumentException(candidate.Key + ": missing or ambiguous sprite " + key);
-                    source = matches[0];
-                }
-                else if (!relative.TryGetValue(normalized, out source)) throw new ArgumentException(candidate.Key + ": sprite not found " + key);
-                result.Add(key, source);
+                var matches = !normalized.Contains("/")
+                    ? files.Where(p => string.Equals(Path.GetFileName(p), normalized, StringComparison.OrdinalIgnoreCase)).ToList()
+                    : relative.TryGetValue(normalized, out var paths) ? paths.ToList() : new List<string>();
+                if (matches.Count == 0) throw new ArgumentException(candidate.Key + ": sprite not found in assetsPath directories: " + key);
+                if (matches.Count > 1) throw new ArgumentException(candidate.Key + ": ambiguous sprite across assetsPath directories: " + key + ". Use a unique relative path or adjust the supplied directories.");
+                result.Add(key, matches[0]);
             }
             return result;
         }
 
-        private static Dictionary<string, string> ResolveFonts(List<KeyValuePair<string, JObject>> candidates, JObject parameters, string structure, string assets, HashSet<string> warnings)
+        private static Dictionary<string, string> ResolveFonts(List<KeyValuePair<string, JObject>> candidates, JObject parameters, string structure, string[] assets, HashSet<string> warnings)
         {
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             var map = parameters["fontMap"] as JObject;
@@ -146,7 +166,8 @@ namespace ImageToUI.Editor
                     else
                     {
                         choices.Add(InputPath(key));
-                        foreach (var directory in new[] { Path.GetDirectoryName(structure), Path.GetDirectoryName(Path.GetDirectoryName(structure)), assets, Path.GetDirectoryName(assets) })
+                        foreach (var directory in new[] { Path.GetDirectoryName(structure), Path.GetDirectoryName(Path.GetDirectoryName(structure)) }
+                            .Concat(assets.SelectMany(root => new[] { root, Path.GetDirectoryName(root) })).Distinct(StringComparer.OrdinalIgnoreCase))
                             if (directory != null) choices.Add(Path.Combine(directory, key));
                     }
                 }
@@ -161,19 +182,15 @@ namespace ImageToUI.Editor
             return result;
         }
 
-        private static UiPrefabAssets BakeResources(string folder, Dictionary<string, string> images,
+        private static void BakeResources(UiPrefabAssets resources, Dictionary<string, string> images,
             Dictionary<string, string> fonts, List<KeyValuePair<string, JObject>> candidates, HashSet<string> warnings)
         {
-            var resources = new UiPrefabAssets(folder) { DefaultFont = UnityEngine.Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf") };
             var importedImages = new Dictionary<string, Sprite>(StringComparer.OrdinalIgnoreCase);
             foreach (var pair in images)
             {
                 if (!importedImages.TryGetValue(pair.Value, out var sprite))
                 {
-                    EnsureFolder(folder + "/Sprites");
-                    var destination = folder + "/Sprites/" + ShortHash(pair.Value) + "_" + Path.GetFileName(pair.Value);
-                    File.Copy(pair.Value, InputPath(destination), false);
-                    sprite = ImportSprite(destination, MetaBorder(pair.Value + ".meta"));
+                    sprite = resources.LoadSprite(pair.Value);
                     importedImages[pair.Value] = sprite;
                 }
                 resources.Sprites[pair.Key] = sprite;
@@ -184,12 +201,7 @@ namespace ImageToUI.Editor
                 if (pair.Value == null) continue;
                 if (!importedFonts.TryGetValue(pair.Value, out var font))
                 {
-                    EnsureFolder(folder + "/Fonts");
-                    var destination = folder + "/Fonts/" + ShortHash(pair.Value) + "_" + Path.GetFileName(pair.Value);
-                    File.Copy(pair.Value, InputPath(destination), false);
-                    AssetDatabase.ImportAsset(destination, ImportAssetOptions.ForceSynchronousImport);
-                    font = AssetDatabase.LoadAssetAtPath<Font>(destination);
-                    if (font == null) throw new ArgumentException("Unity could not import font: " + pair.Value);
+                    font = resources.LoadFont(pair.Value);
                     importedFonts[pair.Value] = font;
                 }
                 resources.Fonts[pair.Key] = font;
@@ -202,7 +214,6 @@ namespace ImageToUI.Editor
                 if (key.Length > 0 && (slice?.Type == JTokenType.Boolean && (bool)slice || slice?.Type == JTokenType.String) && resources.Sprites[key].border == Vector4.zero)
                     warnings.Add(candidate.Key + ": nine-slice margins inferred because source spriteBorder metadata is absent.");
             }
-            return resources;
         }
 
         internal static Sprite ImportSprite(string path, Vector4 border)
@@ -245,9 +256,7 @@ namespace ImageToUI.Editor
         }
         private static void RequireFont(string path)
         { if (!File.Exists(path) || !new[] { ".ttf", ".otf" }.Contains(Path.GetExtension(path).ToLowerInvariant())) throw new ArgumentException("Font must be an existing .ttf/.otf file: " + path); }
-        private static string ShortHash(string value)
-        { using (var sha = SHA256.Create()) return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(value))).Replace("-", "").Substring(0, 12); }
-        private static Vector4 MetaBorder(string path)
+        internal static Vector4 MetaBorder(string path)
         {
             if (!File.Exists(path)) return Vector4.zero;
             var match = Regex.Match(File.ReadAllText(path), @"spriteBorder:\s*\{x:\s*([^,]+),\s*y:\s*([^,]+),\s*z:\s*([^,]+),\s*w:\s*([^}]+)\}");
